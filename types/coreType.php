@@ -48,11 +48,11 @@ abstract class coreType {
 	}
 	
 	public function fromRow($row) {
-		if (Database::isError($row)) {
+		if (AdminDatabase::isError($row)) {
 			echo "<pre>";
 			debug_print_backtrace();
 			echo "</pre>";
-			die(Database::showError($row));
+			die(AdminDatabase::showError($row));
 		}
 		$this->value = $row[$this->name];
 	}
