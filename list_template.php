@@ -13,10 +13,56 @@
 	div.filter form { margin: 0;	}
 	#filter_input { width: 200px; }
 	select.filter { max-width: 150px; }
-
-
-
+	.breadcrumbs { font-weight: bold; margin: 10px 0; }
+	.clear { clear: both; }	
+div.pagination {
+	padding: 3px;
+	margin: 3px;
+	text-align: center;
+	font-family: Tahoma,Helvetica,sans-serif;
+	}
+	
+div.pagination a {
+	color: #0645ad;
+	border: 1px solid #a9b8dd;
+	margin-right: 3px;
+	padding: 2px 6px;
+	background-position: bottom;
+	text-decoration: none;
+	}
+	
+div.pagination a:hover, div.pagination a:active {
+	border: 1px solid #3c61a5;
+	background-image: none;
+	background-color: #6b92d7;
+	color: #fff;
+	}
+	
+div.pagination span.current {
+	color: #000;
+	font-weight: bold;
+	margin-right: 3px;
+	padding: 2px 6px;
+	}
+	
+div.pagination span.disabled {
+	border: 1px solid #ddd;
+	color: #bbb;
+	margin-right: 3px;
+	padding: 2px 6px;
+	}
+	
+div.pagination .next {
+	margin: 0 3px 0 8px;
+	}
+	
+div.pagination .prev {
+	margin: 0 8px 0 0;
+	}	
 </style>
+
+
+
 <script>
 	$(function () {
 		$('#filter_form').submit(function () {
@@ -53,6 +99,7 @@
 <?= $this->topButtons(); ?>
 <button type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
 <button type="submit" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+<div class="clear"></div>
 <div class="pager"><?= $htmlPager ?></div>
 <table class="list-table" width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">	
 <thead>

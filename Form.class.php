@@ -6,9 +6,8 @@ class Form {
 	public $errorMessage;	
 	public $id;
 	public $options;
-	
+
 	function __construct($form, $options) {
-		global $db;
 		$this->form = $form;
 		$this->options = $options;
 	}
@@ -28,7 +27,7 @@ class Form {
 	}
 	
 	function load($values, $source) {
-		$this->id = $values['id'];
+		$this->id = @$values['id'];
 		foreach($this->form as $id => &$item) {
 			if($source == 'db')
 				$item->fromRow($values);
@@ -38,7 +37,6 @@ class Form {
 	}
 	
 	function build() {
-		global $db;
 		$types = array();
 		$data = "";
 		foreach($this->form as $id => &$item) {
@@ -83,7 +81,6 @@ class Form {
 	}
 
 	function save($params) {
-		global $db;
 		foreach($this->form as $id => &$item) {
 			$item->fromForm($params);
 			$itemSql = $item->toSql();

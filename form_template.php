@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="http://banker.ua/css/jquery/css/calendar_banker.css" type="text/css"/>
 
 <style>
+	.breadcrumbs { font-weight: bold; margin: 10px 0; }
+
 	.select2-container,
 	.form_input { width: 100%; max-width: 500px;}
  	textarea { width: 100%;  max-width: 500px;} 
