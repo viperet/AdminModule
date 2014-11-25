@@ -9,12 +9,12 @@ class detailsType extends coreType {
 	
 	private $data = array();
 
-	function __construct($name, $array) {
-		parent::__construct($name, $array);
+	function __construct($db, $name, $array) {
+		parent::__construct($db, $name, $array);
 
 		foreach($this->form as $name=>&$array) {
 			$className = $array['type']."Type";
-			$array = new $className($name, $array);
+			$array = new $className($db, $name, $array);
 		}
 		unset($array);	
 	}

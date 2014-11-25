@@ -5,11 +5,10 @@ class selectType extends textType {
 	public $lookup_table;
 	public $lookup_field;
 	
-	function __construct($name, $array) {
-		global $db;
-		parent::__construct($name, $array);
+	function __construct($db, $name, $array) {
+		parent::__construct($db, $name, $array);
 		if($this->lookup_table != '' && $this->lookup_field) {
-			$values = $db->getAll("SELECT id,".$this->lookup_field." value FROM ".$this->lookup_table." ORDER BY ".$this->lookup_field." ASC ");
+			$values = $this->db->getAll("SELECT id,".$this->lookup_field." value FROM ".$this->lookup_table." ORDER BY ".$this->lookup_field." ASC ");
 			foreach($values as $value) {
 				$this->values[$value['id']] = $value['value']; 
 			}

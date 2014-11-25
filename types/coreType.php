@@ -20,9 +20,11 @@ abstract class coreType {
 	public $filterByClick = false;
 	public $massAction = false;
 	public $options;
+	public $db;
 	
-	function __construct($name, $array) {
+	function __construct($db, $name, $array) {
 		$this->name = $name;
+		$this->db = $db;
 		foreach($array as $field => $value) {
 			if(property_exists(get_class($this), $field)) {
 				$this->$field = $value;
@@ -46,17 +48,19 @@ abstract class coreType {
 	}
 	
 	public function fromRow($row) {
-		if (PEAR::isError($row)) {
+		if (Database::isError($row)) {
 			echo "<pre>";
 			debug_print_backtrace();
 			echo "</pre>";
-			die($row->getMessage());
+			die(Database::showError($row));
 		}
 		$this->value = $row[$this->name];
 	}
 	
 	public function validate(&$errors) {
 		$this->valid = true;
+
+		if(!isset($id) || $id == '-' || !empty($item['readonly'])) return true;
 		
 		if($this->required && trim($this->value) == '' ) {
 			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
@@ -64,7 +68,6 @@ abstract class coreType {
 			$this->valid = false;
 			return false;
 		}
-		if($id == '-' || !empty($item['readonly'])) continue;
 	
 		if($this->type == 'time' && ($this->value!='' && !preg_match('/^\d?\d:\d?\d$/', $this->value))) {
 			$this->valid = false;

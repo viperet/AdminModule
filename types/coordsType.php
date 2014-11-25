@@ -4,10 +4,6 @@ class coordsType extends coreType {
 	public $lat; // широта
 	public $lon; // долгота
 
-	function __construct($name, $array) {
-		if($array['type']."Type" == get_class($this))
-			parent::__construct($name, $array);
-	}
 	
 	public function fromForm($value) {
 		$this->lat = $value['lat'];
@@ -15,12 +11,13 @@ class coordsType extends coreType {
 	}
 	
 	public function fromRow($row) {
-		if (PEAR::isError($row)) {
+		if (Database::isError($row)) {
 			echo "<pre>";
 			debug_print_backtrace();
 			echo "</pre>";
-			die($row->getMessage());
+			die(Database::showError($row));
 		}
+
 		$this->lat = $row['lat'];
 		$this->lon = $row['lon'];
 	}	

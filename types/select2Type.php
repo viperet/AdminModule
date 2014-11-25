@@ -10,9 +10,9 @@ class select2Type extends textType {
 	public $create_variant = false; // можно ли создавать новые значения на лету, для работы необходима включенная опция ajax
 	public $ajax = false;
 	
-	function __construct($name, $array) {
-		global $db;
-		parent::__construct($name, $array);
+	function __construct($db, $name, $array) {
+		
+		parent::__construct($db, $name, $array);
 		if(empty($this->lookup_display) && !empty($this->lookup_field))
 			$this->lookup_display = $this->lookup_field;
 		if(empty($this->lookup_sort) && !empty($this->lookup_field))
@@ -31,14 +31,14 @@ class select2Type extends textType {
 
 	
 	public function getLookup($value, $limit) {
-		global $db;
+		
 		$result = array();
 		$sql = "SELECT id,".$this->lookup_display." value FROM ".$this->lookup_table.
 			(!empty($value) ? " WHERE {$this->lookup_where} AND {$this->lookup_field} LIKE '%".mysql_real_escape_string($value)."%' " : "").
 			" ORDER BY ".$this->lookup_sort.
 			(!empty($limit) ? " LIMIT $limit" : "");
 //		echo $sql;
-		$values = $db->getAll($sql);
+		$values = $this->db->getAll($sql);
 		foreach($values as $value) {
 			$result[$value['id']] = $value['value']; 
 		}
@@ -55,8 +55,8 @@ class select2Type extends textType {
 	}
 	
 	public function lookupValueById($id) {
-		global $db;
-		return $db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE id = '{$id}'");
+		
+		return $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE id = '{$id}'");
 	}
 	
 	public function toString() {
@@ -71,7 +71,7 @@ class select2Type extends textType {
 	}
 	
 	public function toHtml() {
-		global $db;
+		
 		
 		if($this->ajax) {
 			$value_text = $this->lookupValueById($this->value);
