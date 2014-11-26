@@ -1,6 +1,6 @@
 <?
-require(PATH_ROOT."classes/phpthumb/phpthumb.class.php");
-require(PATH_ROOT."classes/phpthumb/imageResizer.class.php");
+require_once(dirname(__FILE__)."/../helpers/phpThumb/phpthumb.class.php");
+require_once(dirname(__FILE__)."/../imageResizer.class.php");
 
 class imageType extends coreType {
 	public $width = 100;
@@ -246,7 +246,7 @@ $(function() {
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="/js/jq/jquery.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">
 	function search(start) {
@@ -276,7 +276,7 @@ $(function() {
 			e.preventDefault();
 			search(0);
 		});
-        $(".searchResult a").live("click", function () {
+        $('#searchResults').on("click", ".searchResult a", function () {
         	var href = $(this).attr('href');
         	var id = 'image_url';
         	var i = window.opener.document.getElementById(id);
@@ -311,7 +311,7 @@ $(function() {
 	}
 </style>
 <form id="searchForm">
-	<input type="text" id="q" style="width:300px;"> <input type="submit" id="search" value="Искать">
+	<input type="text" id="q" style="width:300px;"> <button class="btn btn-primary" type="submit" id="search">Искать</button>
 </form>
 <div id="searchResults"></div>
 </body>
@@ -341,7 +341,7 @@ echo "
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="/js/jq/jquery.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <link href="/js/jq/jcrop/jquery.Jcrop.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/js/jq/jcrop/jquery.Jcrop.js"></script>
 <script type="text/javascript">
@@ -383,7 +383,7 @@ echo "
 }
 </style>
 <img src="" id="preview">
-<button type="button" id="apply">Применить</button>
+<button type="btn btn-primary" id="apply">Применить</button>
 </body>
 </html>
 EOT;
@@ -395,7 +395,7 @@ echo "
 	
 		if($('#'+id+'_w').val() == '') cropImage(id);
 	
-		popupWin = window.open('', 'search', 'location,width=800,height=700,top=100,left=200');
+		popupWin = window.open('', 'search', 'location,width=600,height=400,top=100,left=200');
 		dialog = '".strtr($crop_popup, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'))."';
 		dialog = dialog.replace(/image_id/ig, id);
 //		dialog = dialog.replace(/image_url/ig, image);
