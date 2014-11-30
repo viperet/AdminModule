@@ -11,7 +11,7 @@ class datetimeType extends textType {
 			$date = "";
 		else
 			$date = date("d.m.Y H:i:s", $this->value);
-		return "<input type='text' name='{$this->name}' id='{$this->name}' class='form_input form_datetime {$this->class} ".(!$this->valid?'error':'')."' value='".$date."' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ:СС' />";
+		return "<input type='text' name='{$this->name}' id='{$this->name}' class='form-control form_datetime {$this->class} ".(!$this->valid?'error':'')."' value='".$date."' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ:СС' />";
 	}
 	
 	public function toSql() {

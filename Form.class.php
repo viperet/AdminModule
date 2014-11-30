@@ -124,14 +124,15 @@ class Form {
 		return implode(', ', $sql);
 	}
 
-	function postSave($object_id, $params) {
-		foreach($this->form as $id => &$item) {
-			$postSaveSql = $item->postSave($object_id, $params);
+	function postSave($object_id, $params, $item) {
+		$sql = array();
+		foreach($this->form as $id => &$value) {
+			$postSaveSql = $value->postSave($object_id, $params, $item);
 			if($postSaveSql)
 				$sql[] = $postSaveSql;
 
 		}
-		unset($item);
+		unset($value);
 		if(count($sql)>0)
 			return implode(', ', $sql)." WHERE id=".(int)$object_id;
 		else

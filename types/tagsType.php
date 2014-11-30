@@ -6,45 +6,52 @@ class tagsType extends coreType {
 		return "";
 	}
 	
+	
+	public function ajaxLookup() {
+		$tags = $this->db->getAll("SELECT * FROM tags WHERE tag LIKE '".mysql_real_escape_string($_GET['q'])."%' ORDER By tag ASC LIMIT 10");
+	
+		$tagsJSON = array();
+		foreach($tags as $tag){
+			$tagsJSON[] = array('id'=>$tag['id'], 'text'=>$tag['tag']);
+		}
+		echo $this->json($tagsJSON);
+	}
+	
 	private function parseTags($value) {
-		global $db;
 		$result = array();
 		if(trim($value)=='') return $result;
-		
 		$tags = explode(',', $value);
 		foreach($tags as $tag) {
 			if(preg_match('/^"(.*)"$/', $tag, $matches)) {
 				$result[] = array('id'=>$tag, 'text'=>$matches[1]);
 			} else {
-				$result[] = array('id'=>$tag, 'text'=>$db->getOne('SELECT tag FROM tags WHERE id='.$tag));
+				$result[] = array('id'=>$tag, 'text'=>$this->db->getOne('SELECT tag FROM tags WHERE id=?', $tag));
 			}
 		}
 		return $result;
 	}
 	
 	public function postSave($id, $params) { 
-		global $db;
-		$db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
+		$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
 		
 		foreach($this->value as $tag) {
 			if(preg_match('/^"(.*)"$/', $tag['id'], $matches)) {
-				$db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
+				$this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
 				$tag_id = mysql_insert_id();
 				if($tag_id == 0) { // такой тег уже есть в базе
 					$tag_id =$db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
 				}
-				$db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");	
+				$this->db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");	
 			} else {
-				$db->query("INSERT tags_content SET tag_id={$tag['id']}, content_id={$id}, content_table='{$this->options['table']}'");	
+				$this->db->query("INSERT tags_content SET tag_id={$tag['id']}, content_id={$id}, content_table='{$this->options['table']}'");	
 			}
 		}
 		return ''; 
 	}
 	
 	public function fromRow($row) {
-		global $db;
 		$this->value = array();
-		$tags = $db->getAll("SELECT tags_content.tag_id, tags.tag FROM tags_content 
+		$tags = $this->db->getAll("SELECT tags_content.tag_id, tags.tag FROM tags_content 
 			INNER JOIN tags ON (tags.id = tags_content.tag_id)
 			 WHERE content_id={$row['id']} AND content_table='{$this->options['table']}'");
 		foreach($tags as $tag) {
@@ -64,18 +71,28 @@ class tagsType extends coreType {
 		return $result;
 	}
 	
+	public function validate(&$errors) {
+		if($this->required && count($this->value) == 0 ) {
+			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
+			$this->errors[] = 'Обязательное поле';
+			$this->valid = false;
+			return false;
+		}
+		return true;
+	}
+	
 	public function toHtml() {
-		$value_json = json_encode($this->value);
+		$value_json = $this->json($this->value);
 		$value_ids = '';
 		foreach($this->value as $tag) {
 			if($value_ids != '') $value_ids .= ','; 
 			$value_ids .= $tag['id'];
 		}
 		$html = <<< EOT
-<input type="hidden" id="{$this->name}" name="{$this->name}" class="form_select" value="{$value_ids}"/>		
+<input type="hidden" id="{$this->name}" name="{$this->name}" class="form-control" value="{$value_ids}"/>		
 <script>
-	$(document.getElementById('{$this->name}')).select2({
-	  tags: true,
+	$('#{$this->name}').select2({
+//	  tags: true,
 	  tokenSeparators: [","],
 	  createSearchChoice: function(term, data) {
 	    if ($(data).filter(function() {
@@ -92,17 +109,16 @@ class tagsType extends coreType {
 		callback({$value_json});	  
 	  },
 	  ajax: {
-	    url: '/admin/tags.php',
-	    dataType: "jsonp",
+		url: document.location+'&ajaxField='+encodeURIComponent('{$this->name}')+'&ajaxMethod=ajaxLookup',
+		dataType: 'json',
 	    data: function(term, page) {
 	      return {
 	        q: term
 	      };
 	    },
 	    results: function(data, page) {
-	    	console.log(data);
 	      return {
-	        results: data.results
+	        results: data
 	      };
 	    }
 	  }

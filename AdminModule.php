@@ -31,6 +31,7 @@ class AdminModule {
 	public $baseUrl;
 	public $baseUrlNoPaging;
 	public $baseUrlNoFilter;
+	public $helpersUrl;
 	public $itemsCount;
 	public $filter = "";
 	function __construct($options) {
@@ -41,7 +42,11 @@ class AdminModule {
 
 		if(empty($this->options['db'])) throw new Exception("Empty required parameter 'db'");
 		$this->db = new AdminDatabase($this->options['db']);
+
 		$this->navigation = new Navigation();
+
+		if(empty($this->options['helpersUrl'])) throw new Exception("Empty required parameter 'helpersUrl'");
+		$this->helpersUrl = $this->options['helpersUrl'];
 
 		if(isset($this->options['baseUrl']))
 			$this->baseUrlNoFilter = $this->baseUrlNoPaging = $this->baseUrl = $this->options['baseUrl'];
@@ -83,7 +88,8 @@ class AdminModule {
 		$pager = new Pagination($this->itemsCount, $per_page);
 		$htmlPager  = $pager->display($this->baseUrlNoPaging);		
 		
-		$headers = array('id');
+//		$headers = array('id'); // hide ID column for now
+		$headers = array();
 		$this->options['form'] = array_merge(array('id' => new textType($this->db, 'id', array('type'=>'text', 'label'=>'ID'))), $this->options['form']);
 
 		foreach($this->options['form'] as $key=>$value) {
@@ -131,10 +137,11 @@ class AdminModule {
 					$id = $this->insertItem($_POST);
 				}
 
-				$this->updateCache($id, $this->getItem($id));
+				$item = $this->getItem($id);
+				$this->updateCache($id, $item);
 				$this->updateFullCache();
 				
-				$postSql = $this->form->postSave($id, $_POST);
+				$postSql = $this->form->postSave($id, $_POST, $item);
 				if($postSql) {
 					$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
 				}
@@ -321,8 +328,8 @@ class AdminModule {
 		$html = "";
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
-				$html .= "<button type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} Вкл?');\">{$value->label} Вкл</button>&nbsp;";
-				$html .= "<button type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} Выкл?');\">{$value->label} Выкл</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} Вкл?');\">{$value->label} Вкл</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} Выкл?');\">{$value->label} Выкл</button>&nbsp;";
 			}
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';

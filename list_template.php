@@ -1,17 +1,8 @@
 <style>
-	.list-table thead tr { background-color: #B50505; color: white; }
-	.list-table tr a,
-	.list-table tr { color: #009EC2; }
-	.list-table tr.active a,
-	.list-table tr.active { color: black; }
-	.list-table thead a { color: white; }
-	.list-table thead td { vertical-align: top; }
-	.list-table td.table-data a { text-decoration: none; }
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 	.pager { margin: 5px 0;	}
-	div.filter { margin: 5px 0 20px 0; float: right;	}
+	div.filter { margin: 0 0 10px 0; float: right;	max-width: 200px; }
 	div.filter form { margin: 0;	}
-	#filter_input { width: 200px; }
 	select.filter { max-width: 150px; }
 	.breadcrumbs { font-weight: bold; margin: 10px 0; }
 	.clear { clear: both; }	
@@ -86,9 +77,11 @@ div.pagination .prev {
 	});
 </script>
 <div class="filter">
-	<form method="GET" action="" id="filter_form">
-		<input type="text" name="filter" id="filter_input" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="фильтр"> 
-		<button type="submit" name="">&gt;</button>
+	<form method="GET" action="" id="filter_form" class="input-group">
+		<input type="text" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="фильтр"> 
+		<span class="input-group-btn">
+			<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
+		</span>
 	</form>
 <? if(isset($_GET['filter'])) {
 	echo "<a href='{$this->baseUrlNoFilter}'>убрать фильтр</a>";
@@ -96,79 +89,88 @@ div.pagination .prev {
 ?>
 </div>
 <form method="POST" action="<?= $this->baseUrl ?>">
-<?= $this->topButtons(); ?>
-<button type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
-<button type="submit" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
-<div class="clear"></div>
-<div class="pager"><?= $htmlPager ?></div>
-<table class="list-table" width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#CCCCCC">	
-<thead>
-	<tr bgcolor="#BEBEBE" >
-		<td><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></td>
-<?		
-		foreach($headers as $header) {
-			echo "<td>".
-				htmlspecialchars($this->options['form'][$header]->label);
-			if($this->options['form'][$header]->filterByClick) {
-				$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-				echo "<br>".
-					 "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
-						"<option value=''>-</option>";
-				foreach($fieldValues as $key => $value) {
-					echo "<option value='{$key}'".($this->filter=="{$this->options['form'][$header]->name}:{$key}"?"selected":"").">{$value}</option>"; 
-				}
-				echo "</select>";
-			}
-			echo "</td>\n";
-		}
-?>
-		<td>Действия</td>
-	</tr>			
-</thead>
-<tbody>
-<?
-		$count = 0;
-		foreach($items as $item) {
-?>
-	<tr bgcolor="<?= ($count%2==0)?'#FFFFFF':'#EEEEEE' ?>" class="<?= $this->getListClass($item); ?>">
-		<td>
-			<input type="checkbox" class="row_checkbox" name="item[]" value="<?= $item['id'] ?>" autocomplete="off">
-		</td>
-<?
+	<div class="btn-group" role="group">
+	<?= $this->topButtons(); ?>
+	</div>
+	<div class="btn-group" role="group">
+		<button class="btn btn-default" type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
+		<button class="btn btn-default" type="button" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+	</div>
+	
+	<div class="clear"></div>
+	<div class="pager"><?= $htmlPager ?></div>
+	<table class="table table-hover table-bordered table-striped">	
+	<thead>
+		<tr>
+			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+	<?		
 			foreach($headers as $header) {
-				$formItem = $this->options['form'][$header];
-				$formItem->fromRow($item);
-?>
-		<td class="table-data" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-<?	if($formItem->filterByClick)		
-		echo "<a href='{$this->baseUrlNoPaging}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
-	else
-		echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
-?>
-			<?= $formItem->toStringTruncated() ?>
-			</a>
-		</td>
-<?
-				
+				echo "<th>".
+					htmlspecialchars($this->options['form'][$header]->label);
+				if($this->options['form'][$header]->filterByClick) {
+					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
+					echo "<br>".
+						 "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
+							"<option value=''>-</option>";
+					foreach($fieldValues as $key => $value) {
+						echo "<option value='{$key}'".($this->filter=="{$this->options['form'][$header]->name}:{$key}"?"selected":"").">{$value}</option>"; 
+					}
+					echo "</select>";
+				}
+				echo "</th>\n";
 			}
-?>
-		<td>
-				<a href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>">[Редактировать]</a> 
-				<a href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone">[Копировать]</a> 
-				<a href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('Удалить?');">[Удалить]</a> 
-				<?= $this->actions($item) ?>
-		</td>
-	</tr>
-<?
-			$count++;
-		}
-?>
-</tbody>
-</table>
-<br>
-<div class="pager"><?= $htmlPager ?></div>
-<br>
-<?= $this->topButtons(); ?>
-<input type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;" value="Добавить">
-<button type="submit" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+	?>
+			<th>Действия</th>
+		</tr>			
+	</thead>
+	<tbody>
+	<?
+			$count = 0;
+			foreach($items as $item) {
+	?>
+		<tr class="<?= $this->getListClass($item); ?>">
+			<td>
+				<input type="checkbox" class="row_checkbox" name="item[]" value="<?= $item['id'] ?>" autocomplete="off">
+			</td>
+	<?
+				foreach($headers as $header) {
+					$formItem = $this->options['form'][$header];
+					$formItem->fromRow($item);
+	?>
+			<td class="table-data" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
+	<?	if($formItem->filterByClick)		
+			echo "<a href='{$this->baseUrlNoPaging}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
+		else
+			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
+	?>
+				<?= $formItem->toStringTruncated() ?>
+				</a>
+			</td>
+	<?
+					
+				}
+	?>
+			<td>
+				<div class="btn-group" role="group">
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="Редактировать"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="Копировать"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('Удалить?');"><span class="glyphicon glyphicon-remove" title="Удалить"></span></a> 
+					<?= $this->actions($item) ?>
+				</div>
+			</td>
+		</tr>
+	<?
+				$count++;
+			}
+	?>
+	</tbody>
+	</table>
+	<div class="pager"><?= $htmlPager ?></div>
+	<div class="btn-group" role="group">
+	<?= $this->topButtons(); ?>
+	</div>
+	<div class="btn-group" role="group">
+		<button class="btn btn-default" type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
+		<button class="btn btn-default" type="button" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+	</div>
 </form>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class Pagination {
 
@@ -82,5 +82,3 @@ class Pagination {
   }
 
 }
-
-?>

@@ -11,16 +11,16 @@ class Navigation {
 	
 	function get() {
 		if(count($this->breadcrumbs) == 0) return false;
-		$html = "<div class='breadcrumbs'>";
+		$html = '<ol class="breadcrumb">';
 		$count = 0;
 		foreach($this->breadcrumbs as $url => $title) {
 			$count++;
 			if($count == count($this->breadcrumbs))
-				$html .= htmlspecialchars($title);
+				$html .= '<li class="active">'.htmlspecialchars($title).'</li>';
 			else
-				$html .= "<a href='{$url}'>".htmlspecialchars($title)."</a> &gt; ";
+				$html .= "<li><a href='{$url}'>".htmlspecialchars($title)."</a></li>";
 		}
-		$html .= "</div>";
+		$html .= "</ol>";
 		return $html;
 		
 	}

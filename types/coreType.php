@@ -60,9 +60,7 @@ abstract class coreType {
 	public function validate(&$errors) {
 		$this->valid = true;
 
-		if(!isset($id) || $id == '-' || !empty($item['readonly'])) return true;
-		
-		if($this->required && trim($this->value) == '' ) {
+		if($this->required && is_string($this->value) && trim($this->value) == '' ) {
 			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
 			$this->errors[] = 'Обязательное поле';
 			$this->valid = false;
@@ -106,22 +104,18 @@ abstract class coreType {
 			$this->errors[] = $item['validation_message'];
 		}
 		
-		
-		
-		
-		
 		return $this->valid;
 	}
 	
 	public function toHtmlLabel() {
-		return "<label class='label ".(!$this->valid?'error':'')."' for='{$this->name}'>
-			{$this->label}".($this->required?'*':'')."
-			<br>
-			{$this->label_hint}
-		</label>";
+		return "<label class='col-sm-3 control-label ".(!$this->valid?'error':'')."' for='{$this->name}'>
+			{$this->label}".($this->required?'*':'').
+		($this->label_hint?"<small class='show' style='font-weight:normal'>{$this->label_hint}</small>":"").
+		"</label>";
+
 	}
 	
-	public function postSave($id, $params) { return ''; }
+	public function postSave($id, $params, $item) { return ''; }
 	
 	public function escape($string) {
 		if($this->escape) 
@@ -137,7 +131,7 @@ abstract class coreType {
 	
 	
 	public function json($obj) {
-		return json_encode($obj);
+//		return json_encode($obj);
 		return preg_replace_callback(
 		'/\\\u([0-9a-fA-F]{4})/',
 		create_function('$match', 'return mb_convert_encoding("&#" . intval($match[1], 16) . ";", "UTF-8", "HTML-ENTITIES");'),

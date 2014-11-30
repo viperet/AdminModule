@@ -5,7 +5,7 @@ class textType extends coreType {
 
 
 	public function toHtml() {
-		return "<input type='text' name='{$this->name}' id='{$this->name}' class='form_input {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->value)."' ".(!empty($this->placeholder)?"placeholder='".htmlspecialchars($this->placeholder)."' ":'')." />";
+		return "<input type='text' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->value)."' ".(!empty($this->placeholder)?"placeholder='".htmlspecialchars($this->placeholder)."' ":'')." />";
 	}
 	
 	public function toSql() {

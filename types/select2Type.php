@@ -24,13 +24,15 @@ class select2Type extends textType {
 
 	public static function pageHeader() {
 	?>
+<!--
 <script src="/js/select2.js"></script>
 <link href="/js/select2.css" media="screen" type="text/css" rel="stylesheet">
+-->
 	<?
 	}
 
 	
-	public function getLookup($value, $limit) {
+	public function getLookup($value=NULL, $limit=NULL) {
 		
 		$result = array();
 		$sql = "SELECT id,".$this->lookup_display." value FROM ".$this->lookup_table.
@@ -104,7 +106,7 @@ class select2Type extends textType {
 	</script>";
 		} else {
 		
-			$html = "<select name='{$this->name}' id='{$this->name}' class='form_select {$this->class} ".(!$this->valid?'error':'')."'>";
+			$html = "<select name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."'>";
 			foreach($this->values as $value=>$label) {
 				if(is_array($label)) {
 					$html .= "<optgroup label='{$value}'>";

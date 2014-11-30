@@ -5,7 +5,6 @@ class htmlType extends textareaType {
 
 	public static function pageHeader() {
 	?>
-<script src="/admin/ckeditor/ckeditor.js"></script>
 	<?
 	}
 	
