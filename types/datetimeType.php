@@ -10,8 +10,13 @@ class datetimeType extends textType {
 		if(empty($this->value))
 			$date = "";
 		else
-			$date = date("d.m.Y H:i:s", $this->value);
-		return "<input type='text' name='{$this->name}' id='{$this->name}' class='form-control form_datetime {$this->class} ".(!$this->valid?'error':'')."' value='".$date."' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ:СС' />";
+			$date = date("d.m.Y H:i", $this->value);
+		//return "<input type='text' name='{$this->name}' id='{$this->name}' class='form-control form_datetime {$this->class} ".(!$this->valid?'error':'')."' value='".$date."' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ:СС' />";
+		return "
+    <div class='input-group date' id='{$this->name}'>
+        <input type='text' class='form-control' name='{$this->name}' value='{$date}' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ' />
+        <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
+	</div>";
 	}
 	
 	public function toSql() {
@@ -48,6 +53,16 @@ class datetimeType extends textType {
 				$this->value = strtotime($row[$this->name]);
 		} elseif($this->format == 'unixtime')
 			$this->value = $row[$this->name];
+	}
+	
+	public static function pageHeader() {
+?>
+<script type="text/javascript">
+  $(function() {
+    $('.input-group.date').datetimepicker({language: 'ru'});
+  });
+</script>
+<?
 	}
 	
 }
