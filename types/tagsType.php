@@ -50,6 +50,7 @@ class tagsType extends coreType {
 	}
 	
 	public function fromRow($row) {
+		if(empty($row['id'])) return $this->value = array();
 		$this->value = array();
 		$tags = $this->db->getAll("SELECT tags_content.tag_id, tags.tag FROM tags_content 
 			INNER JOIN tags ON (tags.id = tags_content.tag_id)
