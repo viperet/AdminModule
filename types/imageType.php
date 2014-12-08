@@ -28,6 +28,19 @@ class imageType extends coreType {
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
 	}	
+	
+	public function validate(&$errors) {
+		$this->valid = true;
+		
+		if($this->required && empty($_POST[$this->name.'_url']) && empty($_FILES[$this->name.'_file']['tmp_name']) && trim($this->value) == '' ) {
+			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
+			$this->errors[] = 'Обязательное поле';
+			$this->valid = false;
+			return false;
+		}
+		return $this->valid;
+	}
+	
 	public function toHtml() {
 		return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
 		<div class='col-sm-12'><p class='form-control-static'>Размер не менее {$this->width}x{$this->height}<br>":"Произвольный размер<br>")."</p></div>".
