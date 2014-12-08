@@ -272,11 +272,13 @@ class AdminModule {
 			$item = $this->getItem($id);
 			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
 			$res = $this->db->query($sql);
+/*
 			if($res !== 1) {
 				echo "DELETE error<br>";
 				echo nl2br($res->result->userinfo);
 				exit;
 			}			
+*/
 			$this->updateCache($id, $item);
 		}
 		$this->updateFullCache();
