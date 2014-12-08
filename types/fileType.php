@@ -25,6 +25,9 @@ class fileType extends coreType {
 	public function toString() {
 		$fname = $this->getFilename();
 		$name = basename($fname);
+		
+		if(!file_exists($fname)) return "Файл не загружен";
+
 		$size = filesize($fname);
 		return ($this->value!=''?"<span class='glyphicon glyphicon-file'></span> ".htmlspecialchars($name).", ".fileType::formatSize($size):"Файл не загружен");		
 	}
@@ -37,7 +40,7 @@ class fileType extends coreType {
 			$this->value = $this->path.$this->value;
 	}	
 	public function toHtml() {
-		return "<div class='row file_upload_field'>
+		return "<div class='row file_upload_field' data-maxsize='{$this->maxsize}'>
 <div class='col-sm-3 col-xs-3' style='position:relative;'>
 <p class='form-control-static file_status' id='{$this->name}'>".$this->toString()."</p>
 </div>
@@ -47,13 +50,14 @@ class fileType extends coreType {
 	    Загрузить с компьютера <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file' placeholder='Загрузка файла'>
 	</span>
 </div>
-<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='0' />
+<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='".(empty($this->value)?'1':'0')."' />
 </div>
 ";
 	}
 	public function toSql() { return ""; }	
 	
 	public function validate(&$errors) {
+
 		$valid = true;
 		if(!empty($_FILES[$this->name.'_file']['name'])) {
 			$ext = pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
@@ -82,7 +86,7 @@ class fileType extends coreType {
 			$errors[] = 'Слишком большой файл';
 			$valid = false;
 	    }
-		if($this->required && empty($_FILES[$this->name.'_file']['name'])) {
+		if($this->required && !empty($params[$this->name.'_remove']) && empty($_FILES[$this->name.'_file']['name'])) {
 			$errors[] = "Загрузите файл в поле '".htmlspecialchars($this->label)."'";
 			$this->errors[] = 'Обязательное поле';
 			$this->valid = false;
@@ -102,6 +106,7 @@ class fileType extends coreType {
 		
 	    $path = $this->path.$relative_path;		
 	    @mkdir($this->options['root_path'].$path, 0777, true);
+	    
 	    
 		if(!empty($_FILES[$this->name.'_file']['tmp_name']) &&
 		   !empty($_FILES[$this->name.'_file']['name'])) {
@@ -188,9 +193,46 @@ class fileType extends coreType {
 
 	public static function pageHeader() {
 ?>
+<style>
+	.file_upload_field.hover {
+		border: 1px dashed #CCCCCC;
+		background: #F5F5F5;
+	}
+</style>
 <script>
-
 $(function() {
+	
+/*
+	$('.file_upload_field')
+		.on('dragenter', function (e) {
+			e.stopPropagation().preventDefault();
+			$(this).addClass('hover');
+		})
+		.on('dragleave', function (e) {
+			e.stopPropagation().preventDefault();
+			$(this).removeClass('hover');
+		})
+		.on('dragover', function (e) {
+			e.stopPropagation().preventDefault();
+		})
+		.on('drop', function (e) {
+			e.preventDefault();
+			var file = e.originalEvent.dataTransfer.files[0];
+			var maxsize  = $(this).data('maxsize');
+			
+			if (file.size > maxFileSize) {
+			    alert('Файл слишком большой! Максимальный размер '+formatSize(maxsize));
+			    return false;
+			}
+					 
+			//We need to send dropped files to Server
+			handleFileUpload(files,obj);
+		});
+*/
+	$(document).on('drop', function (e)	{
+	    e.stopPropagation().preventDefault();
+	});
+	
 	function escapeHtml(text) {
 	  var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
 	  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
@@ -205,8 +247,10 @@ $(function() {
 			if(this.files.length == 1) {
 				var file = this.files[0];
 				p.html("<span class='glyphicon glyphicon-file'></span> "+escapeHtml(file.name)+", "+formatSize(file.size));
+				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления 
 			} else {
 				p.text('Файл не загружен');
+				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
 			}
 	});
 	$('.file_upload_remove').click(function () { // удаление файла
