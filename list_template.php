@@ -1,55 +1,11 @@
 <style>
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
-	.pager { margin: 5px 0;	}
+	.admin-pager  { text-align: center;}
 	div.filter { margin: 0 0 10px 0; float: right;	max-width: 200px; }
 	div.filter form { margin: 0;	}
 	select.filter { max-width: 150px; }
-	.breadcrumbs { font-weight: bold; margin: 10px 0; }
 	.clear { clear: both; }	
-div.pagination {
-	padding: 3px;
-	margin: 3px;
-	text-align: center;
-	font-family: Tahoma,Helvetica,sans-serif;
-	}
-	
-div.pagination a {
-	color: #0645ad;
-	border: 1px solid #a9b8dd;
-	margin-right: 3px;
-	padding: 2px 6px;
-	background-position: bottom;
-	text-decoration: none;
-	}
-	
-div.pagination a:hover, div.pagination a:active {
-	border: 1px solid #3c61a5;
-	background-image: none;
-	background-color: #6b92d7;
-	color: #fff;
-	}
-	
-div.pagination span.current {
-	color: #000;
-	font-weight: bold;
-	margin-right: 3px;
-	padding: 2px 6px;
-	}
-	
-div.pagination span.disabled {
-	border: 1px solid #ddd;
-	color: #bbb;
-	margin-right: 3px;
-	padding: 2px 6px;
-	}
-	
-div.pagination .next {
-	margin: 0 3px 0 8px;
-	}
-	
-div.pagination .prev {
-	margin: 0 8px 0 0;
-	}	
+	table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
 </style>
 
 
@@ -98,19 +54,28 @@ div.pagination .prev {
 	</div>
 	
 	<div class="clear"></div>
-	<div class="pager"><?= $htmlPager ?></div>
-	<table class="table table-hover table-bordered table-striped">	
+	<div class="admin-pager"><?= $htmlPager ?></div>
+	<table class="table table-hover table-bordered table-striped table-condensed">	
 	<thead>
 		<tr>
 			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
-				echo "<th>".
+				echo "<th title='".@$this->options['form'][$header]->label_hint."'>".
 					htmlspecialchars($this->options['form'][$header]->label);
+				echo "</th>\n";
+			}
+	?>
+			<th>Действия</th>
+		</tr>			
+		<tr>
+			<th></th>
+	<?		
+			foreach($headers as $header) {
+				echo "<th>";
 				if($this->options['form'][$header]->filterByClick) {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-					echo "<br>".
-						 "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
+					echo "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
 							"<option value=''>-</option>";
 					foreach($fieldValues as $key => $value) {
 						echo "<option value='{$key}'".($this->filter=="{$this->options['form'][$header]->name}:{$key}"?"selected":"").">{$value}</option>"; 
@@ -120,8 +85,9 @@ div.pagination .prev {
 				echo "</th>\n";
 			}
 	?>
-			<th>Действия</th>
-		</tr>			
+			<th></th>
+		</tr>
+	</thead>
 	</thead>
 	<tbody>
 	<?
@@ -150,7 +116,7 @@ div.pagination .prev {
 					
 				}
 	?>
-			<td>
+			<td class="table-actions">
 				<div class="btn-group" role="group">
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="Редактировать"></span></a> 
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="Копировать"></span></a> 
@@ -165,7 +131,7 @@ div.pagination .prev {
 	?>
 	</tbody>
 	</table>
-	<div class="pager"><?= $htmlPager ?></div>
+	<div class="admin-pager"><?= $htmlPager ?></div>
 	<div class="btn-group" role="group">
 	<?= $this->topButtons(); ?>
 	</div>
@@ -174,3 +140,10 @@ div.pagination .prev {
 		<button class="btn btn-default" type="button" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
 	</div>
 </form>
+
+<script>
+	$('select.filter').selectpicker({ 
+		 width: '100%',
+		 style: 'btn-default btn-xs',
+	});
+</script>
