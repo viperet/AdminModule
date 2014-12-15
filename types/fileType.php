@@ -11,7 +11,7 @@ class fileType extends coreType {
 	    $base = log($size) / log(1024);
 	    $suffixes = array('', 'k', 'M', 'G', 'T');   
 	
-	    return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+	    return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)].'B';
     }
 	
 	private function getFilename() {
@@ -202,33 +202,6 @@ class fileType extends coreType {
 <script>
 $(function() {
 	
-/*
-	$('.file_upload_field')
-		.on('dragenter', function (e) {
-			e.stopPropagation().preventDefault();
-			$(this).addClass('hover');
-		})
-		.on('dragleave', function (e) {
-			e.stopPropagation().preventDefault();
-			$(this).removeClass('hover');
-		})
-		.on('dragover', function (e) {
-			e.stopPropagation().preventDefault();
-		})
-		.on('drop', function (e) {
-			e.preventDefault();
-			var file = e.originalEvent.dataTransfer.files[0];
-			var maxsize  = $(this).data('maxsize');
-			
-			if (file.size > maxFileSize) {
-			    alert('Файл слишком большой! Максимальный размер '+formatSize(maxsize));
-			    return false;
-			}
-					 
-			//We need to send dropped files to Server
-			handleFileUpload(files,obj);
-		});
-*/
 	$(document).on('drop', function (e)	{
 	    e.stopPropagation().preventDefault();
 	});
