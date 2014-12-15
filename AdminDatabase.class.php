@@ -9,7 +9,7 @@ class AdminDatabase {
 		$this->linkId = $linkId;
 	}
 	
-	function isError($row) {
+	static function isError($row) {
 		return false;
 	}
 
