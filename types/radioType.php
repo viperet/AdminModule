@@ -18,7 +18,7 @@ class radioType extends textType {
 			$this->value = $this->value[0];
 		}
 		foreach($this->values as $value=>$label)
-			$html .= "<input type='radio' name='{$this->name}' class='form_radio {$this->class} ".(!$this->valid?'error':'')."' id='{$this->name}_{$value}' value='{$value}' ".($this->value==$value?"checked='1'":'')."><label for='{$this->name}_{$value}'>".htmlspecialchars($label)."</label>";
+			$html .= "<label class='radio-inline'><input type='radio' name='{$this->name}' class='form_radio {$this->class} ".(!$this->valid?'error':'')."' id='{$this->name}_{$value}' value='{$value}' ".($this->value==$value?"checked='1'":'')."> ".htmlspecialchars($label)."</label>";
 		return $html;
 	}
 	
