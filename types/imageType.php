@@ -2,7 +2,7 @@
 require_once(dirname(__FILE__)."/../helpers/phpThumb/phpthumb.class.php");
 require_once(dirname(__FILE__)."/../imageResizer.class.php");
 
-class imageType extends coreType {
+class imageType extends fileType {
 	public $width = 100;
 	public $height = 100;
 	public $format = '{id}_{width}x{height}';
@@ -13,33 +13,11 @@ class imageType extends coreType {
 	public $zc = 1;
 	public $value_url = '';
 	public $size = 'medium'; // картинки какого размера показывать в рез-тах поиска (icon|medium|xxlarge|huge)
+	public $validation = array('jpg', 'jpeg', 'png', 'gif');
 	
 	public $x,$y,$h,$w;
 	
-	public function toString() {
-		return 'картинко';		
-	}
-
-	public function fromForm($value) {
-	}	
 	
-	public function fromRow($row) {
-		parent::fromRow($row);
-		if($this->relative && $this->value!='')
-			$this->value = $this->path.$this->value;
-	}	
-	
-	public function validate(&$errors) {
-		$this->valid = true;
-		
-		if($this->required && empty($_POST[$this->name.'_url']) && empty($_FILES[$this->name.'_file']['tmp_name']) && trim($this->value) == '' ) {
-			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
-			$this->valid = false;
-			return false;
-		}
-		return $this->valid;
-	}
 	
 	public function toHtml() {
 		return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
@@ -65,12 +43,11 @@ class imageType extends coreType {
 <input type='hidden' id='{$this->name}_y' name='{$this->name}_y' />
 <input type='hidden' id='{$this->name}_w' name='{$this->name}_w' />
 <input type='hidden' id='{$this->name}_h' name='{$this->name}_h' />
-<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='0' />
+<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='".(empty($this->value)?'1':'0')."' />
 </div>
 ";
 	}
-	public function toSql() { return ""; }	
-	
+
 	
 	public function postSave($id, $params) { 
 		$this->x = $params[$this->name.'_x'];
