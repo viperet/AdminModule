@@ -399,9 +399,9 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 
 	var targetSize = {w: image_width, h: image_height, aspect: image_width/image_height};
 
-	$('#imageCrop').modal().on('shown.bs.modal', function () {
+	img.attr('src', image);
+	$('#imageCrop').modal().one('shown.bs.modal', function () {
 		var max_width = $('#imageCrop .modal-body').width();
-		img.attr('src', $('#'+id).attr('src'));
 		$(img).Jcrop({
 			minSize: [targetSize.w, targetSize.h],
 			aspectRatio: targetSize.aspect,
@@ -411,6 +411,8 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 		},function(){
 			Jcrop = this;
 		});		
+	}).one('hidden.bs.modal', function () {
+		Jcrop.destroy();
 	});
 
 	$('#apply').one('click', function () {
