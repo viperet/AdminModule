@@ -2,19 +2,64 @@
 
 class passwordType extends textType {
 	public $placeholder;
+	public $min_length = 6;
+	public $max_length = 100;
+	public $label_hint = 'Для смены введите новый пароль два раза';
+	public $value_check = '';
 
 	public function fromRow($row) {
 		$this->value = '';
 	}
+	
+	
+	public function fromForm($value) {
+		parent::fromForm($value);
+		$this->value_check = $value[$this->name.'_check'];
+	}
+		
+	
+	public function validate(&$errors) {
+		$this->valid = true;
+
+		if( $this->value !=  $this->value_check) {
+			$errors[] = "Введенные пароли не совпадают";
+			$this->errors[] = "Введенные пароли не совпадают";
+			$this->valid = false;
+		}
+
+		if( strlen($this->value)<$this->min_length ) {
+			$errors[] = "Минимальная длинна пароля {$this->min_length} символов";
+			$this->errors[] = "Минимальная длинна {$this->min_length} символов";
+			$this->valid = false;
+		}
+		if( strlen($this->value)>$this->max_length ) {
+			$errors[] = "Максимальная длинна пароля {$this->max_length} символов";
+			$this->errors[] = "Максимальная длинна {$this->max_length} символов";
+			$this->valid = false;
+		}
+		
+		return $this->valid && parent::validate($errors);
+	}	
 
 	public function toHtml() {
-		return "<input type='password' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' ".(!empty($this->placeholder)?"placeholder='".htmlspecialchars($this->placeholder)."' ":'')." />";
+		return "<div class='row'>".
+		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Новый пароль' /></div>".
+		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}_check' id='{$this->name}_check' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Еще раз новый пароль' /></div>".
+		"</div>";
 	}
 	
 	public function toSql() {
 		if($this->value == '') return "";
 		return "`{$this->name}`= md5('". mysql_real_escape_string($this->value)."')";
 		
+	}
+
+	public static function pageHeader() {
+	?>
+<style>
+	.row .form-password { margin-bottom: 10px; }
+</style>
+	<?
 	}
 	
 }
