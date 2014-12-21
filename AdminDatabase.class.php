@@ -3,6 +3,7 @@
 
 class AdminDatabase {
 	public $linkId;
+	public $insertId;
 	public $foundRows;
 	
 	function __construct($linkId) {
@@ -69,7 +70,7 @@ class AdminDatabase {
 	        // perform the actual replacement
 	        $sql = preg_replace($pattern2, $replacements2, $sql, 1);
 		}
-
+		
 		$res = mysql_query($sql, $this->linkId);
 		if(!$res) {
 			echo "<pre>";
@@ -79,6 +80,7 @@ class AdminDatabase {
 		    die('Invalid query: ' . mysql_error());
 		}
 		
+		$this->insertId = mysql_insert_id();
 		
 		if(strpos($sql, 'SQL_CALC_FOUND_ROWS') > 0) {
 			$this->foundRows = $this->getOne("SELECT FOUND_ROWS()");
