@@ -6,8 +6,9 @@ class Pagination {
 	private $start = 0;
 	private $display;
 	private $start_display;
-
-	function __construct($query, $display=10) {
+	private $pageParam;
+	function __construct($query, $display=10, $pageParam = 's') {
+		$this->pageParam = $pageParam;
 		if (!empty($query)) {
 			$this->display = $display;
 			if (isset($_GET['display']) && is_numeric($_GET['display'])) $this->display = (int) $_GET['display'];
@@ -27,7 +28,7 @@ class Pagination {
 				}
 				if ($num_records > $this->display) $this->num_pages = ceil($num_records/$this->display);
 			}
-			if (isset($_GET['s']) && is_numeric($_GET['s']) && $_GET['s'] > 0) $this->start = (int) $_GET['s'];
+			if (isset($_GET[$pageParam]) && is_numeric($_GET[$pageParam]) && $_GET[$pageParam] > 0) $this->start = (int) $_GET[$pageParam];
 			$this->start_display = " LIMIT {$this->start}, {$this->display}";
 		}
 	}
@@ -56,23 +57,23 @@ class Pagination {
 			if ($begin < 1) $begin = 1;
 		}
 		if ($current_page != 1) {
-			$html .= '<li class="first"><a title="В начало" href="' . $url.$delim.'s=0">&laquo;</a></li>';
-			$html .= '<li class="prev"><a title="Предидущая страница" href="' . $url.$delim.'s='.($this->start - $this->display) . '">Предидущая</a></li>';
+			$html .= '<li class="first"><a title="В начало" href="' . $url . '">&laquo;</a></li>';
+			$html .= '<li class="prev"><a title="Предидущая страница" href="' . $url.($this->start - $this->display>0?$delim.$this->pageParam.'='.($this->start - $this->display) : '') . '">Предидущая</a></li>';
 		} else {
 			$html .= '<li class="disabled first"><span title="В начало">&laquo;</span></li>';
 			$html .= '<li class="disabled prev"><span title="Предидущая страница">Предидущая</span></li>';
 		}
 		for ($i=$begin; $i<=$end; $i++) {
 			if ($i != $current_page) {
-				$html .= '<li><a title="' . $i . '" href="' . $url.$delim.'s='.(($this->display * ($i - 1))) . '">' . $i . '</a></li>';
+				$html .= '<li><a title="' . $i . '" href="' . $url .(($this->display * ($i - 1))>0?$delim.$this->pageParam.'='.(($this->display * ($i - 1))):'') . '">' . $i . '</a></li>';
 			} else {
 				$html .= '<li class="active"><span>' . $i . '</span></li>';
 			}
 		}
 		if ($current_page != $this->num_pages) {
-			$html .= '<li class="next"><a title="Следующая страница" href="' . $url.$delim.'s='.($this->start + $this->display) . '">Следующая</a></li>';
+			$html .= '<li class="next"><a title="Следующая страница" href="' . $url.$delim.$this->pageParam.'='.($this->start + $this->display) . '">Следующая</a></li>';
 			$last = ($this->num_pages * $this->display) - $this->display;
-			$html .= '<li class="last"><a title="В конец" href="' . $url.$delim.'s='.($last) . '">&raquo;</a></li>';
+			$html .= '<li class="last"><a title="В конец" href="' . $url.$delim.$this->pageParam.'='.($last) . '">&raquo;</a></li>';
 		} else {
 			$html .= '<li class="disabled next"><span title="Следующая страница">Следующая</span></li>';
 			$html .= '<li class="disabled last"><span title="В конец">&raquo;</span></li>';
