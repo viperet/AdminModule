@@ -1,6 +1,6 @@
 <?php
 
-class Pagination {
+class Pagination extends Translate {
 
 	private $num_pages = 1;
 	private $start = 0;
@@ -57,11 +57,11 @@ class Pagination {
 			if ($begin < 1) $begin = 1;
 		}
 		if ($current_page != 1) {
-			$html .= '<li class="first"><a title="В начало" href="' . $url . '">&laquo;</a></li>';
-			$html .= '<li class="prev"><a title="Предидущая страница" href="' . $url.($this->start - $this->display>0?$delim.$this->pageParam.'='.($this->start - $this->display) : '') . '">Предидущая</a></li>';
+			$html .= '<li class="first"><a title="'._('To the begining').'" href="' . $url . '">&laquo;</a></li>';
+			$html .= '<li class="prev"><a title="'._('Previous page').'" href="' . $url.($this->start - $this->display>0?$delim.$this->pageParam.'='.($this->start - $this->display) : '') . '">'._('Previous').'</a></li>';
 		} else {
-			$html .= '<li class="disabled first"><span title="В начало">&laquo;</span></li>';
-			$html .= '<li class="disabled prev"><span title="Предидущая страница">Предидущая</span></li>';
+			$html .= '<li class="disabled first"><span title="'._('To the begining').'">&laquo;</span></li>';
+			$html .= '<li class="disabled prev"><span title="'._('Previous page').'">'._('Previous').'</span></li>';
 		}
 		for ($i=$begin; $i<=$end; $i++) {
 			if ($i != $current_page) {
@@ -71,12 +71,12 @@ class Pagination {
 			}
 		}
 		if ($current_page != $this->num_pages) {
-			$html .= '<li class="next"><a title="Следующая страница" href="' . $url.$delim.$this->pageParam.'='.($this->start + $this->display) . '">Следующая</a></li>';
+			$html .= '<li class="next"><a title="'._('Next page').'" href="' . $url.$delim.$this->pageParam.'='.($this->start + $this->display) . '">'._('Next').'</a></li>';
 			$last = ($this->num_pages * $this->display) - $this->display;
-			$html .= '<li class="last"><a title="В конец" href="' . $url.$delim.$this->pageParam.'='.($last) . '">&raquo;</a></li>';
+			$html .= '<li class="last"><a title="'._('To the end').'" href="' . $url.$delim.$this->pageParam.'='.($last) . '">&raquo;</a></li>';
 		} else {
-			$html .= '<li class="disabled next"><span title="Следующая страница">Следующая</span></li>';
-			$html .= '<li class="disabled last"><span title="В конец">&raquo;</span></li>';
+			$html .= '<li class="disabled next"><span title="'._('Next page').'">'._('Next').'</span></li>';
+			$html .= '<li class="disabled last"><span title="'._('To the end').'">&raquo;</span></li>';
 		}
 		return '<nav class="page-navigation"><ul class="pagination">' . $html . '</ul></nav>';
 	}
