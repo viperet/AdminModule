@@ -17,36 +17,36 @@ msgstr ""
 
 #: AdminDatabase.class.php:80
 msgid "Invalid query:"
-msgstr "Невірний запит"
+msgstr "Ошибочный запрос"
 
 #: Pagination.class.php:74 Pagination.class.php:78
 msgid "Next"
-msgstr "Наступна"
+msgstr "Следующая"
 
 #: Pagination.class.php:74 Pagination.class.php:78
 msgid "Next page"
-msgstr "Наступна сторінка"
+msgstr "Следующая страница"
 
 #: Pagination.class.php:61 Pagination.class.php:64
 msgid "Previous"
-msgstr "Попередня"
+msgstr "Предидущая"
 
 #: Pagination.class.php:61 Pagination.class.php:64
 msgid "Previous page"
-msgstr "Попередня сторінка"
+msgstr "Предидущая страница"
 
 #: AdminDatabase.class.php:32 AdminDatabase.class.php:79
 msgid "Query:"
-msgstr "Запит:"
+msgstr "Запрос:"
 
 #: AdminDatabase.class.php:33
 msgid "Replacement count doesn't match"
-msgstr "Кількість замінників не вірна"
+msgstr "Неправильное число подстановок"
 
 #: Pagination.class.php:60 Pagination.class.php:63
 msgid "To the begining"
-msgstr "До початку"
+msgstr "В начало"
 
 #: Pagination.class.php:76 Pagination.class.php:79
 msgid "To the end"
-msgstr "В кінець"
+msgstr "В конец"
