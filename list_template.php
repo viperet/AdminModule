@@ -49,8 +49,8 @@
 	<?= $this->topButtons(); ?>
 	</div>
 	<div class="btn-group" role="group">
-		<button class="btn btn-default" type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
-		<button class="btn btn-default" type="button" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+		<a class="btn btn-default" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</a>
+		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
 	</div>
 	
 	<div class="clear"></div>
@@ -133,7 +133,7 @@
 	</table>
 	<div class="admin-pager"><?= $htmlPager ?></div>
 	<div class="btn-group" role="group">
-	<?= $this->topButtons(); ?>
+	<?= $this->bottomButtons(); ?>
 	</div>
 	<div class="btn-group" role="group">
 		<button class="btn btn-default" type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
