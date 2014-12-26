@@ -337,6 +337,9 @@ class AdminModule {
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
 		return $html;
 	}
+	function bottomButtons() {
+		return self::topButtons();
+	}
 
 /* =============== */
 /* Доп валидация формы	*/
@@ -414,6 +417,11 @@ class AdminModule {
 			}
 		}
 		return true;
+	}
+	
+	function move($url = NULL) {
+		header("Location: ".($url?$url:$this->baseUrl));	
+		exit;
 	}
 
 
