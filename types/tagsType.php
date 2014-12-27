@@ -39,7 +39,7 @@ class tagsType extends coreType {
 				$this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
 				$tag_id = mysql_insert_id();
 				if($tag_id == 0) { // такой тег уже есть в базе
-					$tag_id =$db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
+					$tag_id =$this->db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
 				}
 				$this->db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");	
 			} else {
