@@ -74,8 +74,8 @@ class tagsType extends coreType {
 	
 	public function validate(&$errors) {
 		if($this->required && count($this->value) == 0 ) {
-			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+			$errors[] = sprintf(_("Fill required field '%s'"),htmlspecialchars($this->label));
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			return false;
 		}

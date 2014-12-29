@@ -12,6 +12,7 @@ function AdminModuleAutoloader($class) {
 }
 
 spl_autoload_register('AdminModuleAutoloader');
+require_once("Translate.class.php");			
 require_once("Form.class.php");			
 require_once("AdminDatabase.class.php");			
 require_once("Navigation.class.php");			
@@ -330,8 +331,8 @@ class AdminModule {
 		$html = "";
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} Вкл?');\">{$value->label} Вкл</button>&nbsp;";
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} Выкл?');\">{$value->label} Выкл</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">{$value->label} "._('On')."</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">{$value->label} "._('Off')."</button>&nbsp;";
 			}
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
@@ -402,9 +403,9 @@ class AdminModule {
 				$this->deleteItem($_REQUEST['item']);
 			} elseif(isset($_GET['edit'])) {
 				if($_GET['edit'] == 0)
-					$this->navigation->add("Добавление","addarticle.php");
+					$this->navigation->add(_("Add record"), "addarticle.php");
 				else
-					$this->navigation->add("Редактирование","addarticle.php");
+					$this->navigation->add(_("Edit record"),"addarticle.php");
 				echo $this->navigation->get();
 //				pageStart('foobar',false);
 //! BANKER

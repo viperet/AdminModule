@@ -34,13 +34,13 @@
 </script>
 <div class="filter">
 	<form method="GET" action="" id="filter_form" class="input-group">
-		<input type="text" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="фильтр"> 
+		<input type="text" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="<?= _('filter') ?>"> 
 		<span class="input-group-btn">
 			<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
 		</span>
 	</form>
 <? if(isset($_GET['filter'])) {
-	echo "<a href='{$this->baseUrlNoFilter}'>убрать фильтр</a>";
+	echo "<a href='{$this->baseUrlNoFilter}'>"._('remove filter')."</a>";
 }
 ?>
 </div>
@@ -49,8 +49,8 @@
 	<?= $this->topButtons(); ?>
 	</div>
 	<div class="btn-group" role="group">
-		<a class="btn btn-default" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</a>
-		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
+		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
 	</div>
 	
 	<div class="clear"></div>
@@ -66,7 +66,7 @@
 				echo "</th>\n";
 			}
 	?>
-			<th>Действия</th>
+			<th><?= _('Actions') ?></th>
 		</tr>			
 		<tr>
 			<th></th>
@@ -118,9 +118,9 @@
 	?>
 			<td class="table-actions">
 				<div class="btn-group" role="group">
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="Редактировать"></span></a> 
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="Копировать"></span></a> 
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('Удалить?');"><span class="glyphicon glyphicon-remove" title="Удалить"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="<?= _('Edit') ?>"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="<?= _('Clone') ?>"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('Удалить?');"><span class="glyphicon glyphicon-remove" title="<?= _('Delete') ?>"></span></a> 
 					<?= $this->actions($item) ?>
 				</div>
 			</td>
@@ -136,8 +136,8 @@
 	<?= $this->bottomButtons(); ?>
 	</div>
 	<div class="btn-group" role="group">
-		<button class="btn btn-default" type="button" onclick="document.location='<?= $this->baseUrl ?>&edit=0'; return false;">Добавить</button>
-		<button class="btn btn-default" type="button" name="delete" onclick="return confirm('Удалить выбранные записи?');">Удалить выбранные</button>
+		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
+		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
 	</div>
 </form>
 

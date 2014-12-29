@@ -26,10 +26,10 @@ class fileType extends coreType {
 		$fname = $this->getFilename();
 		$name = basename($fname);
 		
-		if(!file_exists($fname)) return "Файл не загружен";
+		if(!file_exists($fname)) return _("File not uploaded");
 
 		$size = filesize($fname);
-		return ($this->value!=''?"<span class='glyphicon glyphicon-file'></span> ".htmlspecialchars($name).", ".fileType::formatSize($size):"Файл не загружен");		
+		return ($this->value!=''?"<span class='glyphicon glyphicon-file'></span> ".htmlspecialchars($name).", ".fileType::formatSize($size):_("File not uploaded"));
 	}
 
 	public function fromForm($value) {
@@ -45,9 +45,9 @@ class fileType extends coreType {
 <p class='form-control-static file_status' id='{$this->name}'>".$this->toString()."</p>
 </div>
 <div class='col-sm-9 col-xs-9'>
-	<button class='btn btn-default file_upload_remove' type='button'>Удалить файл</button>
+	<button class='btn btn-default file_upload_remove' type='button'>"._("Delete file")."</button>
 	<span class='btn btn-default btn-file'>
-	    Загрузить с компьютера <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file' placeholder='Загрузка файла'>
+	    "._("Upload file")." <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file'>
 	</span>
 </div>
 <input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='".(empty($this->value)?'1':'0')."' />
@@ -63,16 +63,16 @@ class fileType extends coreType {
 			$ext = pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
 			if(in_array($ext, $this->blacklist)) {
 						$this->valid = false;
-						$this->errors[] = "Загрузка файлов формата '".htmlspecialchars($ext)."' запрещена";
-						$errors[] = 'Недопустимый формат файла';
+						$this->errors[] = sprintf(_("Upload of files with extension '%s' is forbidden"), htmlspecialchars($ext));
+						$errors[] = _('Invalid file format');
 						return false;
 			}
 			if(isset($this->validation)) {
 				if(is_array($this->validation)) {
 					if(!in_array($ext, $this->validation)) {
 						$this->valid = false;
-						$this->errors[] = 'Допустимые форматы файлов: '.htmlspecialchars(implode(', ', $this->validation));
-						$errors[] = "Недопустимый формат файла '".htmlspecialchars($ext)."'";
+						$this->errors[] = _('Allowed file formats: ').htmlspecialchars(implode(', ', $this->validation));
+						$errors[] = sprintf(_("Invalid file format '%s'"), htmlspecialchars($ext));
 						$valid = false;
 					}
 				} else {
@@ -82,13 +82,13 @@ class fileType extends coreType {
 		}
 		if ($_FILES[$this->name.'_file']['size'] > $this->maxsize) {
 			$this->valid = false;
-			$this->errors[] = 'Максимальный допустимый размер '.fileType::formatSize($this->maxsize);
-			$errors[] = 'Слишком большой файл';
+			$this->errors[] = sprintf(_('Maximum file size %s'), fileType::formatSize($this->maxsize));
+			$errors[] = _('File too large');
 			$valid = false;
 	    }
 		if($this->required && !empty($params[$this->name.'_remove']) && empty($_FILES[$this->name.'_file']['name'])) {
-			$errors[] = "Загрузите файл в поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+			$errors[] = sprintf(_("Upload file in field '%s'"), htmlspecialchars($this->label));
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			$valid = false;
 		}
@@ -222,7 +222,7 @@ $(function() {
 				p.html("<span class='glyphicon glyphicon-file'></span> "+escapeHtml(file.name)+", "+formatSize(file.size));
 				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления 
 			} else {
-				p.text('Файл не загружен');
+				p.text(<?=_("File not uploaded")?>);
 				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
 			}
 	});
@@ -230,7 +230,7 @@ $(function() {
 		var el = $(this);
 		var p = el.parents('.file_upload_field').find('.file_status');
 		
-		p.text('Файл не загружен');
+		p.text(<?=_("File not uploaded")?>);
 
 		var file_id = $('#'+p.attr('id')+'_file');
 		file_id.val('').replaceWith( file_id = file_id.clone( true ) );

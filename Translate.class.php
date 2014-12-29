@@ -12,7 +12,6 @@ class Translate {
 		$domain = 'messages';
 		bindtextdomain($domain, dirname(__FILE__)."/locale"); 
 		textdomain($domain);	
-
 	}
 }
 

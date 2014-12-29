@@ -61,8 +61,8 @@ abstract class coreType {
 		$this->valid = true;
 
 		if($this->required && is_string($this->value) && trim($this->value) == '' ) {
-			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+			$errors[] = sprintf(_("Fill required field '%s'"),htmlspecialchars($this->label));
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			return false;
 		}
