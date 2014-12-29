@@ -222,7 +222,7 @@ $(function() {
 				p.html("<span class='glyphicon glyphicon-file'></span> "+escapeHtml(file.name)+", "+formatSize(file.size));
 				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления 
 			} else {
-				p.text(<?=_("File not uploaded")?>);
+				p.text('<?=_("File not uploaded")?>');
 				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
 			}
 	});
@@ -230,7 +230,7 @@ $(function() {
 		var el = $(this);
 		var p = el.parents('.file_upload_field').find('.file_status');
 		
-		p.text(<?=_("File not uploaded")?>);
+		p.text('<?=_("File not uploaded")?>');
 
 		var file_id = $('#'+p.attr('id')+'_file');
 		file_id.val('').replaceWith( file_id = file_id.clone( true ) );
