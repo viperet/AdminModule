@@ -94,35 +94,48 @@ class tagsType extends coreType {
 <script>
 	$('#{$this->name}').select2({
 //	  tags: true,
-	  tokenSeparators: [","],
-	  createSearchChoice: function(term, data) {
-	    if ($(data).filter(function() {
-	      return this.text.localeCompare(term) === 0;
-	    }).length === 0) {
-	      return {
-	        id: '"'+term+'"',
-	        text: term
-	      };
-	    }
-	  },
-	  multiple: true,
-	  initSelection: function(element, callback) {
-		callback({$value_json});	  
-	  },
-	  ajax: {
+//	  tokenSeparators: [","],
+		tokenizer: function(input, selection, callback) {
+			// no comma no need to tokenize
+			if (input.indexOf(',') < 0 && input.indexOf(' ') < 0)
+				return;
+	
+			var parts = input.split(/,| /);
+			for (var i = 0; i < parts.length; i++) {
+				var part = parts[i];
+				part = part.trim();
+	
+				callback({id:part,text:part});
+			}
+		},
+		createSearchChoice: function(term, data) {
+			if ($(data).filter(function() {
+				return this.text.localeCompare(term) === 0;
+			}).length === 0) {
+				return {
+					id: '"'+term+'"',
+					text: term
+				};
+			}
+		},
+		multiple: true,
+		initSelection: function(element, callback) {
+			callback({$value_json});	  
+		},
+		ajax: {
 		url: document.location+'&ajaxField='+encodeURIComponent('{$this->name}')+'&ajaxMethod=ajaxLookup',
-		dataType: 'json',
-	    data: function(term, page) {
-	      return {
-	        q: term
-	      };
-	    },
-	    results: function(data, page) {
-	      return {
-	        results: data
-	      };
-	    }
-	  }
+			dataType: 'json',
+			data: function(term, page) {
+		    return {
+		    	q: term
+		    };
+		},
+		results: function(data, page) {
+		    return {
+		    	results: data
+		    };
+		  }
+		}
 	});
 
 </script>
