@@ -86,7 +86,7 @@ class fileType extends coreType {
 			$errors[] = _('File too large');
 			$valid = false;
 	    }
-		if($this->required && !empty($params[$this->name.'_remove']) && empty($_FILES[$this->name.'_file']['name'])) {
+		if($this->required /* && !empty($params[$this->name.'_remove']) */ && empty($_FILES[$this->name.'_file']['name'])) {
 			$errors[] = sprintf(_("Upload file in field '%s'"), htmlspecialchars($this->label));
 			$this->errors[] = _('Required field');
 			$this->valid = false;
@@ -155,11 +155,12 @@ class fileType extends coreType {
 	}
 
 	private static function translit($text) { 
+		$text = mb_convert_case($text, MB_CASE_LOWER);
 		preg_match_all('/./u', $text, $text); 
 		$text = $text[0]; 
-		$simplePairs = array( 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' , 'А' => 'A' , 'Л' => 'L' , 'У' => 'U' , 'Б' => 'B' , 'М' => 'M' , 'Т' => 'T' , 'В' => 'V' , 'Н' => 'N' , 'Ы' => 'Y' , 'Г' => 'G' , 'О' => 'O' , 'Ф' => 'F' , 'Д' => 'D' , 'П' => 'P' , 'И' => 'I' , 'Р' => 'R' , ); 
-		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'kh' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja' , 'З' => 'Z' , 'Ц' => 'C' , 'К' => 'K' , 'Ж' => 'ZH' , 'Ч' => 'CH' , 'Х' => 'KH' , 'Е' => 'E' , 'С' => 'S' , 'Ё' => 'JO' , 'Э' => 'E' , 'Ш' => 'SH' , 'Й' => 'J' , 'Щ' => 'SHH' , 'Ю' => 'JU' , 'Я' => 'JA' , 'Ь' => "" , 'Ъ' => "" , 'ъ' => "" , 'ь' => "" , ); 
-		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '.', ',' => '-', ':' => '-', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
+		$simplePairs = array('і'=>'i', 'ї'=>'i', 'є'=>'e', 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' ); 
+		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'h' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja', 'ъ' => "" , 'ь' => "" ); 
+		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '', ',' => '', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
 		$translitLatSymbols = array( 'a','l','u','b','m','t','v','n','y','g','o', 'f','d','p','i','r','z','c','k','e','s', 'A','L','U','B','M','T','V','N','Y','G','O', 'F','D','P','I','R','Z','C','K','E','S', ); 
 		$simplePairsFlip = array_flip($simplePairs); 
 		$complexPairsFlip = array_flip($complexPairs); 
@@ -187,7 +188,7 @@ class fileType extends coreType {
 				} $result.= $char; 
 			} 
 		} 
-		$result = preg_replace('/[^A-Za-z0-9\-\.]/', '', $result);
+		$result = preg_replace('/[^0-9a-z\-]/', '', $result);
 		return strtolower(preg_replace("/[-]{2,}/", '-', $result)); 
 	} 
 
