@@ -118,7 +118,8 @@ class fileType extends coreType {
 		   !empty($_FILES[$this->name.'_file']['name'])) { 
 			$fileName = $_FILES[$this->name.'_file']['tmp_name'];
 
-		    $translit_filename = pathinfo($this->translit($_FILES[$this->name.'_file']['name']), PATHINFO_FILENAME);
+		    $translit_filename = $this->translit(pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_FILENAME));
+			$translit_filename .= '.'.pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
 			
 			if(!empty($this->value)) { // удаляем предидущий файл 
 				$oldfname = $this->getFilename();
