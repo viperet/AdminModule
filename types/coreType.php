@@ -116,6 +116,11 @@ abstract class coreType {
 	}
 	
 	public function postSave($id, $params, $item) { return ''; }
+
+
+	// удалить какие либо данные связанные с полем при удалении записи
+	public function delete() { return; }
+
 	
 	public function escape($string) {
 		if($this->escape) 

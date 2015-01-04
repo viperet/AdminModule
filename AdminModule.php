@@ -117,13 +117,15 @@ class AdminModule {
 			$object = array();
 			foreach($myObjectForm as $key => $value) {
 				if(isset($value->value)) {
+					// устанавливаем значения по умолчанию
 					$object[$key] = $value->value;
 				}
 			}
 		}
 		$this->form = new Form($myObjectForm, $this->options);
 		if($this->form->filled($_POST)) {	
-			$this->form->load($_POST, 'form');
+			$merged_object = array_merge($object, $_POST);
+			$this->form->load($merged_object, 'form');
 			$error = true;
 			if(!$this->form->validate($_POST) ||
 			  ($error = $this->validate($_POST))!== true
@@ -149,7 +151,7 @@ class AdminModule {
 				header("Location: ".$this->baseUrl);
 				exit;
 			}
-			$htmlForm = $this->form->build($_POST, 'form');
+			$htmlForm = $this->form->build();
 		} else {
 			$this->form->load($object, 'db');
 			$htmlForm = $this->form->build();
@@ -263,14 +265,20 @@ class AdminModule {
 /* =============== */
 /* Удаление записи */
 /* =============== */
-// TODO надо сообщать полям записи об удалении, чтоб они могли подчистить за собой данные
-// например связанные записи в таблицах, картинки, теги
 	function deleteItem($ids) {
-		
 		if(!is_array($ids)) $ids = array($ids);
+
+		$myObjectForm = $this->options['form'];
+		$this->form = new Form($myObjectForm, $this->options);
 		
 		foreach($ids as $id) {
 			$item = $this->getItem($id);
+			
+// сообщаем полям записи об удалении, чтоб они могли подчистить за собой данные
+// например связанные записи в таблицах, картинки, теги
+			$this->form->load($item, 'db');
+			$this->form->delete();
+			
 			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
 			$res = $this->db->query($sql);
 /*

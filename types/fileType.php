@@ -33,12 +33,17 @@ class fileType extends coreType {
 	}
 
 	public function fromForm($value) {
+		parent::fromForm($value);
+		if($this->relative && $this->value!='')
+			$this->value = $this->path.$this->value;
 	}	
+	
 	public function fromRow($row) {
 		parent::fromRow($row);
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
 	}	
+
 	public function toHtml() {
 		return "<div class='row file_upload_field' data-maxsize='{$this->maxsize}'>
 <div class='col-sm-3 col-xs-3' style='position:relative;'>
@@ -50,14 +55,14 @@ class fileType extends coreType {
 	    "._("Upload file")." <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file'>
 	</span>
 </div>
-<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='".(empty($this->value)?'1':'0')."' />
+<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='0' />
+<input type='hidden' id='{$this->name}_loaded' name='{$this->name}_loaded' value='".(!empty($this->value)?'1':'0')."' />
 </div>
 ";
 	}
 	public function toSql() { return ""; }	
 	
 	public function validate(&$errors) {
-
 		$valid = true;
 		if(!empty($_FILES[$this->name.'_file']['name'])) {
 			$ext = pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
@@ -76,7 +81,7 @@ class fileType extends coreType {
 						$valid = false;
 					}
 				} else {
-					throw new Exception("Validation field in '{$this->name}' should be array");
+					throw new Exception("Validation field in '{$this->name}' should be array of allowed file formats");
 				}
 			}
 		}
@@ -86,7 +91,8 @@ class fileType extends coreType {
 			$errors[] = _('File too large');
 			$valid = false;
 	    }
-		if($this->required /* && !empty($params[$this->name.'_remove']) */ && empty($_FILES[$this->name.'_file']['name'])) {
+	    // если обязательное поле и нет старого значения и нет нового файла - ошибка    
+		if($this->required && empty($this->value) && empty($_FILES[$this->name.'_file']['name'])) {
 			$errors[] = sprintf(_("Upload file in field '%s'"), htmlspecialchars($this->label));
 			$this->errors[] = _('Required field');
 			$this->valid = false;
@@ -109,10 +115,10 @@ class fileType extends coreType {
 	    
 	    
 		if(!empty($_FILES[$this->name.'_file']['tmp_name']) &&
-		   !empty($_FILES[$this->name.'_file']['name'])) {
+		   !empty($_FILES[$this->name.'_file']['name'])) { 
 			$fileName = $_FILES[$this->name.'_file']['tmp_name'];
 
-		    $translit_filename = $this->translit($_FILES[$this->name.'_file']['name']);
+		    $translit_filename = pathinfo($this->translit($_FILES[$this->name.'_file']['name']), PATHINFO_FILENAME);
 			
 			if(!empty($this->value)) { // удаляем предидущий файл 
 				$oldfname = $this->getFilename();
@@ -127,9 +133,8 @@ class fileType extends coreType {
 		    			$translit_filename,
 		    		), $this->format);
 
-		} elseif(!empty($params[$this->name.'_remove']) && !empty($this->value)) { // удаление файла 
-			$fname = $this->getFilename();
-			@unlink($fname);
+		} elseif(!$this->required && !empty($params[$this->name.'_remove']) && !empty($this->value)) { // удаление файла 
+			$this->delete();
 			return "`{$this->name}` = ''";
 		} else 
 			return "";
@@ -154,13 +159,21 @@ class fileType extends coreType {
 		return ''; 
 	}
 
+	// удаление файла
+	public function delete() { 
+		if(!empty($this->value)) {
+			$fname = $this->getFilename();
+			@unlink($fname);
+		}
+	}
+
 	private static function translit($text) { 
 		$text = mb_convert_case($text, MB_CASE_LOWER);
 		preg_match_all('/./u', $text, $text); 
 		$text = $text[0]; 
 		$simplePairs = array('і'=>'i', 'ї'=>'i', 'є'=>'e', 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' ); 
 		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'h' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja', 'ъ' => "" , 'ь' => "" ); 
-		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '', ',' => '', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
+		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '-', ',' => '-', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
 		$translitLatSymbols = array( 'a','l','u','b','m','t','v','n','y','g','o', 'f','d','p','i','r','z','c','k','e','s', 'A','L','U','B','M','T','V','N','Y','G','O', 'F','D','P','I','R','Z','C','K','E','S', ); 
 		$simplePairsFlip = array_flip($simplePairs); 
 		$complexPairsFlip = array_flip($complexPairs); 
