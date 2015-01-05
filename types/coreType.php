@@ -119,7 +119,8 @@ abstract class coreType {
 
 
 	// удалить какие либо данные связанные с полем при удалении записи
-	public function delete() { return; }
+	// $id - ID удаляемой записи
+	public function delete($id) { return; }
 
 	
 	public function escape($string) {

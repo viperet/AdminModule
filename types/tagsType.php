@@ -51,6 +51,11 @@ class tagsType extends coreType {
 		}
 		return ''; 
 	}
+	public function delete($id) {
+		if(!empty($this->value) && !empty($id)) {
+			$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
+		}
+	}
 	
 	public function fromRow($row) {
 		if(empty($row['id'])) return $this->value = array();

@@ -38,7 +38,7 @@ class Form {
 
 	function delete() {
 		foreach($this->form as $id => &$item) {
-			$item->delete();
+			$item->delete($this->id);
 		}
 	}
 	
