@@ -19,6 +19,9 @@ class AdminDatabase {
 	}
 	
 	function query($sql, $args = NULL) {
+		
+		if($this->linkId === false) return false;
+		
 		if($args!==NULL && !is_array($args))
 			$args = array_slice(func_get_args(), 1);
 		
