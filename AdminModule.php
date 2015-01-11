@@ -63,7 +63,17 @@ class AdminModule {
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
 		}
 		
+		
 		foreach($this->options['form'] as $name=>&$array) {
+			if(isset($this->options['role']) && isset($array['permissions'])) {
+				$role = $this->options['role'];
+				if(!isset($array['permissions'][$role]) || $array['permissions'][$role] == '') {  // нет прав на просмотр/изменение поля
+					$array['type'] = 'none';
+				} else if($array['permissions'][$role] == 'r') {  // только чтение
+					$array['readonly'] = true;
+				}
+			}
+			
 			$className = $array['type']."Type";
 			$array = new $className($this->db, $name, $array);
 			$array->options = $this->options;

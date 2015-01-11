@@ -9,6 +9,8 @@ abstract class coreType {
 	public $readonly;
 	public $header;
 	public $validation;
+	public $validation_regexp;
+	public $validation_message;
 	public $class;
 	public $truncate = 80;
 	public $escape = true;
@@ -19,6 +21,9 @@ abstract class coreType {
 	public $filter = false;
 	public $filterByClick = false;
 	public $massAction = false;
+	
+	public $permissions;
+	
 	public $options;
 	public $db;
 	
@@ -61,8 +66,8 @@ abstract class coreType {
 		$this->valid = true;
 
 		if($this->required && is_string($this->value) && trim($this->value) == '' ) {
-			$errors[] = sprintf(_("Fill required field '%s'"),htmlspecialchars($this->label));
-			$this->errors[] = _('Required field');
+			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
+			$this->errors[] = 'Обязательное поле';
 			$this->valid = false;
 			return false;
 		}
@@ -99,9 +104,13 @@ abstract class coreType {
 			$this->errorMessage[] = "Введите число в поле '".$item['label']."'";
 			$this->errors[] = 'Требуется число';
 		}
-		if($this->validation == 'regexp' && ($this->value!='' && !preg_match($item['validation_regexp'], $this->value))) {
+		if($this->validation == 'regexp' && ($this->value!='' && !preg_match($this->validation_regexp, $this->value))) {
 			$this->valid = false;
-			$this->errors[] = $item['validation_message'];
+			$this->errors[] = $this->validation_message;
+		}
+		if( preg_match('#^/.*/$#', $this->validation) && ($this->value!='' && !preg_match($this->validation, $this->value))) {
+			$this->valid = false;
+			$this->errors[] = $this->validation_message;
 		}
 		
 		return $this->valid;
@@ -116,12 +125,6 @@ abstract class coreType {
 	}
 	
 	public function postSave($id, $params, $item) { return ''; }
-
-
-	// удалить какие либо данные связанные с полем при удалении записи
-	// $id - ID удаляемой записи
-	public function delete($id) { return; }
-
 	
 	public function escape($string) {
 		if($this->escape) 
