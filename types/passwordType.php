@@ -50,7 +50,8 @@ class passwordType extends textType {
 	
 	public function toSql() {
 		if($this->value == '') return "";
-		return "`{$this->name}`= md5('". mysql_real_escape_string($this->value)."')";
+		$password = password_hash($this->value, PASSWORD_DEFAULT);
+		return "`{$this->name}`= '". mysql_real_escape_string($password)."'";
 		
 	}
 
