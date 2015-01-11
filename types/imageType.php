@@ -20,11 +20,16 @@ class imageType extends fileType {
 	
 	
 	public function toHtml() {
-		return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
+		if($this->readonly) {
+			return "<div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
+			<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
+			</div>";
+		} else 
+			return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
 		<div class='col-sm-12'><p class='form-control-static'>Размер не менее {$this->width}x{$this->height}<br>":"Произвольный размер<br>")."</p></div>".
 "
 <div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
-	<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
+	<img id='{$this->name}' class='form_thumbnail form_thumbnail_crop {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 </div>
 <div class='col-sm-9 col-xs-9'>
 	<div>Кликни по картинке для обрезки</div>
@@ -135,7 +140,7 @@ class imageType extends fileType {
 	public static function pageHeader() {
 ?>
 <style>
-	.img_mask {
+	.form_thumbnail_crop {
 		cursor: pointer;
 	/*	position: relative;
 		background: #FFF url(/site_img/nophoto.jpg) center center no-repeat;
@@ -294,7 +299,7 @@ $(function() {
 		return false;
 	});
 
-	$('.form_thumbnail').click(function () {
+	$('.form_thumbnail_crop').click(function () {
 		var img = $(this);
 		cropPopup(this.id, this.src, img.data('width'), img.data('height'));
 	});
