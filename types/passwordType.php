@@ -27,12 +27,12 @@ class passwordType extends textType {
 			$this->valid = false;
 		}
 
-		if( strlen($this->value)<$this->min_length ) {
+		if( $this->value != '' && strlen($this->value)<$this->min_length ) {
 			$errors[] = "Минимальная длинна пароля {$this->min_length} символов";
 			$this->errors[] = "Минимальная длинна {$this->min_length} символов";
 			$this->valid = false;
 		}
-		if( strlen($this->value)>$this->max_length ) {
+		if( $this->value != '' && strlen($this->value)>$this->max_length ) {
 			$errors[] = "Максимальная длинна пароля {$this->max_length} символов";
 			$this->errors[] = "Максимальная длинна {$this->max_length} символов";
 			$this->valid = false;
