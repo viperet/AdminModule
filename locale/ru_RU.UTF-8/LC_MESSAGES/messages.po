@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: AdminDatabase.class.php:80
+#: AdminDatabase.class.php:80 AdminDatabase.class.php:83
 msgid "Invalid query:"
 msgstr "Ошибочный запрос"
 
@@ -38,10 +38,11 @@ msgid "Previous page"
 msgstr "Предидущая страница"
 
 #: AdminDatabase.class.php:32 AdminDatabase.class.php:79
+#: AdminDatabase.class.php:35 AdminDatabase.class.php:82
 msgid "Query:"
 msgstr "Запрос:"
 
-#: AdminDatabase.class.php:33
+#: AdminDatabase.class.php:33 AdminDatabase.class.php:36
 msgid "Replacement count doesn't match"
 msgstr "Неправильное число подстановок"
 
@@ -53,58 +54,58 @@ msgstr "В начало"
 msgid "To the end"
 msgstr "В конец"
 
-#: AdminModule.php:334
+#: AdminModule.php:334 AdminModule.php:352
 msgid "On"
-msgstr ""
+msgstr "Вкл"
 
-#: AdminModule.php:335
+#: AdminModule.php:335 AdminModule.php:353
 msgid "Off"
-msgstr ""
+msgstr "Выкл"
 
-#: AdminModule.php:406
+#: AdminModule.php:406 AdminModule.php:424
 msgid "Add record"
-msgstr ""
+msgstr "Добавить запись"
 
-#: AdminModule.php:408
+#: AdminModule.php:408 AdminModule.php:426
 msgid "Edit record"
-msgstr ""
+msgstr "Редактировать запись"
 
 #: form_template.php:38
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: list_template.php:37
 msgid "filter"
-msgstr ""
+msgstr "фильтр"
 
 #: list_template.php:43
 msgid "remove filter"
-msgstr ""
+msgstr "убрать фильтр"
 
 #: list_template.php:52 list_template.php:139
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: list_template.php:53 list_template.php:140
 msgid "Delete selected records?"
-msgstr ""
+msgstr "Удалить выбранные записи?"
 
 #: list_template.php:53 list_template.php:140
 msgid "Delete selected"
-msgstr ""
+msgstr "Удалить выбранное"
 
 #: list_template.php:69
 msgid "Actions"
-msgstr ""
+msgstr "Действия"
 
 #: list_template.php:121
 msgid "Edit"
-msgstr ""
+msgstr "Редактировать"
 
 #: list_template.php:122
 msgid "Clone"
-msgstr ""
+msgstr "Клонировать"
 
 #: list_template.php:123
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
