@@ -77,7 +77,7 @@ class select2Type extends textType {
 		
 		if($this->ajax) {
 			$value_text = $this->lookupValueById($this->value);
-			$html = "<input type='hidden' name='{$this->name}' id='{$this->name}' class='{$this->class}' value='{$this->value}'>";
+			$html = "<input type='hidden' name='{$this->name}' id='{$this->name}' class='form-control {$this->class}' value='{$this->value}'>";
 			$html .= "
 	<script>
 		$(document.getElementById('{$this->name}')).select2({
