@@ -123,6 +123,8 @@ abstract class coreType {
 		"</label>";
 
 	}
+
+	public function delete() { return; }
 	
 	public function postSave($id, $params, $item) { return ''; }
 	
