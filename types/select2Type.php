@@ -77,7 +77,7 @@ class select2Type extends textType {
 		
 		if($this->ajax) {
 			$value_text = $this->lookupValueById($this->value);
-			$html = "<input type='hidden' name='{$this->name}' id='{$this->name}' class='{$this->class}' value='{$this->value}'>";
+			$html = "<input type='hidden' name='{$this->name}' id='{$this->name}' class='form-control {$this->class}' value='{$this->value}'>";
 			$html .= "
 	<script>
 		$(document.getElementById('{$this->name}')).select2({
@@ -106,7 +106,7 @@ class select2Type extends textType {
 	</script>";
 		} else {
 		
-			$html = "<select name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."'>";
+			$html = "<select name='{$this->name}' placeholder='{$this->placeholder}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."'>";
 			foreach($this->values as $value=>$label) {
 				if(is_array($label)) {
 					$html .= "<optgroup label='{$value}'>";
