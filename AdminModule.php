@@ -12,6 +12,7 @@ function AdminModuleAutoloader($class) {
 }
 
 spl_autoload_register('AdminModuleAutoloader');
+require_once("Translate.class.php");			
 require_once("Form.class.php");			
 require_once("AdminDatabase.class.php");			
 require_once("Navigation.class.php");			
@@ -62,7 +63,17 @@ class AdminModule {
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
 		}
 		
+		
 		foreach($this->options['form'] as $name=>&$array) {
+			if(isset($this->options['role']) && isset($array['permissions'])) {
+				$role = $this->options['role'];
+				if(!isset($array['permissions'][$role]) || $array['permissions'][$role] == '') {  // нет прав на просмотр/изменение поля
+					$array['type'] = 'none';
+				} else if($array['permissions'][$role] == 'r') {  // только чтение
+					$array['readonly'] = true;
+				}
+			}
+			
 			$className = $array['type']."Type";
 			$array = new $className($this->db, $name, $array);
 			$array->options = $this->options;
@@ -116,13 +127,15 @@ class AdminModule {
 			$object = array();
 			foreach($myObjectForm as $key => $value) {
 				if(isset($value->value)) {
+					// устанавливаем значения по умолчанию
 					$object[$key] = $value->value;
 				}
 			}
 		}
 		$this->form = new Form($myObjectForm, $this);
 		if($this->form->filled($_POST)) {	
-			$this->form->load($_POST, 'form');
+			$merged_object = array_merge($object, $_POST);
+			$this->form->load($merged_object, 'form');
 			$error = true;
 			if(!$this->form->validate($_POST) ||
 			  ($error = $this->validate($_POST))!== true
@@ -148,7 +161,7 @@ class AdminModule {
 				header("Location: ".$this->baseUrl);
 				exit;
 			}
-			$htmlForm = $this->form->build($_POST, 'form');
+			$htmlForm = $this->form->build();
 		} else {
 			$this->form->load($object, 'db');
 			$htmlForm = $this->form->build();
@@ -262,14 +275,20 @@ class AdminModule {
 /* =============== */
 /* Удаление записи */
 /* =============== */
-// TODO надо сообщать полям записи об удалении, чтоб они могли подчистить за собой данные
-// например связанные записи в таблицах, картинки, теги
 	function deleteItem($ids) {
-		
 		if(!is_array($ids)) $ids = array($ids);
+
+		$myObjectForm = $this->options['form'];
+		$this->form = new Form($myObjectForm, $this->options);
 		
 		foreach($ids as $id) {
 			$item = $this->getItem($id);
+			
+// сообщаем полям записи об удалении, чтоб они могли подчистить за собой данные
+// например связанные записи в таблицах, картинки, теги
+			$this->form->load($item, 'db');
+			$this->form->delete();
+			
 			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
 			$res = $this->db->query($sql);
 /*
@@ -330,8 +349,8 @@ class AdminModule {
 		$html = "";
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} Вкл?');\">{$value->label} Вкл</button>&nbsp;";
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} Выкл?');\">{$value->label} Выкл</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">{$value->label} "._('On')."</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">{$value->label} "._('Off')."</button>&nbsp;";
 			}
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
@@ -342,6 +361,9 @@ class AdminModule {
 /* =============== */	
 	function formButtons() {
 		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">Сохранить</button>';
+	}
+	function bottomButtons() {
+		return self::topButtons();
 	}
 
 /* =============== */
@@ -405,9 +427,9 @@ class AdminModule {
 				$this->deleteItem($_REQUEST['item']);
 			} elseif(isset($_GET['edit'])) {
 				if($_GET['edit'] == 0)
-					$this->navigation->add("Добавление","addarticle.php");
+					$this->navigation->add(_("Add record"), "addarticle.php");
 				else
-					$this->navigation->add("Редактирование","addarticle.php");
+					$this->navigation->add(_("Edit record"),"addarticle.php");
 				echo $this->navigation->get();
 //				pageStart('foobar',false);
 //! BANKER
@@ -420,6 +442,11 @@ class AdminModule {
 			}
 		}
 		return true;
+	}
+	
+	function move($url = NULL) {
+		header("Location: ".($url?$url:$this->baseUrl));	
+		exit;
 	}
 
 

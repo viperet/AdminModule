@@ -26,69 +26,75 @@ class fileType extends coreType {
 		$fname = $this->getFilename();
 		$name = basename($fname);
 		
-		if(!file_exists($fname)) return "Файл не загружен";
+		if(!file_exists($fname)) return _("File not uploaded");
 
 		$size = filesize($fname);
-		return ($this->value!=''?"<span class='glyphicon glyphicon-file'></span> ".htmlspecialchars($name).", ".fileType::formatSize($size):"Файл не загружен");		
+		return ($this->value!=''?"<span class='glyphicon glyphicon-file'></span> ".htmlspecialchars($name).", ".fileType::formatSize($size):_("File not uploaded"));
 	}
 
 	public function fromForm($value) {
+		parent::fromForm($value);
+		if($this->relative && $this->value!='')
+			$this->value = $this->path.$this->value;
 	}	
+	
 	public function fromRow($row) {
 		parent::fromRow($row);
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
 	}	
+
 	public function toHtml() {
 		return "<div class='row file_upload_field' data-maxsize='{$this->maxsize}'>
 <div class='col-sm-3 col-xs-3' style='position:relative;'>
 <p class='form-control-static file_status' id='{$this->name}'>".$this->toString()."</p>
 </div>
 <div class='col-sm-9 col-xs-9'>
-	<button class='btn btn-default file_upload_remove' type='button'>Удалить файл</button>
+	<button class='btn btn-default file_upload_remove' type='button'>"._("Delete file")."</button>
 	<span class='btn btn-default btn-file'>
-	    Загрузить с компьютера <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file' placeholder='Загрузка файла'>
+	    "._("Upload file")." <input type='file' class='form_input upload_file' name='{$this->name}_file' id='{$this->name}_file'>
 	</span>
 </div>
-<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='".(empty($this->value)?'1':'0')."' />
+<input type='hidden' id='{$this->name}_remove' name='{$this->name}_remove' value='0' />
+<input type='hidden' id='{$this->name}_loaded' name='{$this->name}_loaded' value='".(!empty($this->value)?'1':'0')."' />
 </div>
 ";
 	}
 	public function toSql() { return ""; }	
 	
 	public function validate(&$errors) {
-
 		$valid = true;
 		if(!empty($_FILES[$this->name.'_file']['name'])) {
 			$ext = pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
 			if(in_array($ext, $this->blacklist)) {
 						$this->valid = false;
-						$this->errors[] = "Загрузка файлов формата '".htmlspecialchars($ext)."' запрещена";
-						$errors[] = 'Недопустимый формат файла';
+						$this->errors[] = sprintf(_("Upload of files with extension '%s' is forbidden"), htmlspecialchars($ext));
+						$errors[] = _('Invalid file format');
 						return false;
 			}
 			if(isset($this->validation)) {
 				if(is_array($this->validation)) {
 					if(!in_array($ext, $this->validation)) {
 						$this->valid = false;
-						$this->errors[] = 'Допустимые форматы файлов: '.htmlspecialchars(implode(', ', $this->validation));
-						$errors[] = "Недопустимый формат файла '".htmlspecialchars($ext)."'";
+						$this->errors[] = _('Allowed file formats: ').htmlspecialchars(implode(', ', $this->validation));
+						$errors[] = sprintf(_("Invalid file format '%s'"), htmlspecialchars($ext));
 						$valid = false;
 					}
 				} else {
-					throw new Exception("Validation field in '{$this->name}' should be array");
+					throw new Exception("Validation field in '{$this->name}' should be array of allowed file formats");
 				}
 			}
 		}
 		if ($_FILES[$this->name.'_file']['size'] > $this->maxsize) {
 			$this->valid = false;
-			$this->errors[] = 'Максимальный допустимый размер '.fileType::formatSize($this->maxsize);
-			$errors[] = 'Слишком большой файл';
+			$this->errors[] = sprintf(_('Maximum file size %s'), fileType::formatSize($this->maxsize));
+			$errors[] = _('File too large');
 			$valid = false;
 	    }
-		if($this->required && !empty($params[$this->name.'_remove']) && empty($_FILES[$this->name.'_file']['name'])) {
-			$errors[] = "Загрузите файл в поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+	    // если обязательное поле и нет старого значения и нет нового файла - ошибка    
+		if($this->required && empty($this->value) && empty($_FILES[$this->name.'_file']['name'])) {
+			$errors[] = sprintf(_("Upload file in field '%s'"), htmlspecialchars($this->label));
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			$valid = false;
 		}
@@ -109,10 +115,11 @@ class fileType extends coreType {
 	    
 	    
 		if(!empty($_FILES[$this->name.'_file']['tmp_name']) &&
-		   !empty($_FILES[$this->name.'_file']['name'])) {
+		   !empty($_FILES[$this->name.'_file']['name'])) { 
 			$fileName = $_FILES[$this->name.'_file']['tmp_name'];
 
-		    $translit_filename = $this->translit($_FILES[$this->name.'_file']['name']);
+		    $translit_filename = $this->translit(pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_FILENAME));
+			$translit_filename .= '.'.pathinfo($_FILES[$this->name.'_file']['name'], PATHINFO_EXTENSION);
 			
 			if(!empty($this->value)) { // удаляем предидущий файл 
 				$oldfname = $this->getFilename();
@@ -127,9 +134,8 @@ class fileType extends coreType {
 		    			$translit_filename,
 		    		), $this->format);
 
-		} elseif(!empty($params[$this->name.'_remove']) && !empty($this->value)) { // удаление файла 
-			$fname = $this->getFilename();
-			@unlink($fname);
+		} elseif(!$this->required && !empty($params[$this->name.'_remove']) && !empty($this->value)) { // удаление файла 
+			$this->delete();
 			return "`{$this->name}` = ''";
 		} else 
 			return "";
@@ -154,12 +160,21 @@ class fileType extends coreType {
 		return ''; 
 	}
 
+	// удаление файла
+	public function delete() { 
+		if(!empty($this->value)) {
+			$fname = $this->getFilename();
+			@unlink($fname);
+		}
+	}
+
 	private static function translit($text) { 
+		$text = mb_convert_case($text, MB_CASE_LOWER);
 		preg_match_all('/./u', $text, $text); 
 		$text = $text[0]; 
-		$simplePairs = array( 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' , 'А' => 'A' , 'Л' => 'L' , 'У' => 'U' , 'Б' => 'B' , 'М' => 'M' , 'Т' => 'T' , 'В' => 'V' , 'Н' => 'N' , 'Ы' => 'Y' , 'Г' => 'G' , 'О' => 'O' , 'Ф' => 'F' , 'Д' => 'D' , 'П' => 'P' , 'И' => 'I' , 'Р' => 'R' , ); 
-		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'kh' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja' , 'З' => 'Z' , 'Ц' => 'C' , 'К' => 'K' , 'Ж' => 'ZH' , 'Ч' => 'CH' , 'Х' => 'KH' , 'Е' => 'E' , 'С' => 'S' , 'Ё' => 'JO' , 'Э' => 'E' , 'Ш' => 'SH' , 'Й' => 'J' , 'Щ' => 'SHH' , 'Ю' => 'JU' , 'Я' => 'JA' , 'Ь' => "" , 'Ъ' => "" , 'ъ' => "" , 'ь' => "" , ); 
-		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '.', ',' => '-', ':' => '-', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
+		$simplePairs = array('і'=>'i', 'ї'=>'i', 'є'=>'e', 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' ); 
+		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'h' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja', 'ъ' => "" , 'ь' => "" ); 
+		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '-', ',' => '-', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
 		$translitLatSymbols = array( 'a','l','u','b','m','t','v','n','y','g','o', 'f','d','p','i','r','z','c','k','e','s', 'A','L','U','B','M','T','V','N','Y','G','O', 'F','D','P','I','R','Z','C','K','E','S', ); 
 		$simplePairsFlip = array_flip($simplePairs); 
 		$complexPairsFlip = array_flip($complexPairs); 
@@ -187,7 +202,7 @@ class fileType extends coreType {
 				} $result.= $char; 
 			} 
 		} 
-		$result = preg_replace('/[^A-Za-z0-9\-\.]/', '', $result);
+		$result = preg_replace('/[^0-9a-z\-]/', '', $result);
 		return strtolower(preg_replace("/[-]{2,}/", '-', $result)); 
 	} 
 
@@ -222,7 +237,7 @@ $(function() {
 				p.html("<span class='glyphicon glyphicon-file'></span> "+escapeHtml(file.name)+", "+formatSize(file.size));
 				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления 
 			} else {
-				p.text('Файл не загружен');
+				p.text('<?=_("File not uploaded")?>');
 				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
 			}
 	});
@@ -230,7 +245,7 @@ $(function() {
 		var el = $(this);
 		var p = el.parents('.file_upload_field').find('.file_status');
 		
-		p.text('Файл не загружен');
+		p.text('<?=_("File not uploaded")?>');
 
 		var file_id = $('#'+p.attr('id')+'_file');
 		file_id.val('').replaceWith( file_id = file_id.clone( true ) );

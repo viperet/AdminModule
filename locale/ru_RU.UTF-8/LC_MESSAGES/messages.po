@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-30 00:09+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: AdminDatabase.class.php:80 AdminDatabase.class.php:83
+msgid "Invalid query:"
+msgstr "Ошибочный запрос"
+
+#: Pagination.class.php:74 Pagination.class.php:78
+msgid "Next"
+msgstr "Следующая"
+
+#: Pagination.class.php:74 Pagination.class.php:78
+msgid "Next page"
+msgstr "Следующая страница"
+
+#: Pagination.class.php:61 Pagination.class.php:64
+msgid "Previous"
+msgstr "Предидущая"
+
+#: Pagination.class.php:61 Pagination.class.php:64
+msgid "Previous page"
+msgstr "Предидущая страница"
+
+#: AdminDatabase.class.php:32 AdminDatabase.class.php:79
+#: AdminDatabase.class.php:35 AdminDatabase.class.php:82
+msgid "Query:"
+msgstr "Запрос:"
+
+#: AdminDatabase.class.php:33 AdminDatabase.class.php:36
+msgid "Replacement count doesn't match"
+msgstr "Неправильное число подстановок"
+
+#: Pagination.class.php:60 Pagination.class.php:63
+msgid "To the begining"
+msgstr "В начало"
+
+#: Pagination.class.php:76 Pagination.class.php:79
+msgid "To the end"
+msgstr "В конец"
+
+#: AdminModule.php:334 AdminModule.php:352
+msgid "On"
+msgstr "Вкл"
+
+#: AdminModule.php:335 AdminModule.php:353
+msgid "Off"
+msgstr "Выкл"
+
+#: AdminModule.php:406 AdminModule.php:424
+msgid "Add record"
+msgstr "Добавить запись"
+
+#: AdminModule.php:408 AdminModule.php:426
+msgid "Edit record"
+msgstr "Редактировать запись"
+
+#: form_template.php:38
+msgid "Save"
+msgstr "Сохранить"
+
+#: list_template.php:37
+msgid "filter"
+msgstr "фильтр"
+
+#: list_template.php:43
+msgid "remove filter"
+msgstr "убрать фильтр"
+
+#: list_template.php:52 list_template.php:139
+msgid "Add"
+msgstr "Добавить"
+
+#: list_template.php:53 list_template.php:140
+msgid "Delete selected records?"
+msgstr "Удалить выбранные записи?"
+
+#: list_template.php:53 list_template.php:140
+msgid "Delete selected"
+msgstr "Удалить выбранное"
+
+#: list_template.php:69
+msgid "Actions"
+msgstr "Действия"
+
+#: list_template.php:121
+msgid "Edit"
+msgstr "Редактировать"
+
+#: list_template.php:122
+msgid "Clone"
+msgstr "Клонировать"
+
+#: list_template.php:123
+msgid "Delete"
+msgstr "Удалить"

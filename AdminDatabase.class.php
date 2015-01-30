@@ -19,6 +19,9 @@ class AdminDatabase {
 	}
 	
 	function query($sql, $args = NULL) {
+		
+		if($this->linkId === false) return false;
+		
 		if($args!==NULL && !is_array($args))
 			$args = array_slice(func_get_args(), 1);
 		
@@ -29,8 +32,8 @@ class AdminDatabase {
 				echo "<pre>";
 				debug_print_backtrace();
 				echo "</pre>";
-				echo "Query: {$sql}<br>";
-			    die("Replacement count doesn't match");
+				echo _("Query:")." {$sql}<br>";
+			    die(_("Replacement count doesn't match"));
 			}
 			
 	        // make preparations for the replacement
@@ -76,8 +79,8 @@ class AdminDatabase {
 			echo "<pre>";
 			debug_print_backtrace();
 			echo "</pre>";
-			echo "Query: {$sql}<br>";
-		    die('Invalid query: ' . mysql_error());
+			echo _("Query:")." {$sql}<br>";
+		    die(_('Invalid query:').' ' . mysql_error());
 		}
 		
 		$this->insertId = mysql_insert_id();

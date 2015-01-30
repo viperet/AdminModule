@@ -22,11 +22,12 @@ class tagsType extends coreType {
 		if(trim($value)=='') return $result;
 		$tags = explode(',', $value);
 		foreach($tags as $tag) {
-			if(preg_match('/^"(.*)"$/', $tag, $matches)) {
-				$result[] = array('id'=>$tag, 'text'=>$matches[1]);
-			} else {
-				$result[] = array('id'=>$tag, 'text'=>$this->db->getOne('SELECT tag FROM tags WHERE id=?', $tag));
-			}
+			if(is_numeric($tag)) 
+				$result[] = array('id'=>(int)$tag, 'text'=>$this->db->getOne('SELECT tag FROM tags WHERE id=?', (int)$tag));
+			else if(preg_match('/^"(.*)"$/', $tag, $matches))
+				$result[] = array('id'=>NULL, 'text'=>$matches[1]);
+			else
+				$result[] = array('id'=>NULL, 'text'=>$tag);
 		}
 		return $result;
 	}
@@ -35,18 +36,25 @@ class tagsType extends coreType {
 		$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
 		
 		foreach($this->value as $tag) {
-			if(preg_match('/^"(.*)"$/', $tag['id'], $matches)) {
+			if($tag['id'] ===  NULL) {
 				$this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
 				$tag_id = mysql_insert_id();
 				if($tag_id == 0) { // такой тег уже есть в базе
-					$tag_id =$db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
+					$tag_id =$this->db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
 				}
 				$this->db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");	
-			} else {
+			} else if(is_numeric($tag['id'])) {
 				$this->db->query("INSERT tags_content SET tag_id={$tag['id']}, content_id={$id}, content_table='{$this->options['table']}'");	
+			} else {
+				throw new Exception("Tag error: ".print_r($tag, true));
 			}
 		}
 		return ''; 
+	}
+	public function delete($id) {
+		if(!empty($this->value) && !empty($id)) {
+			$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
+		}
 	}
 	
 	public function fromRow($row) {
@@ -74,8 +82,8 @@ class tagsType extends coreType {
 	
 	public function validate(&$errors) {
 		if($this->required && count($this->value) == 0 ) {
-			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+			$errors[] = sprintf(_("Fill required field '%s'"),htmlspecialchars($this->label));
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			return false;
 		}
@@ -83,46 +91,67 @@ class tagsType extends coreType {
 	}
 	
 	public function toHtml() {
-		$value_json = $this->json($this->value);
+		$values = array();
+		foreach($this->value as $value)
+			if(is_numeric($value['id']))
+				$values[] = $value;
+			else if(is_null($value['id']))
+				$values[] = array('id'=>'"'.$value['text'].'"', 'text'=>$value['text']);
+		
+		$value_json = $this->json($values);
 		$value_ids = '';
-		foreach($this->value as $tag) {
+		foreach($values as $tag) {
 			if($value_ids != '') $value_ids .= ','; 
 			$value_ids .= $tag['id'];
 		}
+		$value_ids = htmlspecialchars($value_ids);
 		$html = <<< EOT
 <input type="hidden" id="{$this->name}" name="{$this->name}" class="form-control" value="{$value_ids}"/>		
 <script>
 	$('#{$this->name}').select2({
 //	  tags: true,
-	  tokenSeparators: [","],
-	  createSearchChoice: function(term, data) {
-	    if ($(data).filter(function() {
-	      return this.text.localeCompare(term) === 0;
-	    }).length === 0) {
-	      return {
-	        id: '"'+term+'"',
-	        text: term
-	      };
-	    }
-	  },
-	  multiple: true,
-	  initSelection: function(element, callback) {
-		callback({$value_json});	  
-	  },
-	  ajax: {
+//	  tokenSeparators: [","],
+		tokenizer: function(input, selection, callback) {
+			// no comma no need to tokenize
+			if (input.indexOf(',') < 0)
+				return;
+	
+			var parts = input.split(/,/);
+			for (var i = 0; i < parts.length; i++) {
+				var part = parts[i];
+				part = part.trim();
+	
+				callback({id:part,text:part});
+			}
+		},
+		createSearchChoice: function(term, data) {
+			if ($(data).filter(function() {
+				return this.text.localeCompare(term) === 0;
+			}).length === 0) {
+				return {
+					id: '"'+term+'"',
+					text: term
+				};
+			}
+		},
+		multiple: true,
+		initSelection: function(element, callback) {
+			callback({$value_json});	  
+		},
+		ajax: {
 		url: document.location+'&ajaxField='+encodeURIComponent('{$this->name}')+'&ajaxMethod=ajaxLookup',
-		dataType: 'json',
-	    data: function(term, page) {
-	      return {
-	        q: term
-	      };
-	    },
-	    results: function(data, page) {
-	      return {
-	        results: data
-	      };
-	    }
-	  }
+			dataType: 'json',
+			data: function(term, page) {
+		    return {
+		    	q: term
+		    };
+		},
+		results: function(data, page) {
+		    return {
+		    	results: data
+		    };
+		  }
+		}
 	});
 
 </script>

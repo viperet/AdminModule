@@ -19,6 +19,9 @@ abstract class coreType {
 	public $filter = false;
 	public $filterByClick = false;
 	public $massAction = false;
+	
+	public $permissions;
+	
 	public $options;
 	public $db;
 	
@@ -103,6 +106,10 @@ abstract class coreType {
 			$this->valid = false;
 			$this->errors[] = $this->validation_message;
 		}
+		if( preg_match('#^/.*/$#', $this->validation) && ($this->value!='' && !preg_match($this->validation, $this->value))) {
+			$this->valid = false;
+			$this->errors[] = $this->validation_message;
+		}
 		
 		return $this->valid;
 	}
@@ -114,6 +121,8 @@ abstract class coreType {
 		"</label>";
 
 	}
+
+	public function delete() { return; }
 	
 	public function postSave($id, $params, $item) { return ''; }
 	

@@ -4,7 +4,7 @@ class htmlType extends textareaType {
 	public $height = 300;
 	public $download_images = null; // путь куда скачивать картинки найденные в тексте
 	public $download_images_hook = null; // callback для преобразования url картинок
-	
+	public $rows = 10;
 	private $id = null;
 
 	public static function pageHeader() {
@@ -13,7 +13,7 @@ class htmlType extends textareaType {
 	}
 	
 	public function toHtml() {
-		return "<textarea name='{$this->name}' id='{$this->name}' rows='{$this->rows}' class='form_textarea {$this->class}'>".$this->escape($this->value)."</textarea>
+		return "<textarea name='{$this->name}' id='{$this->name}' rows='{$this->rows}' class='form-control {$this->class} '>".$this->escape($this->value)."</textarea>
 <script>
     CKEDITOR.replace('{$this->name}');
 </script>";

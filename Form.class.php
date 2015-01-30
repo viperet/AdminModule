@@ -37,6 +37,12 @@ class Form {
 				$item->fromForm($values);
 		}
 	}
+
+	function delete() {
+		foreach($this->form as $id => &$item) {
+			$item->delete($this->id);
+		}
+	}
 	
 	function build() {
 		$types = array();
