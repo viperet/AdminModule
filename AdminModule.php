@@ -120,7 +120,7 @@ class AdminModule {
 				}
 			}
 		}
-		$this->form = new Form($myObjectForm, $this->options);
+		$this->form = new Form($myObjectForm, $this);
 		if($this->form->filled($_POST)) {	
 			$this->form->load($_POST, 'form');
 			$error = true;
