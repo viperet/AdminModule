@@ -8,7 +8,7 @@ abstract class coreType {
 	public $label_hint;
 	public $readonly;
 	public $header;
-	public $validation;
+	public $validation, $validation_regexp, $validation_message;
 	public $class;
 	public $truncate = 80;
 	public $escape = true;
@@ -86,7 +86,7 @@ abstract class coreType {
 			$this->valid = false;
 			$this->errors[] = 'Требуется ввести действительный URL (http://…)';
 		}
-		if($this->validation == 'integer' && ($this->value!='' && !preg_match('/^\d+$/', $this->value))) {
+		if($this->validation == 'integer' && ($this->value!='' && !preg_match('/^-?\d+$/', $this->value))) {
 			$this->valid = false;
 			$this->errors[] = 'Требуется целое число';
 		}
@@ -99,9 +99,9 @@ abstract class coreType {
 			$this->errorMessage[] = "Введите число в поле '".$item['label']."'";
 			$this->errors[] = 'Требуется число';
 		}
-		if($this->validation == 'regexp' && ($this->value!='' && !preg_match($item['validation_regexp'], $this->value))) {
+		if($this->validation == 'regexp' && ($this->value!='' && !preg_match($this->validation_regexp, $this->value))) {
 			$this->valid = false;
-			$this->errors[] = $item['validation_message'];
+			$this->errors[] = $this->validation_message;
 		}
 		
 		return $this->valid;
