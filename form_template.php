@@ -20,7 +20,7 @@
 	<input type="hidden" name="id" value="<?= $this->id ?>">
 <?	$count = 0;
 	foreach($this->form as $id=>$item) { ?>
-	<div class="form-group <?=($item->required?'required':'') .' '. (!$item->valid?' has-error':'') ?>">
+	<div class="form-group <?=$item->name?> <?=($item->required?'required':'') .' '. (!$item->valid?' has-error':'') ?>">
 		<?= $item->toHtmlLabel() ?>
 		<div class="col-sm-8">
 			<?= $item->toHtml() ?>
@@ -35,7 +35,7 @@
 	} ?>
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-8">
-			<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">Сохранить</button>
+			<?= $this->adminModule->formButtons(); ?>
 		</div>
 	</div>
 </form>

@@ -312,7 +312,7 @@ class AdminModule {
 /* =============== */
 /* Дополнительные действия над записями	*/
 /* =============== */
-	function actions() {
+	function actions($item) {
 		return "";
 	}
 	
@@ -336,6 +336,12 @@ class AdminModule {
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
 		return $html;
+	}
+/* =============== */
+/* Возвращает кнопки для формы редактирования	*/
+/* =============== */	
+	function formButtons() {
+		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">Сохранить</button>';
 	}
 
 /* =============== */
