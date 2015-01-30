@@ -25,7 +25,7 @@ class selectType extends textType {
 	}
 	
 	public function toHtml() {
-		$html = "<select name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."'>";
+		$html = "<select name='{$this->name}' placeholder='{$this->placeholder}' id='{$this->name}' class='form-control selectpicker {$this->class} ".(!$this->valid?'error':'')."'>";
 		foreach($this->values as $value=>$label) {
 			if(is_array($label)) {
 				$html .= "<optgroup label='{$value}'>";
