@@ -4,7 +4,7 @@ class passwordType extends textType {
 	public $placeholder;
 	public $min_length = 6;
 	public $max_length = 100;
-	public $label_hint = 'Для смены введите новый пароль два раза';
+	public $label_hint = '';
 	public $value_check = '';
 
 	public function fromRow($row) {
@@ -27,12 +27,12 @@ class passwordType extends textType {
 			$this->valid = false;
 		}
 
-		if( strlen($this->value)<$this->min_length ) {
+		if( $this->value != '' && strlen($this->value)<$this->min_length ) {
 			$errors[] = "Минимальная длинна пароля {$this->min_length} символов";
 			$this->errors[] = "Минимальная длинна {$this->min_length} символов";
 			$this->valid = false;
 		}
-		if( strlen($this->value)>$this->max_length ) {
+		if( $this->value != '' && strlen($this->value)>$this->max_length ) {
 			$errors[] = "Максимальная длинна пароля {$this->max_length} символов";
 			$this->errors[] = "Максимальная длинна {$this->max_length} символов";
 			$this->valid = false;
@@ -45,6 +45,7 @@ class passwordType extends textType {
 		return "<div class='row'>".
 		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Новый пароль' /></div>".
 		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}_check' id='{$this->name}_check' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Еще раз новый пароль' /></div>".
+		"<div class='col-lg-12 help-block'>Для смены введите новый пароль два раза</div>".
 		"</div>";
 	}
 	
