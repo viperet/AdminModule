@@ -60,10 +60,10 @@ class detailsType extends coreType {
 			return;
 		}
 		$this->master_id = $row['id'];
-		$res = $db->query("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort} ASC");
+		$rows = $db->getAll("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort} ASC");
 		$index = 0;
 		$this->data = array();
-		while($row = $res->fetchRow()) {
+		foreach($rows as $row) {
 			foreach($this->form as $name=>$field) {
 				$item = clone $field;
 				$item->fromRow($row);
@@ -88,7 +88,7 @@ class detailsType extends coreType {
 		foreach($this->data as $row) {
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
-					if(!$field->validate()) {
+					if(!$field->validate(&$errors)) {
 						$valid = false;
 					}
 				}
@@ -108,15 +108,21 @@ class detailsType extends coreType {
 	
 	public function toHtml() {
 		global $db;
-		$html = "<table class='details_table'><thead><tr><td>ID</td>";
+		$html = "<table class='table details_table'><thead><tr><th>ID</th>";
 		foreach($this->form as $name=>$field) {
-			$html .= "<td>".$field->toHtmlLabel()."</td>";
+			$html .= "<th>".htmlspecialchars($field->label).($field->required?'*':'')."</th>";
 		}
-		$html .= "<td></td></tr></thead>";
+		$html .= "<th></th></tr></thead>";
 		$html .= "<tbody>";
 		
 		$actions_td = "<td class='actions_td'><a href='#' onClick='return removeRow(this);'>[Удалить]</a>"
 					. "&nbsp; <a href='#' onClick=\"return addRow($(this).parents('tr:first'));\">[Копировать]</a></td>";
+					
+		$actions_td = "<td class='actions_td'><div role='group' class='btn-group'>
+					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='Копировать' class='glyphicon glyphicon-sound-stereo'></span></div> 
+					<div onclick='return confirm(\"Удалить?\")?removeRow(this):false;' class='btn btn-default'><span title='Удалить' class='glyphicon glyphicon-remove'></span></div> 
+					</div></td>";
+					
 		$index = 0;
 		foreach($this->data as $row) {
 			$html .= "<tr data-index='{$index}'>";
@@ -139,7 +145,7 @@ class detailsType extends coreType {
 			$field->name = $oldName;
 		}
 		$html .= $actions_td."</tr></tbody></table>";
-		$html .= "<button type='button' onClick=\"return addRow($(this).parents('.input:first').find('.details_table tr.new_row'));\">Добавить</button>";
+		$html .= "<button type='button' class='pull-right btn btn-default' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> Добавить</button>";
 		return $html;		
 		
 	}
@@ -148,7 +154,7 @@ class detailsType extends coreType {
 		global $db;
 
 		$res = $db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
-		if($res !== 1) {
+		if(!$res) {
 			echo "SQL error while deleting old details<br>";
 			echo nl2br($res->result->userinfo);
 			exit;
@@ -168,7 +174,7 @@ class detailsType extends coreType {
 				$sql .= implode(', ', $sql_values);
 /* 				echo $sql."<br>"; */
 				$res = $db->query($sql);
-				if($res !== 1) {
+				if(!$res) {
 					echo "SQL error while saving details<br>";
 					echo nl2br($res->result->userinfo);
 					exit;
@@ -193,7 +199,7 @@ class detailsType extends coreType {
 	}
 	function addRow(el) {
 		var new_row = $(el);
-	    var table = $(el).parents('.input:first').find('.details_table');
+	    var table = $(el).parents('.form-group:first').find('.details_table');
 	    var last_row = table.find('tr.new_row');
 		var index = table.find('tr:not(.new_row):last').data('index');
 		if(index === undefined) 
@@ -202,7 +208,7 @@ class detailsType extends coreType {
 			index++;
 		var clone_row = new_row.html().replace(/\[(%%ID%%|\d+)\]\[/g, '['+index+'][' );
 		clone_row = $('<tr>'+clone_row+'</tr>').attr('class','').data('index', index); 
-		console.log(clone_row);
+//		console.log(clone_row);
 		clone_row.find('td.id_td').contents().last()[0].textContent='';
 		clone_row.find('td.id_td input').val('');
 		clone_row.find('.select2-container').remove(); // фикс для select2
