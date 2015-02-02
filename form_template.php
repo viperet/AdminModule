@@ -33,6 +33,7 @@
 	</div> <!-- form-group -->
 <?		$count++;
 	} ?>
+	<hr>
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-8">
 			<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save"><?= _('Save') ?></button>
