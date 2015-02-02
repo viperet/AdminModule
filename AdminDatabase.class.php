@@ -1,5 +1,54 @@
 <?php
 
+class Rowset implements Iterator, Countable {
+	public $resource;	
+	public $count = 0;
+	public $foundRows = 0;
+	
+	private $_position = 0;
+	private $_row = FALSE;
+	
+	function __construct($resource) {
+		$this->resource = $resource;
+		$this->count = mysql_num_rows($this->resource);
+		$this->fetchRow();
+	}
+	public function rewind() {
+        if($this->_position != 0) {
+	        mysql_data_seek($this->resource, 0);
+	        $this->_position = 0;
+        
+	        $this->fetchRow();
+	    }
+    }
+
+    public function current() {
+        return $this->_row;
+    }
+
+    public function key() {
+        return $this->_position;
+    }
+
+    public function next() {
+        ++$this->_position;
+        $this->fetchRow();
+    }
+
+    public function valid() {
+        return (boolean) $this->_row;
+    }		
+    
+    public function count() {
+        return $this->count;
+    }	 
+    
+    private function fetchRow() {
+		return $this->_row = mysql_fetch_assoc($this->resource);
+	}   
+	
+}
+
 
 class AdminDatabase {
 	public $linkId;
@@ -13,6 +62,17 @@ class AdminDatabase {
 	static function isError($row) {
 		return false;
 	}
+	
+	static function escape($values) {
+		if(!is_array($values))
+			return "'".mysql_real_escape_string($value)."'";
+			
+		foreach($values as &$value) {
+			$value = "'".mysql_real_escape_string($value)."'";
+		}
+		return $values;
+	}
+
 
 	function showError($row) {
 		return false;
@@ -83,29 +143,40 @@ class AdminDatabase {
 		    die(_('Invalid query:').' ' . mysql_error());
 		}
 		
-		$this->insertId = mysql_insert_id();
 		
-		if(strpos($sql, 'SQL_CALC_FOUND_ROWS') > 0) {
-			$this->foundRows = $this->getOne("SELECT FOUND_ROWS()");
-		} else {
-			$this->foundRows = 0;
+		if(is_resource($res)) { // SELECT, SHOW, DESCRIBE, EXPLAIN 
+			
+			if(strpos($sql, 'SQL_CALC_FOUND_ROWS') > 0) { 
+				$this->foundRows = $this->getOne("SELECT FOUND_ROWS()");
+			} else {
+				$this->foundRows = 0;
+			}
+			$rowset = new Rowset($res);
+			$rowset->foundRows = $this->foundRows;
+			return $rowset;
+			
+			
+		} else { // INSERT, UPDATE, DELETE, DROP
+			$this->insertId = mysql_insert_id();
+			return $res;
 		}
-		return $res;
+		
+		
 	}
 	
 	function getOne($sql, $args = NULL) {
 		if($args!==NULL && !is_array($args))
 			$args = array_slice(func_get_args(), 1);
 		$res = $this->query($sql, $args);
-		$row = mysql_fetch_row($res);
-		return $row[0];
+		$row = $res->current();
+		return current($row);
 	}
 	
 	function getRow($sql, $args = NULL) {
 		if($args!==NULL && !is_array($args))
 			$args = array_slice(func_get_args(), 1);
 		$res = $this->query($sql, $args);
-		$row = mysql_fetch_assoc($res);
+		$row = $res->current();
 		return $row;
 	}
 	
@@ -114,7 +185,7 @@ class AdminDatabase {
 			$args = array_slice(func_get_args(), 1);
 		$res = $this->query($sql, $args);
 		$data = array();
-		while($row = mysql_fetch_assoc($res)) {
+		foreach($res as $row) {
 			$data[] = $row;
 		}
 		return $data;
