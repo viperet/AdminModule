@@ -8,9 +8,7 @@ abstract class coreType {
 	public $label_hint;
 	public $readonly;
 	public $header;
-	public $validation;
-	public $validation_regexp;
-	public $validation_message;
+	public $validation, $validation_regexp, $validation_message;
 	public $class;
 	public $truncate = 80;
 	public $escape = true;
@@ -91,7 +89,7 @@ abstract class coreType {
 			$this->valid = false;
 			$this->errors[] = 'Требуется ввести действительный URL (http://…)';
 		}
-		if($this->validation == 'integer' && ($this->value!='' && !preg_match('/^\d+$/', $this->value))) {
+		if($this->validation == 'integer' && ($this->value!='' && !preg_match('/^-?\d+$/', $this->value))) {
 			$this->valid = false;
 			$this->errors[] = 'Требуется целое число';
 		}
@@ -123,6 +121,8 @@ abstract class coreType {
 		"</label>";
 
 	}
+
+	public function delete() { return; }
 	
 	public function postSave($id, $params, $item) { return ''; }
 	

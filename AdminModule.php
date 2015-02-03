@@ -132,7 +132,7 @@ class AdminModule {
 				}
 			}
 		}
-		$this->form = new Form($myObjectForm, $this->options);
+		$this->form = new Form($myObjectForm, $this);
 		if($this->form->filled($_POST)) {	
 			$merged_object = array_merge($object, $_POST);
 			$this->form->load($merged_object, 'form');
@@ -331,7 +331,7 @@ class AdminModule {
 /* =============== */
 /* Дополнительные действия над записями	*/
 /* =============== */
-	function actions() {
+	function actions($item) {
 		return "";
 	}
 	
@@ -355,6 +355,12 @@ class AdminModule {
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
 		return $html;
+	}
+/* =============== */
+/* Возвращает кнопки для формы редактирования	*/
+/* =============== */	
+	function formButtons() {
+		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">Сохранить</button>';
 	}
 	function bottomButtons() {
 		return self::topButtons();

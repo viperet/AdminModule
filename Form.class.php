@@ -6,10 +6,12 @@ class Form {
 	public $errorMessage;	
 	public $id;
 	public $options;
+	public $adminModule;
 
-	function __construct($form, $options) {
+	function __construct($form, $adminModule) {
 		$this->form = $form;
-		$this->options = $options;
+		$this->adminModule = $adminModule;
+		$this->options = $adminModule->options;
 	}
 
 	function validate($params) {
