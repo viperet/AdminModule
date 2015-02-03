@@ -93,6 +93,7 @@ class AdminDatabase {
 				debug_print_backtrace();
 				echo "</pre>";
 				echo _("Query:")." {$sql}<br>";
+				var_dump($args);
 			    die(_("Replacement count doesn't match"));
 			}
 			
@@ -158,7 +159,7 @@ class AdminDatabase {
 			
 		} else { // INSERT, UPDATE, DELETE, DROP
 			$this->insertId = mysql_insert_id();
-			return $res;
+			return $this->insertId;
 		}
 		
 		
