@@ -32,6 +32,8 @@ $form = array(
 		'required' => true, // required field should have value to pass form validation (default - false)
 		'filter' => true, // use field's contents for filtering/searching in list view (default - false)
 		'filterByClick' => true, // filter list by field value on click on that field (default - false)
+		'permissions' => ['admin'=>'rw', 'user'=>'r', 'guest'=>''], // role-based permissons on that field
+				// 'rw' - can view and modify, 'r' - read only, '' or no entry - can't view or modify
 	),
 );
 ```	
