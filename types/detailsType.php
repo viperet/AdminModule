@@ -154,11 +154,7 @@ class detailsType extends coreType {
 		global $db;
 
 		$res = $db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
-		if(!$res) {
-			echo "SQL error while deleting old details<br>";
-			echo nl2br($res->result->userinfo);
-			exit;
-		}	
+
 		foreach($this->data as $row) {
 			$sql = "INSERT {$this->details_table} SET `{$this->details_field}` = '{$id}', ";
 			$sql_values = array();
