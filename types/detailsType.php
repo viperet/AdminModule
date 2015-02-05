@@ -88,7 +88,7 @@ class detailsType extends coreType {
 		foreach($this->data as $row) {
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
-					if(!$field->validate(&$errors)) {
+					if(!$field->validate($errors)) {
 						$valid = false;
 					}
 				}
