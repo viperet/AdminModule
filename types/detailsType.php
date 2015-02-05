@@ -108,7 +108,7 @@ class detailsType extends coreType {
 	
 	public function toHtml() {
 		global $db;
-		$html = "<table class='table details_table'><thead><tr><th>ID</th>";
+		$html = "<table class='table details_table'><thead><tr><th class='hidden'>ID</th>";
 		foreach($this->form as $name=>$field) {
 			$html .= "<th>".htmlspecialchars($field->label).($field->required?'*':'')."</th>";
 		}
@@ -126,7 +126,7 @@ class detailsType extends coreType {
 		$index = 0;
 		foreach($this->data as $row) {
 			$html .= "<tr data-index='{$index}'>";
-			$html .= "<td class='id_td'><input type='hidden' name='{$this->name}[{$index}][id]' value='{$row['id']}'>{$row['id']}</td>";
+			$html .= "<td class='id_td hidden'><input type='hidden' name='{$this->name}[{$index}][id]' value='{$row['id']}'>{$row['id']}</td>";
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
 					$html .= "<td>".$field->toHtml()."</td>";
@@ -136,7 +136,7 @@ class detailsType extends coreType {
 			$index++;
 		}
 		$html .= "<tr class='new_row'>";
-		$html .= "<td class='id_td'><input type='hidden' name='{$this->name}[%%ID%%][id]' value=''></td>";
+		$html .= "<td class='id_td hidden'><input type='hidden' name='{$this->name}[%%ID%%][id]' value=''></td>";
 		foreach($this->form as $name=>$field) {
 			$field->fromForm(array($name=>''));
 			$oldName = $field->name;
