@@ -6,17 +6,23 @@ class passwordType extends textType {
 	public $max_length = 100;
 	public $label_hint = '';
 	public $value_check = '';
+	public $compat = false;
+
+	private function hashPassword() {
+		if($this->compat) 
+			return md5($this->value);
+		else
+			return password_hash($this->value, PASSWORD_DEFAULT);
+	}
 
 	public function fromRow($row) {
 		$this->value = '';
 	}
 	
-	
 	public function fromForm($value) {
 		parent::fromForm($value);
 		$this->value_check = $value[$this->name.'_check'];
 	}
-		
 	
 	public function validate(&$errors) {
 		$this->valid = true;
@@ -51,7 +57,7 @@ class passwordType extends textType {
 	
 	public function toSql() {
 		if($this->value == '') return "";
-		$password = password_hash($this->value, PASSWORD_DEFAULT);
+		$password = $this->hashPassword();
 		return "`{$this->name}`= '". mysql_real_escape_string($password)."'";
 		
 	}

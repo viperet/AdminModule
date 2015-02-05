@@ -87,7 +87,7 @@ class detailsType extends coreType {
 		foreach($this->data as $row) {
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
-					if(!$field->validate(&$errors)) {
+					if(!$field->validate($errors)) {
 						$valid = false;
 					}
 				}
@@ -106,7 +106,7 @@ class detailsType extends coreType {
 	
 	
 	public function toHtml() {
-		$html = "<table class='table details_table'><thead><tr><th>ID</th>";
+		$html = "<table class='table details_table'><thead><tr><th class='hidden'>ID</th>";
 		foreach($this->form as $name=>$field) {
 			$html .= "<th>".htmlspecialchars($field->label).($field->required?'*':'')."</th>";
 		}
@@ -124,7 +124,7 @@ class detailsType extends coreType {
 		$index = 0;
 		foreach($this->data as $row) {
 			$html .= "<tr data-index='{$index}'>";
-			$html .= "<td class='id_td'><input type='hidden' name='{$this->name}[{$index}][id]' value='{$row['id']}'>{$row['id']}</td>";
+			$html .= "<td class='id_td hidden'><input type='hidden' name='{$this->name}[{$index}][id]' value='{$row['id']}'>{$row['id']}</td>";
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
 					$html .= "<td>".$field->toHtml()."</td>";
@@ -134,7 +134,7 @@ class detailsType extends coreType {
 			$index++;
 		}
 		$html .= "<tr class='new_row'>";
-		$html .= "<td class='id_td'><input type='hidden' name='{$this->name}[%%ID%%][id]' value=''></td>";
+		$html .= "<td class='id_td hidden'><input type='hidden' name='{$this->name}[%%ID%%][id]' value=''></td>";
 		foreach($this->form as $name=>$field) {
 			$field->fromForm(array($name=>''));
 			$oldName = $field->name;
@@ -150,12 +150,17 @@ class detailsType extends coreType {
 
 	public function postSave($id, $params) { 
 
+<<<<<<< HEAD
 		$res = $this->db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
 		if(!$res) {
 			echo "SQL error while deleting old details<br>";
 			echo nl2br($res->result->userinfo);
 			exit;
 		}	
+=======
+		$res = $db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
+
+>>>>>>> a5fdd36ec181be20b48570e20a85f5250d2f7115
 		foreach($this->data as $row) {
 			$sql = "INSERT {$this->details_table} SET `{$this->details_field}` = '{$id}', ";
 			$sql_values = array();
