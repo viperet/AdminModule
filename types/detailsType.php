@@ -54,13 +54,12 @@ class detailsType extends coreType {
 	
 	// загружает структуру из ДБ
 	public function fromRow($row) {
-		global $db;
 		if(empty($row['id'])) {
 			// добавление записи, данные брать неоткуда
 			return;
 		}
 		$this->master_id = $row['id'];
-		$rows = $db->getAll("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort} ASC");
+		$rows = $this->db->getAll("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort} ASC");
 		$index = 0;
 		$this->data = array();
 		foreach($rows as $row) {
@@ -107,7 +106,6 @@ class detailsType extends coreType {
 	
 	
 	public function toHtml() {
-		global $db;
 		$html = "<table class='table details_table'><thead><tr><th>ID</th>";
 		foreach($this->form as $name=>$field) {
 			$html .= "<th>".htmlspecialchars($field->label).($field->required?'*':'')."</th>";
@@ -151,9 +149,8 @@ class detailsType extends coreType {
 	}
 
 	public function postSave($id, $params) { 
-		global $db;
 
-		$res = $db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
+		$res = $this->db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
 		if(!$res) {
 			echo "SQL error while deleting old details<br>";
 			echo nl2br($res->result->userinfo);
@@ -173,7 +170,7 @@ class detailsType extends coreType {
 				if(!empty($row['id'])) $sql .= " `id` = '{$row['id']}', ";
 				$sql .= implode(', ', $sql_values);
 /* 				echo $sql."<br>"; */
-				$res = $db->query($sql);
+				$res = $this->db->query($sql);
 				if(!$res) {
 					echo "SQL error while saving details<br>";
 					echo nl2br($res->result->userinfo);
