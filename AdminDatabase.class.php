@@ -187,7 +187,10 @@ class AdminDatabase {
 		$res = $this->query($sql, $args);
 		$data = array();
 		foreach($res as $row) {
-			$data[] = $row;
+			if(isset($row['id']))
+				$data[$row['id']] = $row;
+			else
+				$data[] = $row;
 		}
 		return $data;
 	}
