@@ -19,7 +19,11 @@
 <form method="POST" id="editForm" class="form-horizontal" enctype="multipart/form-data" role="form">
 	<input type="hidden" name="id" value="<?= $this->id ?>">
 <?	$count = 0;
-	foreach($this->form as $id=>$item) { ?>
+	foreach($this->form as $id=>$item) { 
+		if($item->raw)
+			echo $item->toHtml();
+		else {
+?>
 	<div class="form-group <?=$item->name?> <?=($item->required?'required':'') .' '. (!$item->valid?' has-error':'') ?>">
 		<?= $item->toHtmlLabel() ?>
 		<div class="col-sm-8">
@@ -31,7 +35,8 @@
 		</span>
 <?		} ?>
 	</div> <!-- form-group -->
-<?		$count++;
+<?		}
+		$count++;
 	} ?>
 	<hr>
 	<div class="form-group">

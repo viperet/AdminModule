@@ -19,7 +19,7 @@ abstract class coreType {
 	public $filter = false;
 	public $filterByClick = false;
 	public $massAction = false;
-	
+	public $raw = false; // raw - не использовать обрамляющие HTML блоки для отображения элемента
 	public $permissions;
 	
 	public $options;
