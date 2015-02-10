@@ -3,6 +3,7 @@
 class select2Type extends textType {
 	public $values = array();
 	public $lookup_table; // таблица по которой смотреть
+	public $lookup_id = 'id'; // поле которое возвращать
 	public $lookup_field; // поле по которому искать
 	public $lookup_display; // поле которое отображать
 	public $lookup_sort; // сортировка
@@ -35,14 +36,14 @@ class select2Type extends textType {
 	public function getLookup($value=NULL, $limit=NULL) {
 		
 		$result = array();
-		$sql = "SELECT id,".$this->lookup_display." value FROM ".$this->lookup_table.
+		$sql = "SELECT {$this->lookup_id} _key, ".$this->lookup_display." value FROM ".$this->lookup_table.
 			(!empty($value) ? " WHERE {$this->lookup_where} AND {$this->lookup_field} LIKE '%".mysql_real_escape_string($value)."%' " : "").
 			" ORDER BY ".$this->lookup_sort.
 			(!empty($limit) ? " LIMIT $limit" : "");
 //		echo $sql;
 		$values = $this->db->getAll($sql);
 		foreach($values as $value) {
-			$result[$value['id']] = $value['value']; 
+			$result[$value['_key']] = $value['value']; 
 		}
 		return $result;
 	}
@@ -58,7 +59,7 @@ class select2Type extends textType {
 	
 	public function lookupValueById($id) {
 		
-		return $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE id = '{$id}'");
+		return $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE {$this->lookup_id} = '{$id}'");
 	}
 	
 	public function toString() {
@@ -86,7 +87,7 @@ class select2Type extends textType {
 			if($this->value!='') {
 				$html .= "
 				initSelection: function(element, callback) {
-					callback({id: {$this->value}, text: ".json_encode($value_text)."}); 
+					callback({id: '{$this->value}', text: ".json_encode($value_text)."}); 
 				},";
 			}
 			$html .= "
