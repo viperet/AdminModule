@@ -210,7 +210,7 @@ class AdminModule {
 		if(strpos($this->filter, ':')) {
 			list($field, $filter) = explode(':', $this->filter);
 			if(isset($this->options['form'][$field]))
-				return " `{$field}` = '".mysql_real_escape_string($filter)."'";
+				return " `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
 		}
 
 		$filter = $this->filter;
