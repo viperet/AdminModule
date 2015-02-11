@@ -12,11 +12,18 @@ class datetimeType extends textType {
 		else
 			$date = date("d.m.Y H:i", $this->value);
 		//return "<input type='text' name='{$this->name}' id='{$this->name}' class='form-control form_datetime {$this->class} ".(!$this->valid?'error':'')."' value='".$date."' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ:СС' />";
-		return "
-    <div class='input-group date' id='{$this->name}'>
-        <input type='text' class='form-control' name='{$this->name}' value='{$date}' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ' />
-        <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
-	</div>";
+		if($this->readonly)
+			return "
+	    <div class='input-group' id='{$this->name}'>
+	        <input type='text' class='form-control' name='{$this->name}' value='{$date}' readonly='1' />
+	        <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
+		</div>";
+		else		
+			return "
+	    <div class='input-group date' id='{$this->name}'>
+	        <input type='text' class='form-control' name='{$this->name}' value='{$date}' placeholder='ДД.ММ.ГГГГ ЧЧ:ММ' />
+	        <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
+		</div>";
 	}
 	
 	public function toSql() {

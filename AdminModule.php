@@ -64,6 +64,28 @@ class AdminModule {
 		}
 		
 		
+		$tmp = $this->options['form'];
+		$this->options['form'] = array();
+		foreach($tmp as $name=>&$array) {
+			if($array['type'] == 'group') {
+				$arrayBegin = $arrayEnd = $array;
+				$arrayBegin['begin'] = true;
+				$arrayEnd['begin'] = false;
+				unset($arrayBegin['form'], $arrayEnd['form']);
+				$this->options['form'] = array_merge(
+					$this->options['form'], 
+					array($name => $arrayBegin),
+					$array['form'],
+					array($name.'-end' => $arrayEnd)
+				);
+			} else 
+				$this->options['form'][$name] = $array;
+		}
+		unset($tmp);
+		
+
+// 		echo "<pre>";print_r($this->options['form']);exit;
+		
 		foreach($this->options['form'] as $name=>&$array) {
 			if(isset($this->options['role']) && isset($array['permissions'])) {
 				$role = $this->options['role'];

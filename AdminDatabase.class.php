@@ -169,6 +169,7 @@ class AdminDatabase {
 		if($args!==NULL && !is_array($args))
 			$args = array_slice(func_get_args(), 1);
 		$res = $this->query($sql, $args);
+		if($res->count == 0) return NULL;
 		$row = $res->current();
 		return current($row);
 	}
@@ -187,7 +188,10 @@ class AdminDatabase {
 		$res = $this->query($sql, $args);
 		$data = array();
 		foreach($res as $row) {
-			$data[] = $row;
+			if(isset($row['id']))
+				$data[$row['id']] = $row;
+			else
+				$data[] = $row;
 		}
 		return $data;
 	}
