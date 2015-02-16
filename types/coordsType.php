@@ -42,8 +42,8 @@ class coordsType extends coreType {
 		}
 	
 		return 
-"<input type='text' name='lat' id='lat' class='form_input {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->lat)."' placeholder='Широта' style='width:150px;' />&nbsp;
-<input type='text' name='lon' id='lon' class='form_input {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->lon)."' placeholder='Долгота' style='width:150px;' />&nbsp; Редактировать координаты точки можно перетаскивая маркер на карте, 
+"<input type='text' name='lat' id='lat' class='form_input {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->lat)."' placeholder='"._('Latitude')."' style='width:150px;' />&nbsp;
+<input type='text' name='lon' id='lon' class='form_input {$this->class} ".(!$this->valid?'error':'')."' value='".$this->escape($this->lon)."' placeholder='"._('Longitude')."' style='width:150px;' />&nbsp; "._('You can edit coordinates by dragging point on the map').", 
 <div id='map' style='width: 100%; height: 400px'></div>
 <script>
 ymaps.ready(function () {

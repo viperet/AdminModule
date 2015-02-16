@@ -1,0 +1,309 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-30 00:09+0200\n"
+"PO-Revision-Date: 2015-02-16 21:44+0200\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: AdminDatabase.class.php:80 AdminDatabase.class.php:83
+#: AdminDatabase.class.php:144
+msgid "Invalid query:"
+msgstr "Ошибочный запрос"
+
+#: Pagination.class.php:74 Pagination.class.php:78
+msgid "Next"
+msgstr "Следующая"
+
+#: Pagination.class.php:74 Pagination.class.php:78
+msgid "Next page"
+msgstr "Следующая страница"
+
+#: Pagination.class.php:61 Pagination.class.php:64
+msgid "Previous"
+msgstr "Предидущая"
+
+#: Pagination.class.php:61 Pagination.class.php:64
+msgid "Previous page"
+msgstr "Предидущая страница"
+
+#: AdminDatabase.class.php:32 AdminDatabase.class.php:79
+#: AdminDatabase.class.php:35 AdminDatabase.class.php:82
+#: AdminDatabase.class.php:95 AdminDatabase.class.php:143
+msgid "Query:"
+msgstr "Запрос:"
+
+#: AdminDatabase.class.php:33 AdminDatabase.class.php:36
+#: AdminDatabase.class.php:97
+msgid "Replacement count doesn't match"
+msgstr "Неправильное число подстановок"
+
+#: Pagination.class.php:60 Pagination.class.php:63
+msgid "To the begining"
+msgstr "В начало"
+
+#: Pagination.class.php:76 Pagination.class.php:79
+msgid "To the end"
+msgstr "В конец"
+
+#: AdminModule.php:334 AdminModule.php:352 AdminModule.php:374
+#: AdminModule.php:377
+msgid "On"
+msgstr "Вкл"
+
+#: AdminModule.php:335 AdminModule.php:353 AdminModule.php:375
+#: AdminModule.php:378
+msgid "Off"
+msgstr "Выкл"
+
+#: AdminModule.php:406 AdminModule.php:424 AdminModule.php:452
+#: AdminModule.php:456 AdminModule.php:459
+msgid "Add record"
+msgstr "Добавить запись"
+
+#: AdminModule.php:408 AdminModule.php:426 AdminModule.php:454
+#: AdminModule.php:458 AdminModule.php:461
+msgid "Edit record"
+msgstr "Редактировать запись"
+
+#: form_template.php:38 AdminModule.php:385 AdminModule.php:388
+msgid "Save"
+msgstr "Сохранить"
+
+#: list_template.php:37
+msgid "filter"
+msgstr "фильтр"
+
+#: list_template.php:43
+msgid "remove filter"
+msgstr "убрать фильтр"
+
+#: list_template.php:52 list_template.php:139 types/detailsType.php:146
+msgid "Add"
+msgstr "Добавить"
+
+#: list_template.php:53 list_template.php:140
+msgid "Delete selected records?"
+msgstr "Удалить выбранные записи?"
+
+#: list_template.php:53 list_template.php:140
+msgid "Delete selected"
+msgstr "Удалить выбранное"
+
+#: list_template.php:69
+msgid "Actions"
+msgstr "Действия"
+
+#: list_template.php:121
+msgid "Edit"
+msgstr "Редактировать"
+
+#: list_template.php:122
+msgid "Clone"
+msgstr "Клонировать"
+
+#: list_template.php:123 types/detailsType.php:116
+#: types/detailsType.php:121
+msgid "Delete"
+msgstr "Удалить"
+
+#: Form.class.php:26
+msgid "Form has errors"
+msgstr "Ошибки в форме"
+
+#: types/checkboxType.php:5
+msgid "Yes"
+msgstr "Да"
+
+#: types/checkboxType.php:5
+msgid "No"
+msgstr "Нет"
+
+#: types/coordsType.php:45
+msgid "Latitude"
+msgstr "Широта"
+
+#: types/coordsType.php:46
+msgid "Longitude"
+msgstr "Долгота"
+
+#: types/coordsType.php:46
+msgid "You can edit coordinates by dragging point on the map"
+msgstr "Координаты можно изменить, перетаскивая точку на карте"
+
+#: types/coreType.php:67
+#, php-format
+msgid "Please fill required field '%s'"
+msgstr "Пожалуйста, заполните обязательное поле '%s'"
+
+#: types/coreType.php:68 types/fileType.php:97 types/tagsType.php:86
+msgid "Required field"
+msgstr "Обязательное поле"
+
+#: types/coreType.php:75
+msgid "Time format - HH:MM"
+msgstr "Формат времени - ЧЧ:ММ"
+
+#: types/coreType.php:76
+#, php-format
+msgid "Wrong time format in '%s'"
+msgstr "Неправильный формат времени в '%s'"
+
+#: types/coreType.php:81
+msgid "Date/time format - DD.MM.YYYY HH:MM"
+msgstr "Формат даты/времени - ДД.ММ.ГГГГ ЧЧ:ММ"
+
+#: types/coreType.php:82
+#, php-format
+msgid "Wrong date/time format in '%s'"
+msgstr "Неправильный формат даты/времени в '%s'"
+
+#: types/coreType.php:86
+msgid "Please enter correct email address"
+msgstr "Введите правильный адрес email"
+
+#: types/coreType.php:90
+msgid "Please enter correct URL (http://...)"
+msgstr "Введите правильный URL (http://...)"
+
+#: types/coreType.php:94
+msgid "Please enter integer number"
+msgstr "Введите целое число"
+
+#: types/coreType.php:98
+msgid "Please enter positive number"
+msgstr "Введите положительное число"
+
+#: types/coreType.php:102
+#, php-format
+msgid "Please enter number in '%s'"
+msgstr "Введите положительное число в '%s'"
+
+#: types/coreType.php:103
+msgid "Please enter number"
+msgstr "Введите число"
+
+#: types/dateType.php:14
+msgid "DD.MM.YYYY"
+msgstr "ДД.ММ.ГГГГ"
+
+#: types/datetimeType.php:23
+msgid "DD.MM.YYYY HH:MM"
+msgstr "ДД.ММ.ГГГГ ЧЧ:ММ"
+
+#: types/detailsType.php:96
+#, php-format
+msgid "Error in field '%s'"
+msgstr "Ошибка в поле '%s'"
+
+#: types/detailsType.php:99
+#, php-format
+msgid "Fill at least one entry in '%s'"
+msgstr "Заполните хотя бы одно значение в '%s'"
+
+#: types/detailsType.php:117 types/detailsType.php:120
+msgid "Copy"
+msgstr "Копировать"
+
+#: types/detailsType.php:121
+msgid "Delete?"
+msgstr "Удалить?"
+
+#: types/fileType.php:29 types/fileType.php:32 types/fileType.php:240
+#: types/fileType.php:248
+msgid "File not uploaded"
+msgstr "Файл не загружен"
+
+#: types/fileType.php:53
+msgid "Delete file"
+msgstr "Удалить файл"
+
+#: types/fileType.php:55
+msgid "Upload file"
+msgstr "Загрузить файл"
+
+#: types/fileType.php:71
+#, php-format
+msgid "Upload of files with extension '%s' is forbidden"
+msgstr "Загрузка файлов с расширением '%s' запрещена"
+
+#: types/fileType.php:72
+msgid "Invalid file format"
+msgstr "Неправильный формат файла"
+
+#: types/fileType.php:79
+msgid "Allowed file formats: "
+msgstr "Разрешенные форматы:"
+
+#: types/fileType.php:80
+#, php-format
+msgid "Invalid file format '%s'"
+msgstr "Неправильный формат файла '%s'"
+
+#: types/fileType.php:90
+#, php-format
+msgid "Maximum file size %s"
+msgstr "Максимальный размер файла %s"
+
+#: types/fileType.php:91
+msgid "File too large"
+msgstr "Файл слишком большой"
+
+#: types/fileType.php:96
+#, php-format
+msgid "Upload file in field '%s'"
+msgstr "Загрузите файл в поле '%s'"
+
+#: types/passwordType.php:31 types/passwordType.php:32
+msgid "Passwords don't match"
+msgstr "Пароли не совпадают"
+
+#: types/passwordType.php:37
+#, php-format
+msgid "Min password length %s chars"
+msgstr "Минимальная длинна пароля %s символов"
+
+#: types/passwordType.php:38
+#, php-format
+msgid "Min length %s chars"
+msgstr "Минимальная длинна %s символов"
+
+#: types/passwordType.php:42
+#, php-format
+msgid "Max password length %s chars"
+msgstr "Максимальная длинна пароля %s символов"
+
+#: types/passwordType.php:43
+#, php-format
+msgid "Max length %s chars"
+msgstr "Максимальная длинна %s символов"
+
+#: types/passwordType.php:52
+msgid "New password"
+msgstr "Новый пароль"
+
+#: types/passwordType.php:53
+msgid "New password again"
+msgstr "Еще раз новый пароль"
+
+#: types/passwordType.php:54
+msgid "To change password enter new password in both fields"
+msgstr "Чтобы сменить пароль - введите новый пароль в оба поля"
+
+#: types/tagsType.php:85
+#, php-format
+msgid "Fill required field '%s'"
+msgstr "Заполните обязательное поле '%s'"

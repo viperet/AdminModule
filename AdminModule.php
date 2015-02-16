@@ -35,6 +35,9 @@ class AdminModule {
 	public $helpersUrl;
 	public $itemsCount;
 	public $filter = "";
+	
+	private $gettextDomain;
+	
 	function __construct($options) {
 //		global $this->db;
 //! BANKER
@@ -382,7 +385,7 @@ class AdminModule {
 /* Возвращает кнопки для формы редактирования	*/
 /* =============== */	
 	function formButtons() {
-		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">Сохранить</button>';
+		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">'._('Save').'</button>';
 	}
 	function bottomButtons() {
 		return self::topButtons();
@@ -424,6 +427,10 @@ class AdminModule {
 /* Обработка действий по умолчанию	*/
 /* =============== */
 	function processCommands() {
+		$this->gettextDomain = 'AdminModule';
+		bindtextdomain($this->gettextDomain, dirname(__FILE__)."/locale"); 
+		$oldDomain = textdomain($this->gettextDomain);	
+		
 
 		if(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX
 		
@@ -463,6 +470,9 @@ class AdminModule {
 				$this->listItems();
 			}
 		}
+		
+		textdomain($oldDomain);
+		
 		return true;
 	}
 	

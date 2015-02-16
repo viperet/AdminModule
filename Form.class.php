@@ -23,7 +23,7 @@ class Form {
 		}
 		unset($item);
 		if(!$valid) {
-			array_unshift($this->errorMessage, "Ошибки в заполнении формы");
+			array_unshift($this->errorMessage, _("Form has errors"));
 		}
 		return $valid;
 	}
@@ -70,22 +70,6 @@ class Form {
 	
 	function filled($params) {
 		return isset($params[$this->formId.'_save']);
-/*
-		$filled = true;
-		foreach($this->form as $id => &$item) {
-			if($id == '-' || $item['type'] == 'label' 
-					|| $item['type'] == 'checkbox' 
-					|| $item['type'] == 'image' 
-					|| !empty($item['readonly'])
-				) continue;
-			if(!isset($params[$id])) {
-				echo $id;
-				$filled = false;
-				break;
-			}
-		}
-		return $filled;
-*/
 	}
 
 	function save($params) {
@@ -94,39 +78,6 @@ class Form {
 			$itemSql = $item->toSql();
 			if(!empty($itemSql))
 				$sql[] = $itemSql;
-/*
-			if($id == '-' || !empty($item['readonly']) || $item['type'] == 'label' || isset($item['dontsave'])) continue;
-			if($item['type'] == 'text' && isset($item['lookup_table'])) {
-				if(trim($params[$id]) == '') {
-					$lookup_id = 0;
-				} else {
-					$lookup_id = $db->getOne("SELECT id FROM `{$item['lookup_table']}` WHERE `{$item['lookup_field']}` = '".addslashes($params[$id])."'");
-					if(empty($lookup_id)) {
-						$db->query("INSERT `{$item['lookup_table']}` SET `{$item['lookup_field']}` = '".addslashes($params[$id])."'");
-						$lookup_id = mysql_insert_id();
-					}
-				}
-				$sql[] = "`{$id}` = '{$lookup_id}'";
-			}elseif($item['type'] == 'datetime') {
-				$sql[] = "`{$id}` = '".strftime('%Y-%m-%d %H:%M', strtotime($params[$id]))."'";
-			}elseif($item['type'] == 'date') {
-				if(trim($params[$id])=='')
-					$sql[] = "`{$id}` = NULL";
-				else
-					$sql[] = "`{$id}` = '".strftime('%Y-%m-%d', strtotime($params[$id]))."'";
-			}elseif($item['type'] == 'checkbox') {
-				$sql[] = "`{$id}` = '".($params[$id]=='on'?1:0)."'";
-			}elseif($item['type'] == 'html') {
-				$sql[] = "`{$id}` = '".addslashes($params[$id])."'";
-			}elseif($item['type'] == 'image') {
-				continue;			
-			}elseif($item['type'] == 'set') {
-				if($params[$id] != NULL)
-					$sql[] = "`{$id}` = '".implode(',', array_keys($params[$id]))."'";
-			} else {
-				$sql[] = "`{$id}` = '".addslashes($params[$id])."'";
-			}
-*/
 		}
 		unset($item);
 		return implode(', ', $sql);

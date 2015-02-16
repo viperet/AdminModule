@@ -28,19 +28,19 @@ class passwordType extends textType {
 		$this->valid = true;
 
 		if( $this->value !=  $this->value_check) {
-			$errors[] = "Введенные пароли не совпадают";
-			$this->errors[] = "Введенные пароли не совпадают";
+			$errors[] = _("Passwords don't match");
+			$this->errors[] = _("Passwords don't match");
 			$this->valid = false;
 		}
 
 		if( $this->value != '' && strlen($this->value)<$this->min_length ) {
-			$errors[] = "Минимальная длинна пароля {$this->min_length} символов";
-			$this->errors[] = "Минимальная длинна {$this->min_length} символов";
+			$errors[] = sprintf(_("Min password length %s chars"), $this->min_length);
+			$this->errors[] = sprintf(_("Min length %s chars"), $this->min_length);
 			$this->valid = false;
 		}
 		if( $this->value != '' && strlen($this->value)>$this->max_length ) {
-			$errors[] = "Максимальная длинна пароля {$this->max_length} символов";
-			$this->errors[] = "Максимальная длинна {$this->max_length} символов";
+			$errors[] = sprintf(_("Max password length %s chars"), $this->max_length);
+			$this->errors[] = sprintf(_("Max length %s chars"), $this->max_length);
 			$this->valid = false;
 		}
 		
@@ -49,9 +49,9 @@ class passwordType extends textType {
 
 	public function toHtml() {
 		return "<div class='row'>".
-		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Новый пароль' /></div>".
-		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}_check' id='{$this->name}_check' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='Еще раз новый пароль' /></div>".
-		"<div class='col-lg-12 help-block'>Для смены введите новый пароль два раза</div>".
+		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='"._('New password')."' /></div>".
+		"<div class='col-lg-6 form-password'><input type='password' autocomplete='off' name='{$this->name}_check' id='{$this->name}_check' class='form-control {$this->class} ".(!$this->valid?'error':'')."' value='' placeholder='"._('New password again')."' /></div>".
+		"<div class='col-lg-12 help-block'>"._('To change password enter new password in both fields')."</div>".
 		"</div>";
 	}
 	
