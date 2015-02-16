@@ -277,3 +277,55 @@ msgstr ""
 #, php-format
 msgid "Fill required field '%s'"
 msgstr ""
+
+#: types/imageType.php:29
+msgid "Minimum size"
+msgstr ""
+
+#: types/imageType.php:29
+msgid "Any size"
+msgstr ""
+
+#: types/imageType.php:35
+msgid "Click on image to crop"
+msgstr ""
+
+#: types/imageType.php:36
+msgid "Delete image"
+msgstr ""
+
+#: types/imageType.php:38
+msgid "Upload from computer"
+msgstr ""
+
+#: types/imageType.php:41
+msgid "find image"
+msgstr ""
+
+#: types/imageType.php:41
+msgid "or upload image from URL"
+msgstr ""
+
+#: types/imageType.php:107
+msgid "Unknown file format in %1, signature %2"
+msgstr ""
+
+#: types/imageType.php:211 types/imageType.php:234
+msgid "Close"
+msgstr ""
+
+#: types/imageType.php:212
+msgid "Image search"
+msgstr ""
+
+#: types/imageType.php:217
+msgid "Search"
+msgstr ""
+
+#: types/imageType.php:235
+msgid "Image cropping"
+msgstr ""
+
+#: types/imageType.php:243
+msgid "Apply"
+msgstr ""

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-30 00:09+0200\n"
-"PO-Revision-Date: 2015-02-16 20:52+0200\n"
+"PO-Revision-Date: 2015-02-16 22:08+0200\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -307,3 +307,55 @@ msgstr "Ще раз новий пароль"
 #: types/passwordType.php:54
 msgid "To change password enter new password in both fields"
 msgstr "Щоб змінити пароль введіть новий пароль в обидва поля"
+
+#: types/imageType.php:29
+msgid "Minimum size"
+msgstr "Мінімальний розмір"
+
+#: types/imageType.php:29
+msgid "Any size"
+msgstr "Довільний розмір"
+
+#: types/imageType.php:35
+msgid "Click on image to crop"
+msgstr "Клікніть на зображенні для обрізання"
+
+#: types/imageType.php:36
+msgid "Delete image"
+msgstr "Видалити зображення"
+
+#: types/imageType.php:38
+msgid "Upload from computer"
+msgstr "Завантажити з компьютера"
+
+#: types/imageType.php:41
+msgid "find image"
+msgstr "знайти зображення"
+
+#: types/imageType.php:41
+msgid "or upload image from URL"
+msgstr "або завантажити з URL"
+
+#: types/imageType.php:107
+msgid "Unknown file format in %1, signature %2"
+msgstr "Невідомий формат файла в %1, сигнатура %2"
+
+#: types/imageType.php:211 types/imageType.php:234
+msgid "Close"
+msgstr "Закрити"
+
+#: types/imageType.php:212
+msgid "Image search"
+msgstr "Пошук зображень"
+
+#: types/imageType.php:217
+msgid "Search"
+msgstr "Пошук"
+
+#: types/imageType.php:235
+msgid "Image cropping"
+msgstr "Обрізання зображення"
+
+#: types/imageType.php:243
+msgid "Apply"
+msgstr "Обрізати"

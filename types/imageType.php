@@ -26,19 +26,19 @@ class imageType extends fileType {
 			</div>";
 		} else 
 			return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
-		<div class='col-sm-12'><p class='form-control-static'>Размер не менее {$this->width}x{$this->height}<br>":"Произвольный размер<br>")."</p></div>".
+		<div class='col-sm-12'><p class='form-control-static'>"._('Minimum size')." {$this->width}x{$this->height}":_("Any size"))."<br></p></div>".
 "
 <div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
 	<img id='{$this->name}' class='form_thumbnail form_thumbnail_crop {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 </div>
 <div class='col-sm-9 col-xs-9'>
-	<div>Кликни по картинке для обрезки</div>
-	<button class='btn btn-default upload_remove' type='button'>Удалить картинку</button>
+	<div>"._('Click on image to crop')."</div>
+	<button class='btn btn-default upload_remove' type='button'>"._('Delete image')."</button>
 	<span class='btn btn-default btn-file'>
-	    Загрузить с компьютера <input type='file' class='form_input upload_image' name='{$this->name}_file' id='{$this->name}_file' placeholder='Загрузка файла'>
+	    "._('Upload from computer')." <input type='file' class='form_input upload_image' name='{$this->name}_file' id='{$this->name}_file'>
 	</span>
 	<div>
-		<span class='link' onClick='return searchPopup(\"{$this->name}_url\", \"{$this->size}\");'>найти картинку</span> или загрузить картинку по ссылке<br>
+		<span class='link' onClick='return searchPopup(\"{$this->name}_url\", \"{$this->size}\");'>"._('find image')."</span> "._('or upload image from URL')."<br>
 		<input type='hidden' name='{$this->name}' value='{$this->value}'>
 		<input type='text' class='form-control upload_url' name='{$this->name}_url' id='{$this->name}_url' placeholder='http://' value='{$this->value_url}'>
 	</div>
@@ -104,7 +104,7 @@ class imageType extends fileType {
 	    elseif($signature == '474946') // gif
 	    	$ext = 'png';
 	    else {
-	    	die("неизвестный формат файла в поле {$this->label}, сигнатура $signature");
+	    	die(strarg(_("Unknown file format in %1, signature %2"), $this->label, $signature));
 	    }
 	    
 		$name= $this->options['root_path'].$path.$fname.".".$ext; // имя файла
@@ -208,13 +208,13 @@ class imageType extends fileType {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Поиск изображения</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?= _('Close'); ?></span></button>
+        <h4 class="modal-title" id="exampleModalLabel"><?= _('Image search'); ?></h4>
         <form id="searchForm" role="form">
 	        <div class="input-group">
 				<input type="text" id="q" class="form-control"> 
 				<span class="input-group-btn">
-					<button class="btn btn-primary" type="submit" id="search">Искать</button>
+					<button class="btn btn-primary" type="submit" id="search"><?= _('Search'); ?></button>
 				</span>
 	        </div>
 		</form>
@@ -231,8 +231,8 @@ class imageType extends fileType {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Закрыть</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Обрезка изображения</h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?= _('Close'); ?></span></button>
+        <h4 class="modal-title" id="exampleModalLabel"><?= _('Image cropping'); ?></h4>
       </div>
       <div class="modal-body">
 
@@ -240,7 +240,7 @@ class imageType extends fileType {
 
       </div>
       <div class="modal-footer">
-		<button type="btn btn-primary" id="apply" data-dismiss="modal">Применить</button>
+		<button type="btn btn-primary" id="apply" data-dismiss="modal"><?= _('Apply'); ?></button>
       </div>      
     </div>
   </div>
