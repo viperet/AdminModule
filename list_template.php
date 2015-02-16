@@ -120,7 +120,7 @@
 				<div class="btn-group" role="group">
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="<?= _('Edit') ?>"></span></a> 
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="<?= _('Clone') ?>"></span></a> 
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('_('Delete?')');"><span class="glyphicon glyphicon-remove" title="<?= _('Delete') ?>"></span></a> 
+					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('<?= _('Delete?') ?>');"><span class="glyphicon glyphicon-remove" title="<?= _('Delete') ?>"></span></a> 
 				</div>
 					<?= $this->actions($item) ?>
 			</td>
