@@ -18,6 +18,7 @@
 
 <form method="POST" id="editForm" class="form-horizontal" enctype="multipart/form-data" role="form">
 	<input type="hidden" name="id" value="<?= $this->id ?>">
+	<input type="hidden" name="_session_id" value="<?= $this->session_id ?>">
 <?	$count = 0;
 	foreach($this->form as $id=>$item) { 
 		if($item->raw)

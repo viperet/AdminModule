@@ -7,6 +7,8 @@ class Form {
 	public $id;
 	public $options;
 	public $adminModule;
+	
+	private $session_id = "";
 
 	function __construct($form, $adminModule) {
 		$this->form = $form;
@@ -30,6 +32,8 @@ class Form {
 	
 	function load($values, $source) {
 		$this->id = @$values['id'];
+		if(isset($values['_session_id'])) $this->session_id = $values['_session_id'];
+		
 		foreach($this->form as $id => &$item) {
 			if($source == 'db')
 				$item->fromRow($values);
@@ -45,6 +49,8 @@ class Form {
 	}
 	
 	function build() {
+		if(empty($this->session_id)) $this->session_id = uniqid('', true);
+		
 		$types = array();
 		$data = "";
 		foreach($this->form as $id => &$item) {
@@ -74,7 +80,7 @@ class Form {
 
 	function save($params) {
 		foreach($this->form as $id => &$item) {
-			$item->fromForm($params);
+//			$item->fromForm($params);
 			$itemSql = $item->toSql();
 			if(!empty($itemSql))
 				$sql[] = $itemSql;
