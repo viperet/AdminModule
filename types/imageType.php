@@ -11,25 +11,30 @@ class imageType extends fileType {
 	public $path = ''; 
 	public $quality = 95;
 	public $zc = 1;
-	public $value_url = '';
 	public $size = 'medium'; // картинки какого размера показывать в рез-тах поиска (icon|medium|xxlarge|huge)
 	public $validation = array('jpg', 'jpeg', 'png', 'gif');
 	
 	public $x,$y,$h,$w;
 	
+	protected $timestamp = '';
+	protected $download_url = '';
 	
+	public function __construct($db, $name, $array) {
+		parent::__construct($db, $name, $array);
+		$this->timestamp = 'v='.time();
+	}
 	
 	public function toHtml() {
 		if($this->readonly) {
 			return "<div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
-			<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
+			<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}?{$this->timestamp}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 			</div>";
 		} else 
 			return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
 		<div class='col-sm-12'><p class='form-control-static'>"._('Minimum size')." {$this->width}x{$this->height}":_("Any size"))."<br></p></div>".
 "
 <div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
-	<img id='{$this->name}' class='form_thumbnail form_thumbnail_crop {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
+	<img id='{$this->name}' class='form_thumbnail form_thumbnail_crop {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}?{$this->timestamp}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 </div>
 <div class='col-sm-9 col-xs-9'>
 	<div>"._('Click on image to crop')."</div>
@@ -40,7 +45,7 @@ class imageType extends fileType {
 	<div>
 		<span class='link' onClick='return searchPopup(\"{$this->name}_url\", \"{$this->size}\");'>"._('find image')."</span> "._('or upload image from URL')."<br>
 		<input type='hidden' name='{$this->name}' value='{$this->value}'>
-		<input type='text' class='form-control upload_url' name='{$this->name}_url' id='{$this->name}_url' placeholder='http://' value='{$this->value_url}'>
+		<input type='text' class='form-control upload_url' name='{$this->name}_url' id='{$this->name}_url' placeholder='http://' value=''>
 	</div>
 </div>
 <input type='hidden' id='{$this->name}_size' value='{$this->size}' />
@@ -53,8 +58,40 @@ class imageType extends fileType {
 ";
 	}
 
+	public function fromForm($value) {
+		parent::fromForm($value);
+		
+		if(!empty($value[$this->name.'_url'])) { // загрузка по ссылке
+			$fileName = $this->download_url = $value[$this->name.'_url'];
+
+			$translit_filename = 'tmp_image.jpg';
+		
+		    $path = $this->path.'/tmp/'.$this->session_id.'/';
+		    @mkdir($this->options['root_path'].$path, 0777, true);
+		    
+		    $name = $this->options['root_path'].$path.$translit_filename; // имя файла
+			$tmpData = file_get_contents($fileName);
+			file_put_contents($name, $tmpData);
+			unset($tmpData);
+			    
+		    $this->value = $path.$translit_filename;
+			$_SESSION['uploads'][$this->session_id][$this->name] = array(
+				'value' => $this->value,
+			);
+
+		} 
+	}
+
+	public function fromRow($row) {
+		parent::fromRow($row);
+		list($this->value, $this->timestamp) = explode('?', $this->value, 2);
+		
+		if($this->relative && $this->value!='')
+			$this->value = $this->path.$this->value;
+	}
 	
 	public function postSave($id, $params) { 
+	
 		$this->x = $params[$this->name.'_x'];
 		$this->y = $params[$this->name.'_y'];
 		$this->w = $params[$this->name.'_w'];
@@ -78,13 +115,9 @@ class imageType extends fileType {
 	    		), $this->format);
 
 
-		if(!empty($params[$this->name.'_url'])) { // загрузка по ссылке
-			$fileName = $params[$this->name.'_url'];
-		} elseif(!empty($_FILES[$this->name.'_file']['tmp_name'])) {
-			$fileName = $_FILES[$this->name.'_file']['tmp_name'];
-		} elseif(!empty($params[$this->name.'_remove'])) { // удаление картинки
-			@unlink($this->options['root_path'].$path.$fname.".jpg");
-			@unlink($this->options['root_path'].$path.$fname.".png");
+		if(!empty($this->value)) {
+			$fileName = $this->options['root_path'].$this->value;
+		} elseif(empty($this->value)) { // удаление картинки
 			return "`{$this->name}` = ''";
 		} else 
 			return "";
@@ -115,6 +148,7 @@ class imageType extends fileType {
 
 		if($this->width==0 && $this->height==0) {
 			file_put_contents($name, $image);
+			$this->cleanup();
 			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 		} elseif(!empty($this->w) && !empty($this->h)) {
 			$img_r = imagecreatefromstring($image);
@@ -125,15 +159,17 @@ class imageType extends fileType {
 				imagejpeg($dst_r, $name, $this->quality);
 			else
 				imagepng($dst_r, $name);
+			$this->cleanup();
 			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 				
 		} else {
 			$params = array('w'=>$this->width,'h'=>$this->height,'zc'=>$this->zc,'q'=>$this->quality);
 			if(ImageResizer::resizeImgAdvanced($image, $name, $ext, $params)) {
+				$this->cleanup();
 				return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 			}
 		}
-
+		$this->cleanup();
 		return ''; 
 	}
 

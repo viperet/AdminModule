@@ -7,8 +7,8 @@ class fileType extends coreType {
 	public $maxsize = 5242880; // 5 MB
 	public $blacklist = array('php', 'cgi', 'phtml'); 
 	
-	private $session_id;
-	private $original_name;
+	protected $session_id;
+	protected $original_name;
 	
 	static function formatSize($size, $precision = 1) {
 	    $base = log($size) / log(1024);
@@ -107,7 +107,7 @@ class fileType extends coreType {
 		$valid = true;
 		if(!empty($this->value)) {
 			$fname = $this->getFilename();
-			$ext = pathinfo($fname, PATHINFO_EXTENSION);
+			$ext = mb_convert_case(pathinfo($fname, PATHINFO_EXTENSION), MB_CASE_LOWER);
 			if(in_array($ext, $this->blacklist)) {
 						$this->valid = false;
 						$this->errors[] = sprintf(_("Upload of files with extension '%s' is forbidden"), htmlspecialchars($ext));
@@ -128,15 +128,17 @@ class fileType extends coreType {
 					throw new Exception("Validation field in '{$this->name}' should be array of allowed file formats");
 				}
 			}
-			$stat = stat($fname);
-			$fsize = $stat['size'];
-			if ($fsize > $this->maxsize) {
-				$this->valid = false;
-				$this->errors[] = sprintf(_('Maximum file size %s'), fileType::formatSize($this->maxsize));
-				$errors[] = _('File too large');
-				$valid = false;
-				$this->delete();
-		    }
+			$stat = @stat($fname);
+			if($stat) {
+				$fsize = $stat['size'];
+				if ($fsize > $this->maxsize) {
+					$this->valid = false;
+					$this->errors[] = sprintf(_('Maximum file size %s'), fileType::formatSize($this->maxsize));
+					$errors[] = _('File too large');
+					$valid = false;
+					$this->delete();
+			    }
+			}
 		}
 
 	    // если обязательное поле и нет старого значения и нет нового файла - ошибка    
@@ -175,8 +177,10 @@ class fileType extends coreType {
 		    		), $this->format);
 
 		} elseif(empty($this->value)) { // удаление файла 
+			$this->cleanup();
 			return "`{$this->name}` = ''";
 		} else 
+			$this->cleanup();
 			return "";
 			
 		$name= $this->options['root_path'].$path.$fname; // имя файла
@@ -184,8 +188,7 @@ class fileType extends coreType {
 		if (rename($fileName, $name)) {
 		    // Файл корректен и был успешно загружен
 		    
-			$this->removeEmptySubFolders($this->options['root_path'].$this->path);
-			unset($_SESSION['uploads'][$this->session_id][$this->name]);
+			$this->cleanup();
 
 			if($this->relative)
 				$url = $fname; //."?v=".time(); // ссылка на файл
@@ -194,6 +197,7 @@ class fileType extends coreType {
 
 			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 		} else {
+			$this->cleanup();
 			die("Error rename('$fileName', '$name')");
 			return ''; 
 		}	    
@@ -206,11 +210,37 @@ class fileType extends coreType {
 		if(!empty($this->value)) {
 			$fname = $this->getFilename();
 			@unlink($fname);
-			$this->removeEmptySubFolders($this->options['root_path'].$this->path);
-			unset($_SESSION['uploads'][$this->session_id][$this->name]);
 		}
 	}
 	
+	// очистка временных файлов
+	public function cleanup() { 
+		if(!empty($this->session_id)) {
+			$path = $this->options['root_path'].$this->path.'/tmp/'.$this->session_id.'/';
+			if(file_exists($path)) $this->recRmDir($path);
+			unset($_SESSION['uploads'][$this->session_id][$this->name]);
+		}
+		$this->removeEmptySubFolders($this->options['root_path'].$this->path);
+	}
+
+	private function recRmDir($path) {
+		if(!file_exists($path)) return;
+		if(is_file($path)) { 
+			unlink($path);
+			return;
+		}
+		$dir = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
+		
+		for ($dir->rewind(); $dir->valid(); $dir->next()) {
+		    if ($dir->isDir()) {
+		        @rmdir($dir->getPathname());
+		    } else {
+		        @unlink($dir->getPathname());
+		    }
+		}
+		rmdir($path);	
+	}	
+
 	private function removeEmptySubFolders($path) {
 		$empty=true;
 		foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
@@ -220,7 +250,7 @@ class fileType extends coreType {
 	}	
 	
 	private function translitFileName($translit_filename) {
-	    return $this->translit(pathinfo($translit_filename, PATHINFO_FILENAME)).'.'.pathinfo($translit_filename, PATHINFO_EXTENSION);
+	    return $this->translit(pathinfo($translit_filename, PATHINFO_FILENAME)).'.'.mb_convert_case(pathinfo($translit_filename, PATHINFO_EXTENSION), MB_CASE_LOWER);
 	}
 
 	private static function translit($text) { 
