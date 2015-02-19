@@ -443,10 +443,8 @@ class AdminModule {
 			}
 			fclose($df);		
 			$csv = ob_get_clean();
-/*
 			header("Content-Disposition: attachment;filename={$this->options['table']}.csv"); 
 			header("Content-Transfer-Encoding: binary");			
-*/
 			if($encoding == 'windows1251') {
 				header('Content-type: text/plain; charset=windows-1251');
 				echo iconv('UTF-8', 'windows-1251', $csv);
