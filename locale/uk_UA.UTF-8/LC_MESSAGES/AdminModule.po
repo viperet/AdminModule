@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-30 00:09+0200\n"
-"PO-Revision-Date: 2015-02-16 22:08+0200\n"
+"PO-Revision-Date: 2015-02-19 17:49+0200\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -115,7 +115,8 @@ msgstr "Редагувати"
 msgid "Clone"
 msgstr "Клонувати"
 
-#: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
+#: list_template.php:123 types/detailsType.php:116
+#: types/detailsType.php:121
 msgid "Delete"
 msgstr "Видалити"
 
@@ -126,55 +127,57 @@ msgstr "Заповніть обов'язкове поле '%s'"
 
 #: types/coreType.php:65 types/fileType.php:91 types/tagsType.php:78
 #: types/fileType.php:97 types/tagsType.php:86 types/coreType.php:68
+#: types/fileType.php:147
 msgid "Required field"
 msgstr "Обов'язкове поле"
 
 #: types/fileType.php:29 types/fileType.php:32 types/fileType.php:225
 #: types/fileType.php:233 types/fileType.php:240 types/fileType.php:248
+#: types/fileType.php:35 types/fileType.php:325 types/fileType.php:333
 msgid "File not uploaded"
 msgstr "Файл не завантажений"
 
-#: types/fileType.php:48 types/fileType.php:53
+#: types/fileType.php:48 types/fileType.php:53 types/fileType.php:94
 msgid "Delete file"
 msgstr "Видалити файл"
 
-#: types/fileType.php:50 types/fileType.php:55
+#: types/fileType.php:50 types/fileType.php:55 types/fileType.php:96
 msgid "Upload file"
 msgstr "Завантажити файл"
 
-#: types/fileType.php:66 types/fileType.php:71
+#: types/fileType.php:66 types/fileType.php:71 types/fileType.php:113
 #, php-format
 msgid "Upload of files with extension '%s' is forbidden"
 msgstr "Завантаження файлів типу '%s' заборонено"
 
-#: types/fileType.php:67 types/fileType.php:72
+#: types/fileType.php:67 types/fileType.php:72 types/fileType.php:114
 msgid "Invalid file format"
 msgstr "Неправильній формат файла"
 
-#: types/fileType.php:74 types/fileType.php:79
+#: types/fileType.php:74 types/fileType.php:79 types/fileType.php:122
 msgid "Allowed file formats: "
 msgstr "Дозволені формати файла: "
 
-#: types/fileType.php:75 types/fileType.php:80
+#: types/fileType.php:75 types/fileType.php:80 types/fileType.php:123
 #, php-format
 msgid "Invalid file format '%s'"
 msgstr "Неправильній формат файла '%s'"
 
-#: types/fileType.php:85 types/fileType.php:90
+#: types/fileType.php:85 types/fileType.php:90 types/fileType.php:136
 #, php-format
 msgid "Maximum file size %s"
 msgstr "Максимальний розмір файла %s"
 
-#: types/fileType.php:86 types/fileType.php:91
+#: types/fileType.php:86 types/fileType.php:91 types/fileType.php:137
 msgid "File too large"
 msgstr "Файл занадто великий"
 
-#: types/fileType.php:90 types/fileType.php:96
+#: types/fileType.php:90 types/fileType.php:96 types/fileType.php:146
 #, php-format
 msgid "Upload file in field '%s'"
 msgstr "Завантажте файл в поле '%s'"
 
-#: Form.class.php:26
+#: Form.class.php:26 Form.class.php:28
 msgid "Form has errors"
 msgstr "Помилки в формі"
 
@@ -268,7 +271,7 @@ msgstr "Введіть хоча б одне значення в поле '%s'"
 msgid "Copy"
 msgstr "Копіювати"
 
-#: types/detailsType.php:121
+#: types/detailsType.php:121 list_template.php:123
 msgid "Delete?"
 msgstr "Видалити?"
 
@@ -308,54 +311,59 @@ msgstr "Ще раз новий пароль"
 msgid "To change password enter new password in both fields"
 msgstr "Щоб змінити пароль введіть новий пароль в обидва поля"
 
-#: types/imageType.php:29
+#: types/imageType.php:29 types/imageType.php:34
 msgid "Minimum size"
 msgstr "Мінімальний розмір"
 
-#: types/imageType.php:29
+#: types/imageType.php:29 types/imageType.php:34
 msgid "Any size"
 msgstr "Довільний розмір"
 
-#: types/imageType.php:35
+#: types/imageType.php:35 types/imageType.php:40
 msgid "Click on image to crop"
 msgstr "Клікніть на зображенні для обрізання"
 
-#: types/imageType.php:36
+#: types/imageType.php:36 types/imageType.php:41
 msgid "Delete image"
 msgstr "Видалити зображення"
 
-#: types/imageType.php:38
+#: types/imageType.php:38 types/imageType.php:43
 msgid "Upload from computer"
 msgstr "Завантажити з компьютера"
 
-#: types/imageType.php:41
+#: types/imageType.php:41 types/imageType.php:46
 msgid "find image"
 msgstr "знайти зображення"
 
-#: types/imageType.php:41
+#: types/imageType.php:41 types/imageType.php:46
 msgid "or upload image from URL"
 msgstr "або завантажити з URL"
 
-#: types/imageType.php:107
+#: types/imageType.php:107 types/imageType.php:140
 msgid "Unknown file format in %1, signature %2"
 msgstr "Невідомий формат файла в %1, сигнатура %2"
 
-#: types/imageType.php:211 types/imageType.php:234
+#: types/imageType.php:211 types/imageType.php:234 types/imageType.php:247
+#: types/imageType.php:270
 msgid "Close"
 msgstr "Закрити"
 
-#: types/imageType.php:212
+#: types/imageType.php:212 types/imageType.php:248
 msgid "Image search"
 msgstr "Пошук зображень"
 
-#: types/imageType.php:217
+#: types/imageType.php:217 types/imageType.php:253
 msgid "Search"
 msgstr "Пошук"
 
-#: types/imageType.php:235
+#: types/imageType.php:235 types/imageType.php:271
 msgid "Image cropping"
 msgstr "Обрізання зображення"
 
-#: types/imageType.php:243
+#: types/imageType.php:243 types/imageType.php:279
 msgid "Apply"
 msgstr "Обрізати"
+
+#: list_template.php:144
+msgid "Export"
+msgstr "Експорт"

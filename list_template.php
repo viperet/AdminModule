@@ -122,7 +122,7 @@
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="<?= _('Clone') ?>"></span></a> 
 					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('<?= _('Delete?') ?>');"><span class="glyphicon glyphicon-remove" title="<?= _('Delete') ?>"></span></a> 
 				</div>
-					<?= $this->actions($item) ?>
+				<?= $this->actions($item) ?>
 			</td>
 		</tr>
 	<?
@@ -139,6 +139,18 @@
 		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
 		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
 	</div>
+	<? if($this->options['export']) { ?>
+	<div class="btn-group">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	    <?= _('Export') ?> <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu">
+	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+	    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+	  </ul>
+	</div>				
+	<? } ?>
 </form>
 
 <script>

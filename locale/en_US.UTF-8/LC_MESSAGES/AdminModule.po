@@ -1,3 +1,17 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en_US\n"
+
 #: AdminDatabase.class.php:95 AdminDatabase.class.php:143
 msgid "Query:"
 msgstr ""
@@ -30,7 +44,7 @@ msgstr ""
 msgid "Edit record"
 msgstr ""
 
-#: Form.class.php:26
+#: Form.class.php:26 Form.class.php:28
 msgid "Form has errors"
 msgstr ""
 
@@ -120,6 +134,7 @@ msgid "Please fill required field '%s'"
 msgstr ""
 
 #: types/coreType.php:68 types/fileType.php:97 types/tagsType.php:86
+#: types/fileType.php:147
 msgid "Required field"
 msgstr ""
 
@@ -188,51 +203,52 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: types/detailsType.php:121
+#: types/detailsType.php:121 list_template.php:123
 msgid "Delete?"
 msgstr ""
 
 #: types/fileType.php:29 types/fileType.php:32 types/fileType.php:240
-#: types/fileType.php:248
+#: types/fileType.php:248 types/fileType.php:35 types/fileType.php:325
+#: types/fileType.php:333
 msgid "File not uploaded"
 msgstr ""
 
-#: types/fileType.php:53
+#: types/fileType.php:53 types/fileType.php:94
 msgid "Delete file"
 msgstr ""
 
-#: types/fileType.php:55
+#: types/fileType.php:55 types/fileType.php:96
 msgid "Upload file"
 msgstr ""
 
-#: types/fileType.php:71
+#: types/fileType.php:71 types/fileType.php:113
 #, php-format
 msgid "Upload of files with extension '%s' is forbidden"
 msgstr ""
 
-#: types/fileType.php:72
+#: types/fileType.php:72 types/fileType.php:114
 msgid "Invalid file format"
 msgstr ""
 
-#: types/fileType.php:79
+#: types/fileType.php:79 types/fileType.php:122
 msgid "Allowed file formats: "
 msgstr ""
 
-#: types/fileType.php:80
+#: types/fileType.php:80 types/fileType.php:123
 #, php-format
 msgid "Invalid file format '%s'"
 msgstr ""
 
-#: types/fileType.php:90
+#: types/fileType.php:90 types/fileType.php:136
 #, php-format
 msgid "Maximum file size %s"
 msgstr ""
 
-#: types/fileType.php:91
+#: types/fileType.php:91 types/fileType.php:137
 msgid "File too large"
 msgstr ""
 
-#: types/fileType.php:96
+#: types/fileType.php:96 types/fileType.php:146
 #, php-format
 msgid "Upload file in field '%s'"
 msgstr ""
@@ -278,54 +294,59 @@ msgstr ""
 msgid "Fill required field '%s'"
 msgstr ""
 
-#: types/imageType.php:29
+#: types/imageType.php:29 types/imageType.php:34
 msgid "Minimum size"
 msgstr ""
 
-#: types/imageType.php:29
+#: types/imageType.php:29 types/imageType.php:34
 msgid "Any size"
 msgstr ""
 
-#: types/imageType.php:35
+#: types/imageType.php:35 types/imageType.php:40
 msgid "Click on image to crop"
 msgstr ""
 
-#: types/imageType.php:36
+#: types/imageType.php:36 types/imageType.php:41
 msgid "Delete image"
 msgstr ""
 
-#: types/imageType.php:38
+#: types/imageType.php:38 types/imageType.php:43
 msgid "Upload from computer"
 msgstr ""
 
-#: types/imageType.php:41
+#: types/imageType.php:41 types/imageType.php:46
 msgid "find image"
 msgstr ""
 
-#: types/imageType.php:41
+#: types/imageType.php:41 types/imageType.php:46
 msgid "or upload image from URL"
 msgstr ""
 
-#: types/imageType.php:107
+#: types/imageType.php:107 types/imageType.php:140
 msgid "Unknown file format in %1, signature %2"
 msgstr ""
 
-#: types/imageType.php:211 types/imageType.php:234
+#: types/imageType.php:211 types/imageType.php:234 types/imageType.php:247
+#: types/imageType.php:270
 msgid "Close"
 msgstr ""
 
-#: types/imageType.php:212
+#: types/imageType.php:212 types/imageType.php:248
 msgid "Image search"
 msgstr ""
 
-#: types/imageType.php:217
+#: types/imageType.php:217 types/imageType.php:253
 msgid "Search"
 msgstr ""
 
-#: types/imageType.php:235
+#: types/imageType.php:235 types/imageType.php:271
 msgid "Image cropping"
 msgstr ""
 
-#: types/imageType.php:243
+#: types/imageType.php:243 types/imageType.php:279
 msgid "Apply"
+msgstr ""
+
+#: list_template.php:144
+msgid "Export"
 msgstr ""

@@ -26,6 +26,7 @@ class AdminModule {
 			'perpage' => 25,
 			'title' => '',
 			'sort' => '',
+			'export' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -400,6 +401,84 @@ class AdminModule {
 
 
 /* =============== */
+/* Экспорт данных	*/
+/* =============== */
+	function export($format, $encoding) {
+		//$this->itemsCount
+		
+//		var_dump($items);exit;
+		$csv = array();
+
+		// заголовоки столбцов
+		$row = array();
+		foreach($this->options['form'] as $name => $field) {
+			if($field->type == 'group' || $field->type == 'label' || $field->type == 'none') continue;
+			$row[] = $field->label;
+		}
+		$csv[] = $row;
+
+		$per_page = 100;
+		$limit = 0;
+		do {
+			$items = $this->getItems($limit, $per_page);
+			$limit += $per_page;	
+			//  данные
+			foreach($items as $item) {
+				$row = array();
+				foreach($this->options['form'] as $name => $field) {
+					if($field->type == 'group' || $field->type == 'label' || $field->type == 'none') continue;
+					$field->fromRow($item);
+					$row[] = $field->toString();
+				}
+				$csv[] = $row;
+			}
+		} while(count($items)>0);
+		
+		if($format == 'csv') {
+			ob_start();
+			// вывод		
+			$df = fopen("php://output", 'w');
+			foreach ($csv as $row) {
+				fputcsv($df, $row);
+			}
+			fclose($df);		
+			$csv = ob_get_clean();
+/*
+			header("Content-Disposition: attachment;filename={$this->options['table']}.csv"); 
+			header("Content-Transfer-Encoding: binary");			
+*/
+			if($encoding == 'windows1251') {
+				header('Content-type: text/plain; charset=windows-1251');
+				echo iconv('UTF-8', 'windows-1251', $csv);
+			} else {
+				header('Content-type: text/plain; charset=utf-8');
+				echo $csv;
+			}
+		} elseif($format == 'xls') {
+			header("Content-Type: application/force-download");
+			header("Content-Type: application/octet-stream");
+			header("Content-Type: application/download");
+			header("Content-Disposition: attachment;filename={$this->options['table']}.xls"); 
+			header("Content-Transfer-Encoding: binary");			
+			SimpleXLS::begin();
+			foreach($csv as $line => $row) {
+				$col = 0;
+				foreach($row as $column => $item) {
+					if(is_numeric($item))
+						SimpleXLS::number($line, $column, $item);
+					else
+						SimpleXLS::label($line, $column, iconv('UTF-8', 'windows-1251', mb_substr($item, 0, 255, 'UTF-8')));
+				}
+				$row++;
+			}
+			SimpleXLS::end();
+		}
+		
+		
+		exit;		
+	}
+
+/* =============== */
 /* Массовые действия	*/
 /* =============== */
 	function massAction($ids, $field, $value) {
@@ -452,7 +531,9 @@ class AdminModule {
 				}
 			}
 	
-			if(isset($_REQUEST['delete'])) {
+			if(isset($_REQUEST['export'])) {
+				$this->export($_REQUEST['format'], $_REQUEST['encoding']);
+			} elseif(isset($_REQUEST['delete'])) {
 				$this->deleteItem($_REQUEST['item']);
 			} elseif(isset($_GET['edit'])) {
 				if($_GET['edit'] == 0)
