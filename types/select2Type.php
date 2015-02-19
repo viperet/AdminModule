@@ -10,6 +10,7 @@ class select2Type extends textType {
 	public $lookup_where = '1';
 	public $create_variant = false; // можно ли создавать новые значения на лету, для работы необходима включенная опция ajax
 	public $ajax = false;
+	public $min_input = 2;
 	
 	function __construct($db, $name, $array) {
 		
@@ -45,7 +46,8 @@ class select2Type extends textType {
 		foreach($values as $value) {
 			$result[$value['_key']] = $value['value']; 
 		}
-		return $result;
+		
+		return $result+$this->values;
 	}
 	
 	public function ajaxLookup() {
@@ -58,7 +60,8 @@ class select2Type extends textType {
 	}
 	
 	public function lookupValueById($id) {
-		
+		if(isset($this->values[$id])) 
+			return $this->values[$id];
 		return $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE {$this->lookup_id} = '{$id}'");
 	}
 	
@@ -68,6 +71,13 @@ class select2Type extends textType {
 			$this->value = $this->lookupValueById($value);
 		} elseif(isset($this->values[$value]))
 			$this->value = $this->values[$value];
+		else {
+			array_walk_recursive($this->values, function ($val, $key) {
+				if($key == $this->value) { 
+					$this->value = $val;
+				}
+			});
+		}
 		$result = parent::toString();
 		$this->value = $value;
 		return $result;
@@ -83,7 +93,7 @@ class select2Type extends textType {
 	<script>
 		$(document.getElementById('{$this->name}')).select2({
 			".($this->create_variant?"createSearchChoice: function (term) { return { id: term, text: term }; },":"")."
-			minimumInputLength: 2,";
+			minimumInputLength: {$this->min_input},";
 			if($this->value!='') {
 				$html .= "
 				initSelection: function(element, callback) {
