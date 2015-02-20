@@ -64,9 +64,12 @@ class datetimeType extends textType {
 	public static function pageHeader() {
 ?>
 <script type="text/javascript">
-  $(function() {
-    $('.input-group.date').datetimepicker({language: 'ru'});
-  });
+	$(function() {
+		if($.fn.datetimepicker.defaults.locale !== undefined)
+			$('.input-group.date').datetimepicker({locale: 'ru'});
+		else
+			$('.input-group.date').datetimepicker({language: 'ru'});
+	});
 </script>
 <?
 	}
