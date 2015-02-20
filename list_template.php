@@ -1,3 +1,5 @@
+<?= $this->listHeader(); ?>
+
 <style>
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 	.admin-pager  { text-align: center;}

@@ -388,9 +388,26 @@ class AdminModule {
 	function formButtons() {
 		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">'._('Save').'</button>';
 	}
+	
 	function bottomButtons() {
 		return self::topButtons();
 	}
+
+/* =============== */
+/* Возвращает заголовок над списком	*/
+/* =============== */	
+	function listHeader() {
+		return '';
+	}
+
+/* =============== */
+/* Возвращает заголовок над формой	*/
+/* =============== */	
+	function formHeader() {
+		return '';
+	}
+
+
 
 /* =============== */
 /* Доп валидация формы	*/

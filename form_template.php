@@ -1,3 +1,4 @@
+<?= $this->adminModule->formHeader(); ?>
 <!--
 <script src="/js/jquery.autocomplete.js"></script>
 <link href="/css/jquery.autocomplete.css" media="screen" type="text/css" rel="stylesheet">
