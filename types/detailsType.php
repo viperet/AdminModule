@@ -205,6 +205,8 @@ class detailsType extends coreType {
 		clone_row.find('td.id_td input').val('');
 		clone_row.find('.select2-container').remove(); // фикс для select2
 		last_row.before(clone_row);
+		clone_row.find('.btn-group.bootstrap-select.form-control').remove();
+		clone_row.find('.selectpicker').selectpicker();
 		return false;
 	}
 </script>
