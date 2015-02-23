@@ -8,7 +8,10 @@ class setType extends textType {
 	}	
 	public function toSql() {
 		if($this->readonly) return "";
-		return "`{$this->name}`='". implode(',', $this->value)."'";
+		if(empty($this->value))
+			return "`{$this->name}`=''";
+		else
+			return "`{$this->name}`='". implode(',', $this->value)."'";
 	}
 	public function toString() {
 		$result = implode(', ', array_intersect_key($this->values, array_flip($this->value)));

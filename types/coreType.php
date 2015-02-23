@@ -64,43 +64,43 @@ abstract class coreType {
 		$this->valid = true;
 
 		if($this->required && is_string($this->value) && trim($this->value) == '' ) {
-			$errors[] = "Заполните обязательное поле '".htmlspecialchars($this->label)."'";
-			$this->errors[] = 'Обязательное поле';
+			$errors[] = sprintf(_("Please fill required field '%s'"), $this->label);
+			$this->errors[] = _('Required field');
 			$this->valid = false;
 			return false;
 		}
 	
 		if($this->type == 'time' && ($this->value!='' && !preg_match('/^\d?\d:\d?\d$/', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Формат времени - ЧЧ:ММ';
-			$errors[] = "Неправильный формат времени в '".htmlspecialchars($this->label)."'";
+			$this->errors[] = _('Time format - HH:MM');
+			$errors[] = sprintf(_("Wrong time format in '%s'"), $this->label);
 			return false;
 		}
 		if($this->type == 'datetime' && ( $this->value!='' && !preg_match('/^\d?\d.\d?\d.\d\d\d\d(\s+\d?\d:\d?\d(:\d?\d)?)?$/', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Формат даты/времени - ЧЧ.ММ.ГГГГ ЧЧ:ММ:СС';
-			$errors[] = "Неправильный формат даты/времени в '".htmlspecialchars($this->label)."'";
+			$this->errors[] = _('Date/time format - DD.MM.YYYY HH:MM');
+			$errors[] = sprintf(_("Wrong date/time format in '%s'"), $this->label);
 		}
 		if($this->validation == 'email' && ($this->value!='' && !preg_match('#[A-Z0-9\._%\+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}#i', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Требуется ввести действительный email';
+			$this->errors[] = _('Please enter correct email address');
 		}
 		if($this->validation == 'url' && ($this->value!='' && !preg_match('#^http\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$#i', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Требуется ввести действительный URL (http://…)';
+			$this->errors[] = _('Please enter correct URL (http://...)');
 		}
 		if($this->validation == 'integer' && ($this->value!='' && !preg_match('/^-?\d+$/', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Требуется целое число';
+			$this->errors[] = _('Please enter integer number');
 		}
 		if($this->validation == 'money' && ($this->value!='' && !preg_match('/^[0-9]*\.?[0-9]+$/', $this->value))) {
 			$this->valid = false;
-			$this->errors[] = 'Требуется положительное число';
+			$this->errors[] = _('Please enter positive number');
 		}
 		if($this->validation == 'float' && ($this->value!='' &&!preg_match('/^[-+]?[0-9]*\.?[0-9]+$/', $this->value))) {
 			$this->valid = false;
-			$this->errorMessage[] = "Введите число в поле '".$item['label']."'";
-			$this->errors[] = 'Требуется число';
+			$this->errorMessage[] = sprintf(_("Please enter number in '%s'"), $this->label);
+			$this->errors[] = _('Please enter number');
 		}
 		if($this->validation == 'regexp' && ($this->value!='' && !preg_match($this->validation_regexp, $this->value))) {
 			$this->valid = false;

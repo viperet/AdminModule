@@ -1,3 +1,4 @@
+<?= $this->adminModule->formHeader(); ?>
 <!--
 <script src="/js/jquery.autocomplete.js"></script>
 <link href="/css/jquery.autocomplete.css" media="screen" type="text/css" rel="stylesheet">
@@ -18,6 +19,7 @@
 
 <form method="POST" id="editForm" class="form-horizontal" enctype="multipart/form-data" role="form">
 	<input type="hidden" name="id" value="<?= $this->id ?>">
+	<input type="hidden" name="_session_id" value="<?= $this->session_id ?>">
 <?	$count = 0;
 	foreach($this->form as $id=>$item) { 
 		if($item->raw)

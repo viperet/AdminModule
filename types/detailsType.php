@@ -93,10 +93,10 @@ class detailsType extends coreType {
 				}
 			}
 		}
-		if(!$valid) $errors[] = "Ошибка в заполнении поля '".htmlspecialchars($this->label)."'";
+		if(!$valid) $errors[] = sprintf(_("Error in field '%s'"), $this->label);
 		if($this->required && count($this->data) == 0) {
 			$valid = false;
-			$errors[] = "Введите хотя бы одно значение в '".htmlspecialchars($this->label)."'";
+			$errors[] = sprintf(_("Fill at least one entry in '%s'"), $this->label);
 		}
 		$this->valid = $valid;
 		return $valid;
@@ -113,12 +113,12 @@ class detailsType extends coreType {
 		$html .= "<th></th></tr></thead>";
 		$html .= "<tbody>";
 		
-		$actions_td = "<td class='actions_td'><a href='#' onClick='return removeRow(this);'>[Удалить]</a>"
-					. "&nbsp; <a href='#' onClick=\"return addRow($(this).parents('tr:first'));\">[Копировать]</a></td>";
+		$actions_td = "<td class='actions_td'><a href='#' onClick='return removeRow(this);'>["._('Delete')."]</a>"
+					. "&nbsp; <a href='#' onClick=\"return addRow($(this).parents('tr:first'));\">["._('Copy')."]</a></td>";
 					
 		$actions_td = "<td class='actions_td'><div role='group' class='btn-group'>
-					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='Копировать' class='glyphicon glyphicon-sound-stereo'></span></div> 
-					<div onclick='return confirm(\"Удалить?\")?removeRow(this):false;' class='btn btn-default'><span title='Удалить' class='glyphicon glyphicon-remove'></span></div> 
+					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='"._('Copy')."' class='glyphicon glyphicon-sound-stereo'></span></div> 
+					<div onclick='return confirm(\""._('Delete?')."\")?removeRow(this):false;' class='btn btn-default'><span title='"._('Delete')."' class='glyphicon glyphicon-remove'></span></div> 
 					</div></td>";
 					
 		$index = 0;
@@ -143,7 +143,7 @@ class detailsType extends coreType {
 			$field->name = $oldName;
 		}
 		$html .= $actions_td."</tr></tbody></table>";
-		$html .= "<button type='button' class='pull-right btn btn-default' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> Добавить</button>";
+		$html .= "<button type='button' class='pull-right btn btn-default' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> "._('Add')."</button>";
 		return $html;		
 		
 	}

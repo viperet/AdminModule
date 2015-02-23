@@ -2,7 +2,7 @@
 
 class checkboxType extends textType {
 	public function toString() {
-		return ($this->value?'Да':'Нет');
+		return ($this->value?_('Yes'):_('No'));
 	}
 	public function toHtmlLabel() {
 		return '<div class="col-sm-3"></div>';

@@ -15,4 +15,3 @@ class Translate {
 	}
 }
 
-Translate::setTranslationDomain();
