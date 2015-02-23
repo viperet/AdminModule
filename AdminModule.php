@@ -123,7 +123,7 @@ class AdminModule {
 //		$htmlPager = $pager->showNav();
 		
 		$pager = new Pagination($this->itemsCount, $per_page);
-		$htmlPager  = $pager->display($this->baseUrlNoPaging);		
+		$htmlPager  = $pager->display($this->baseUrl);		
 		
 //		$headers = array('id'); // hide ID column for now
 		$headers = array();
