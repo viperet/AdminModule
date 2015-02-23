@@ -246,7 +246,7 @@ class AdminModule {
 		}
 		foreach($this->options['form'] as $key=>$value)
 			if($value->filter)
-				$sql[] = "`{$key}` LIKE '{$filter}'";
+				$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$filter}'";
 				
 		if(preg_match('/^%(\d+)%$/', $filter, $m)) {
 			$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
