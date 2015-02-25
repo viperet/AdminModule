@@ -85,7 +85,7 @@ abstract class coreType {
 			$this->valid = false;
 			$this->errors[] = _('Please enter correct email address');
 		}
-		if($this->validation == 'url' && ($this->value!='' && !preg_match('#^http\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(/\S*)?$#i', $this->value))) {
+		if($this->validation == 'url' && ($this->value!='' && filter_var($this->value, FILTER_VALIDATE_URL) === false)) {
 			$this->valid = false;
 			$this->errors[] = _('Please enter correct URL (http://...)');
 		}
