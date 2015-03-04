@@ -4,6 +4,7 @@ class Rowset implements Iterator, Countable {
 	public $resource;	
 	public $count = 0;
 	public $foundRows = 0;
+	public $affectedRows = NULL;
 	
 	private $_position = 0;
 	private $_row = FALSE;
@@ -159,6 +160,7 @@ class AdminDatabase {
 			
 		} else { // INSERT, UPDATE, DELETE, DROP
 			$this->insertId = mysql_insert_id();
+			$this->affectedRows = mysql_affected_rows();
 			return $this->insertId;
 		}
 		
