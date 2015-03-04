@@ -179,9 +179,10 @@ class fileType extends coreType {
 		} elseif(empty($this->value)) { // удаление файла 
 			$this->cleanup();
 			return "`{$this->name}` = ''";
-		} else 
+		} else {
 			$this->cleanup();
 			return "";
+		}
 			
 		$name= $this->options['root_path'].$path.$fname; // имя файла
 			
@@ -210,6 +211,7 @@ class fileType extends coreType {
 		if(!empty($this->value)) {
 			$fname = $this->getFilename();
 			@unlink($fname);
+			$this->removeEmptySubFolders($this->options['root_path'].$this->path);
 		}
 	}
 	
