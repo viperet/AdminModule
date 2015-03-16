@@ -217,7 +217,7 @@ class AdminModule {
 	function insertItem($data) {
 		
 		$sql = "INSERT ".$this->options['table']." SET ".$this->form->save($data);
-		$res = $this->db->query($sql);
+		return $this->db->query($sql); // return insert id
 //		if($res !== 1) {
 //			echo "INSERT error<br>";
 //			echo nl2br($res->result->userinfo);
