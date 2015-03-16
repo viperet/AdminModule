@@ -160,7 +160,8 @@ class AdminModule {
 		}
 		$this->form = new Form($myObjectForm, $this);
 		if($this->form->filled($_POST)) {	
-			$merged_object = array_merge($object, $_POST);
+//			$merged_object = array_merge($object, $_POST);
+			$merged_object = $_POST;
 			$this->form->load($merged_object, 'form');
 			$error = true;
 			if(!$this->form->validate($_POST) ||
