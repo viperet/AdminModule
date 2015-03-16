@@ -159,8 +159,8 @@ class AdminDatabase {
 			
 			
 		} else { // INSERT, UPDATE, DELETE, DROP
-			$this->insertId = mysql_insert_id();
-			$this->affectedRows = mysql_affected_rows();
+			$this->insertId = mysql_insert_id($this->linkId);
+			$this->affectedRows = mysql_affected_rows($this->linkId);
 			return $this->insertId;
 		}
 		
