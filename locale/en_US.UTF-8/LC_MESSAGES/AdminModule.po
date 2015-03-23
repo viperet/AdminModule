@@ -13,34 +13,37 @@ msgstr ""
 "Language: en_US\n"
 
 #: AdminDatabase.class.php:95 AdminDatabase.class.php:143
+#: AdminDatabase.class.php:96 AdminDatabase.class.php:144
 msgid "Query:"
 msgstr ""
 
-#: AdminDatabase.class.php:97
+#: AdminDatabase.class.php:97 AdminDatabase.class.php:98
 msgid "Replacement count doesn't match"
 msgstr ""
 
-#: AdminDatabase.class.php:144
+#: AdminDatabase.class.php:144 AdminDatabase.class.php:145
 msgid "Invalid query:"
 msgstr ""
 
-#: AdminModule.php:374 AdminModule.php:377
+#: AdminModule.php:374 AdminModule.php:377 AdminModule.php:393
 msgid "On"
 msgstr ""
 
-#: AdminModule.php:375 AdminModule.php:378
+#: AdminModule.php:375 AdminModule.php:378 AdminModule.php:394
 msgid "Off"
 msgstr ""
 
-#: AdminModule.php:385 AdminModule.php:388
+#: AdminModule.php:385 AdminModule.php:388 AdminModule.php:404
 msgid "Save"
 msgstr ""
 
 #: AdminModule.php:452 AdminModule.php:456 AdminModule.php:459
+#: AdminModule.php:570
 msgid "Add record"
 msgstr ""
 
 #: AdminModule.php:454 AdminModule.php:458 AdminModule.php:461
+#: AdminModule.php:572
 msgid "Edit record"
 msgstr ""
 
@@ -72,39 +75,43 @@ msgstr ""
 msgid "To the end"
 msgstr ""
 
-#: list_template.php:37
+#: list_template.php:37 list_template.php:71
 msgid "filter"
 msgstr ""
 
-#: list_template.php:43
+#: list_template.php:43 list_template.php:80 list_template.php:183
 msgid "remove filter"
 msgstr ""
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
+#: list_template.php:89 list_template.php:192
 msgid "Add"
 msgstr ""
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193
 msgid "Delete selected records?"
 msgstr ""
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193
 msgid "Delete selected"
 msgstr ""
 
-#: list_template.php:69
+#: list_template.php:69 list_template.php:117
 msgid "Actions"
 msgstr ""
 
-#: list_template.php:121
+#: list_template.php:121 list_template.php:169
 msgid "Edit"
 msgstr ""
 
-#: list_template.php:122
+#: list_template.php:122 list_template.php:170
 msgid "Clone"
 msgstr ""
 
 #: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
+#: list_template.php:171
 msgid "Delete"
 msgstr ""
 
@@ -203,13 +210,13 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: types/detailsType.php:121 list_template.php:123
+#: types/detailsType.php:121 list_template.php:123 list_template.php:171
 msgid "Delete?"
 msgstr ""
 
 #: types/fileType.php:29 types/fileType.php:32 types/fileType.php:240
 #: types/fileType.php:248 types/fileType.php:35 types/fileType.php:325
-#: types/fileType.php:333
+#: types/fileType.php:333 types/fileType.php:327 types/fileType.php:335
 msgid "File not uploaded"
 msgstr ""
 
@@ -347,6 +354,10 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: list_template.php:144
+#: list_template.php:144 list_template.php:95 list_template.php:198
 msgid "Export"
+msgstr ""
+
+#: list_template.php:185
+msgid "add records"
 msgstr ""

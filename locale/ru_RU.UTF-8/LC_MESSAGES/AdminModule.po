@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Poedit 1.7.4\n"
 
 #: AdminDatabase.class.php:80 AdminDatabase.class.php:83
-#: AdminDatabase.class.php:144
+#: AdminDatabase.class.php:144 AdminDatabase.class.php:145
 msgid "Invalid query:"
 msgstr "Ошибочный запрос"
 
@@ -43,11 +43,12 @@ msgstr "Предидущая страница"
 #: AdminDatabase.class.php:32 AdminDatabase.class.php:79
 #: AdminDatabase.class.php:35 AdminDatabase.class.php:82
 #: AdminDatabase.class.php:95 AdminDatabase.class.php:143
+#: AdminDatabase.class.php:96 AdminDatabase.class.php:144
 msgid "Query:"
 msgstr "Запрос:"
 
 #: AdminDatabase.class.php:33 AdminDatabase.class.php:36
-#: AdminDatabase.class.php:97
+#: AdminDatabase.class.php:97 AdminDatabase.class.php:98
 msgid "Replacement count doesn't match"
 msgstr "Неправильное число подстановок"
 
@@ -60,63 +61,67 @@ msgid "To the end"
 msgstr "В конец"
 
 #: AdminModule.php:334 AdminModule.php:352 AdminModule.php:374
-#: AdminModule.php:377
+#: AdminModule.php:377 AdminModule.php:393
 msgid "On"
 msgstr "Вкл"
 
 #: AdminModule.php:335 AdminModule.php:353 AdminModule.php:375
-#: AdminModule.php:378
+#: AdminModule.php:378 AdminModule.php:394
 msgid "Off"
 msgstr "Выкл"
 
 #: AdminModule.php:406 AdminModule.php:424 AdminModule.php:452
-#: AdminModule.php:456 AdminModule.php:459
+#: AdminModule.php:456 AdminModule.php:459 AdminModule.php:570
 msgid "Add record"
 msgstr "Добавить запись"
 
 #: AdminModule.php:408 AdminModule.php:426 AdminModule.php:454
-#: AdminModule.php:458 AdminModule.php:461
+#: AdminModule.php:458 AdminModule.php:461 AdminModule.php:572
 msgid "Edit record"
 msgstr "Редактировать запись"
 
 #: form_template.php:38 AdminModule.php:385 AdminModule.php:388
+#: AdminModule.php:404
 msgid "Save"
 msgstr "Сохранить"
 
-#: list_template.php:37
+#: list_template.php:37 list_template.php:71
 msgid "filter"
 msgstr "фильтр"
 
-#: list_template.php:43
+#: list_template.php:43 list_template.php:80 list_template.php:183
 msgid "remove filter"
 msgstr "убрать фильтр"
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
+#: list_template.php:89 list_template.php:192
 msgid "Add"
 msgstr "Добавить"
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193
 msgid "Delete selected records?"
 msgstr "Удалить выбранные записи?"
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193
 msgid "Delete selected"
 msgstr "Удалить выбранное"
 
-#: list_template.php:69
+#: list_template.php:69 list_template.php:117
 msgid "Actions"
 msgstr "Действия"
 
-#: list_template.php:121
+#: list_template.php:121 list_template.php:169
 msgid "Edit"
 msgstr "Редактировать"
 
-#: list_template.php:122
+#: list_template.php:122 list_template.php:170
 msgid "Clone"
 msgstr "Клонировать"
 
-#: list_template.php:123 types/detailsType.php:116
-#: types/detailsType.php:121
+#: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
+#: list_template.php:171
 msgid "Delete"
 msgstr "Удалить"
 
@@ -219,13 +224,13 @@ msgstr "Заполните хотя бы одно значение в '%s'"
 msgid "Copy"
 msgstr "Копировать"
 
-#: types/detailsType.php:121 list_template.php:123
+#: types/detailsType.php:121 list_template.php:123 list_template.php:171
 msgid "Delete?"
 msgstr "Удалить?"
 
 #: types/fileType.php:29 types/fileType.php:32 types/fileType.php:240
 #: types/fileType.php:248 types/fileType.php:35 types/fileType.php:325
-#: types/fileType.php:333
+#: types/fileType.php:333 types/fileType.php:327 types/fileType.php:335
 msgid "File not uploaded"
 msgstr "Файл не загружен"
 
@@ -363,6 +368,10 @@ msgstr "Обрезка изображения"
 msgid "Apply"
 msgstr "Применить"
 
-#: list_template.php:144
+#: list_template.php:144 list_template.php:95 list_template.php:198
 msgid "Export"
 msgstr "Экспорт"
+
+#: list_template.php:185
+msgid "add records"
+msgstr "добавить запись"

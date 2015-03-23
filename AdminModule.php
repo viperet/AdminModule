@@ -27,6 +27,7 @@ class AdminModule {
 			'title' => '',
 			'sort' => '',
 			'export' => false,
+			'date' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -35,7 +36,7 @@ class AdminModule {
 	public $baseUrlNoFilter;
 	public $helpersUrl;
 	public $itemsCount;
-	public $filter = "";
+	public $filter = "", $dateFrom = "", $dateTo = "";
 	
 	private $gettextDomain;
 	
@@ -65,6 +66,11 @@ class AdminModule {
 		if(isset($_GET['filter'])) { 
 			$this->filter = $_GET['filter'];
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
+		}
+		if(isset($_GET['df']) && isset($_GET['dt'])) { 
+			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
+			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
+			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 		}
 		
 		
@@ -231,7 +237,15 @@ class AdminModule {
 /* Получение SQL для фильтра */
 /* ====================== */
 	function getFilterSQL($additionalFields = NULL) {
-		if(trim($this->filter) == '') return "1";
+		
+		if($this->dateFrom != '' && $this->dateTo != '') {
+			$sql = " DATE(`{$this->options['table']}`.`{$this->options['date']}`) >=  '{$this->dateFrom}' AND DATE(`{$this->options['table']}`.`{$this->options['date']}`) <=  '{$this->dateTo}' ";
+		} else {
+			$sql = "1";
+		}
+		
+		
+		if(trim($this->filter) == '') return $sql;
 
 		// проверяем фильтрацию по списку полей "поле:значение"
 		if(strpos($this->filter, ':')) {
@@ -258,7 +272,7 @@ class AdminModule {
 		}
 		
 		if(count($sql) == 0) return '0';
-		return ' ('.implode(' OR ', $sql).') ';
+		return $sql.' AND ('.implode(' OR ', $sql).') ';
 	}
 
 /* ====================== */
