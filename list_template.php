@@ -107,11 +107,16 @@
 	</div>				
 	<? } ?>	
 	<div class="clear"></div>
+
+<? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
-	<table class="table table-hover table-bordered table-striped table-condensed">	
+<? } ?>
+
+
+	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed">	
 	<thead>
 		<tr>
-			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+			<th data-orderable="0"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th title='".@$this->options['form'][$header]->label_hint."'>".
@@ -119,7 +124,7 @@
 				echo "</th>\n";
 			}
 	?>
-			<th><?= _('Actions') ?></th>
+			<th data-orderable="0"><?= _('Actions') ?></th>
 		</tr>			
 		<tr>
 			<th></th>
@@ -170,11 +175,6 @@
 				}
 	?>
 			<td class="table-actions btn-toolbar">
-				<div class="btn-group" role="group">
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>"><span class="glyphicon glyphicon-edit" title="<?= _('Edit') ?>"></span></a> 
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&edit=<?= $item['id'] ?>&clone"><span class="glyphicon glyphicon-sound-stereo" title="<?= _('Clone') ?>"></span></a> 
-					<a class="btn btn-default btn-xs" href="<?= $this->baseUrl ?>&delete&item=<?= $item['id'] ?>" onclick="return confirm('<?= _('Delete?') ?>');"><span class="glyphicon glyphicon-remove" title="<?= _('Delete') ?>"></span></a> 
-				</div>
 				<?= $this->actions($item) ?>
 			</td>
 		</tr>
@@ -189,7 +189,12 @@
 <? } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert">Записей пока нет, <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
 <? } ?>	
+
+<? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
+<? } ?>
+
+	
 	<div class="btn-group" role="group">
 	<?= $this->bottomButtons(); ?>
 	</div>
@@ -212,6 +217,22 @@
 </form>
 
 <script>
+<? if($this->options['datatables']) { ?>
+	$('#admin-table').dataTable( {
+// 		paginate: false,
+		pageLength: <?=$this->options['perpage']?>,
+		orderCellsTop: true,
+		order: [],
+		serverSide: true,
+		ajax: '<?= $this->baseUrl ?>&data-source',
+//		ordering: false,
+// 		scrollY: 300
+	});
+<? } ?>
+	
+	
+	
+	
 	moment.locale('ru');
 	
 	function setTime(mode) {
