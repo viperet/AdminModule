@@ -185,9 +185,9 @@
 	</tbody>
 	</table>
 <? if(count($items) == 0 && isset($_GET['filter'])) { ?>	
-	<div class="alert alert-info" role="alert">Записи не найдены, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
+	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
 <? } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
-	<div class="alert alert-info" role="alert">Записей пока нет, <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
+	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
 <? } ?>	
 
 <? if(!$this->options['datatables']) { ?>

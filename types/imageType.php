@@ -91,6 +91,8 @@ class imageType extends fileType {
 	}
 	
 	public function postSave($id, $params) { 
+		
+		if($this->readonly) return "";
 	
 		$this->x = $params[$this->name.'_x'];
 		$this->y = $params[$this->name.'_y'];
