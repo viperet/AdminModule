@@ -18,9 +18,12 @@
 <script>
 	$(function () {
 		$('#filter_form').submit(function () {
-			document.location = "<?=$this->baseUrlNoPaging?>&filter="+$('#filter_input').val()
-				+"&df="+$('#date-from').val()
-				+"&dt="+$('#date-to').val();
+			var new_location = "<?=$this->baseUrlNoPaging?>&filter="+$('#filter_input').val();
+			if($('#date-from').val())
+				new_location = new_location + "&df="+$('#date-from').val()
+			if($('#date-to').val())
+				new_location = new_location + "&dt="+$('#date-to').val();
+			document.location = new_location;
 			return false;
 		})
 		

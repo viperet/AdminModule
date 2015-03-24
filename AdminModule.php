@@ -67,7 +67,7 @@ class AdminModule {
 			$this->filter = $_GET['filter'];
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
 		}
-		if(isset($_GET['df']) && isset($_GET['dt'])) { 
+		if(!empty($_GET['df']) && !empty($_GET['dt'])) { 
 			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
 			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
 			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
