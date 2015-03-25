@@ -39,7 +39,7 @@ abstract class coreType {
 		$value = $this->toString();
 		$value_truncated = mb_substr($value, 0, $this->truncate, $this->encoding);
 		if($value_truncated != $value) $value_truncated .= '...';
-		return $this->escape($value_truncated);		
+		return $value_truncated;
 	}
 	public function toString() {
 		return $this->escape($this->value);		
@@ -128,7 +128,7 @@ abstract class coreType {
 	
 	public function escape($string) {
 		if($this->escape) 
-			return htmlspecialchars($string, ENT_NOQUOTES, $this->encoding);	
+			return htmlspecialchars($string, ENT_QUOTES, $this->encoding);	
 		else
 			return $string;
 	}
