@@ -30,8 +30,10 @@ class imageType extends fileType {
 			<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}?{$this->timestamp}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 			</div>";
 		} else 
-			return ($this->width>0&&$this->height>0?"<div class='row upload_field'>
-		<div class='col-sm-12'><p class='form-control-static'>"._('Minimum size')." {$this->width}x{$this->height}":_("Any size"))."<br></p></div>".
+			return "<div class='row upload_field'>
+		<div class='col-sm-12'><p class='form-control-static'>".
+			($this->width>0&&$this->height>0?_('Minimum size')." {$this->width}x{$this->height}":_("Any size"))
+		."<br></p></div>".
 "
 <div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
 	<img id='{$this->name}' class='form_thumbnail form_thumbnail_crop {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}?{$this->timestamp}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
