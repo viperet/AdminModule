@@ -65,6 +65,10 @@ class AdminModule {
 		if(isset($_GET['filter'])) { 
 			$this->filter = $_GET['filter'];
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
+			$this->baseUrlNoPaging .= "&filter=".urlencode($_GET['filter']);
+		}
+		if(isset($_GET['s'])) {
+			$this->baseUrl .= "&s=".(int)$_GET['s'];
 		}
 		
 		
@@ -123,7 +127,7 @@ class AdminModule {
 //		$htmlPager = $pager->showNav();
 		
 		$pager = new Pagination($this->itemsCount, $per_page);
-		$htmlPager  = $pager->display($this->baseUrl);		
+		$htmlPager  = $pager->display($this->baseUrlNoPaging);		
 		
 //		$headers = array('id'); // hide ID column for now
 		$headers = array();
