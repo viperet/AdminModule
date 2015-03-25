@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Poedit 1.7.4\n"
 
 #: AdminDatabase.class.php:80 AdminDatabase.class.php:83
-#: AdminDatabase.class.php:144
+#: AdminDatabase.class.php:144 AdminDatabase.class.php:145
 msgid "Invalid query:"
 msgstr "Невірний запит"
 
@@ -43,11 +43,12 @@ msgstr "Попередня сторінка"
 #: AdminDatabase.class.php:32 AdminDatabase.class.php:79
 #: AdminDatabase.class.php:35 AdminDatabase.class.php:82
 #: AdminDatabase.class.php:95 AdminDatabase.class.php:143
+#: AdminDatabase.class.php:96 AdminDatabase.class.php:144
 msgid "Query:"
 msgstr "Запит:"
 
 #: AdminDatabase.class.php:33 AdminDatabase.class.php:36
-#: AdminDatabase.class.php:97
+#: AdminDatabase.class.php:97 AdminDatabase.class.php:98
 msgid "Replacement count doesn't match"
 msgstr "Кількість замінників не вірна"
 
@@ -60,63 +61,69 @@ msgid "To the end"
 msgstr "В кінець"
 
 #: AdminModule.php:334 AdminModule.php:352 AdminModule.php:374
-#: AdminModule.php:377
+#: AdminModule.php:377 AdminModule.php:393
 msgid "On"
 msgstr "Вкл"
 
 #: AdminModule.php:335 AdminModule.php:353 AdminModule.php:375
-#: AdminModule.php:378
+#: AdminModule.php:378 AdminModule.php:394
 msgid "Off"
 msgstr "Викл"
 
 #: AdminModule.php:406 AdminModule.php:424 AdminModule.php:452
-#: AdminModule.php:456 AdminModule.php:459
+#: AdminModule.php:456 AdminModule.php:459 AdminModule.php:570
 msgid "Add record"
 msgstr "Створення"
 
 #: AdminModule.php:408 AdminModule.php:426 AdminModule.php:454
-#: AdminModule.php:458 AdminModule.php:461
+#: AdminModule.php:458 AdminModule.php:461 AdminModule.php:572
 msgid "Edit record"
 msgstr "Редагування"
 
 #: form_template.php:38 AdminModule.php:385 AdminModule.php:388
+#: AdminModule.php:404
 msgid "Save"
 msgstr "Зберегти"
 
-#: list_template.php:37
+#: list_template.php:37 list_template.php:71 list_template.php:73
 msgid "filter"
 msgstr "фільтр"
 
-#: list_template.php:43
+#: list_template.php:43 list_template.php:80 list_template.php:183
+#: list_template.php:82 list_template.php:185
 msgid "remove filter"
 msgstr "відключити фільтр"
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
+#: list_template.php:89 list_template.php:192 list_template.php:91
+#: list_template.php:194
 msgid "Add"
 msgstr "Додати"
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193 list_template.php:92 list_template.php:195
 msgid "Delete selected records?"
 msgstr "Видалити вибрані записи?"
 
-#: list_template.php:53 list_template.php:140
+#: list_template.php:53 list_template.php:140 list_template.php:90
+#: list_template.php:193 list_template.php:92 list_template.php:195
 msgid "Delete selected"
 msgstr "Видалити вибране"
 
-#: list_template.php:69
+#: list_template.php:69 list_template.php:117 list_template.php:119
 msgid "Actions"
 msgstr "Дії"
 
-#: list_template.php:121
+#: list_template.php:121 list_template.php:169 list_template.php:171
 msgid "Edit"
 msgstr "Редагувати"
 
-#: list_template.php:122
+#: list_template.php:122 list_template.php:170 list_template.php:172
 msgid "Clone"
 msgstr "Клонувати"
 
-#: list_template.php:123 types/detailsType.php:116
-#: types/detailsType.php:121
+#: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
+#: list_template.php:171 list_template.php:173
 msgid "Delete"
 msgstr "Видалити"
 
@@ -134,6 +141,7 @@ msgstr "Обов'язкове поле"
 #: types/fileType.php:29 types/fileType.php:32 types/fileType.php:225
 #: types/fileType.php:233 types/fileType.php:240 types/fileType.php:248
 #: types/fileType.php:35 types/fileType.php:325 types/fileType.php:333
+#: types/fileType.php:327 types/fileType.php:335
 msgid "File not uploaded"
 msgstr "Файл не завантажений"
 
@@ -271,7 +279,8 @@ msgstr "Введіть хоча б одне значення в поле '%s'"
 msgid "Copy"
 msgstr "Копіювати"
 
-#: types/detailsType.php:121 list_template.php:123
+#: types/detailsType.php:121 list_template.php:123 list_template.php:171
+#: list_template.php:173
 msgid "Delete?"
 msgstr "Видалити?"
 
@@ -364,6 +373,19 @@ msgstr "Обрізання зображення"
 msgid "Apply"
 msgstr "Обрізати"
 
-#: list_template.php:144
+#: list_template.php:144 list_template.php:95 list_template.php:198
+#: list_template.php:97 list_template.php:200
 msgid "Export"
 msgstr "Експорт"
+
+#: list_template.php:185 list_template.php:187
+msgid "add records"
+msgstr "додати запис"
+
+#: list_template.php:185
+msgid "Records not found"
+msgstr "Немає записів"
+
+#: list_template.php:187
+msgid "No records yet,"
+msgstr "Записів ще немає,"

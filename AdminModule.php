@@ -27,6 +27,7 @@ class AdminModule {
 			'title' => '',
 			'sort' => '',
 			'export' => false,
+			'date' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -35,7 +36,7 @@ class AdminModule {
 	public $baseUrlNoFilter;
 	public $helpersUrl;
 	public $itemsCount;
-	public $filter = "";
+	public $filter = "", $dateFrom = "", $dateTo = "";
 	
 	private $gettextDomain;
 	
@@ -69,6 +70,11 @@ class AdminModule {
 		}
 		if(isset($_GET['s'])) {
 			$this->baseUrl .= "&s=".(int)$_GET['s'];
+		}
+		if(!empty($_GET['df']) && !empty($_GET['dt'])) { 
+			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
+			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
+			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 		}
 		
 		
@@ -164,7 +170,8 @@ class AdminModule {
 		}
 		$this->form = new Form($myObjectForm, $this);
 		if($this->form->filled($_POST)) {	
-			$merged_object = array_merge($object, $_POST);
+//			$merged_object = array_merge($object, $_POST);
+			$merged_object = $_POST;
 			$this->form->load($merged_object, 'form');
 			$error = true;
 			if(!$this->form->validate($_POST) ||
@@ -221,7 +228,7 @@ class AdminModule {
 	function insertItem($data) {
 		
 		$sql = "INSERT ".$this->options['table']." SET ".$this->form->save($data);
-		$res = $this->db->query($sql);
+		return $this->db->query($sql); // return insert id
 //		if($res !== 1) {
 //			echo "INSERT error<br>";
 //			echo nl2br($res->result->userinfo);
@@ -234,13 +241,21 @@ class AdminModule {
 /* Получение SQL для фильтра */
 /* ====================== */
 	function getFilterSQL($additionalFields = NULL) {
-		if(trim($this->filter) == '') return "1";
+		
+		if($this->dateFrom != '' && $this->dateTo != '') {
+			$dateSql = " DATE(`{$this->options['table']}`.`{$this->options['date']}`) >=  '{$this->dateFrom}' AND DATE(`{$this->options['table']}`.`{$this->options['date']}`) <=  '{$this->dateTo}' ";
+		} else {
+			$dateSql = "1";
+		}
+		
+		
+		if(trim($this->filter) == '') return $dateSql;
 
 		// проверяем фильтрацию по списку полей "поле:значение"
 		if(strpos($this->filter, ':')) {
 			list($field, $filter) = explode(':', $this->filter);
 			if(isset($this->options['form'][$field]))
-				return " `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
+				return $dateSql." AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
 		}
 
 		$filter = $this->filter;
@@ -260,8 +275,8 @@ class AdminModule {
 			$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
 		}
 		
-		if(count($sql) == 0) return '0';
-		return ' ('.implode(' OR ', $sql).') ';
+		if(count($sql) == 0) return $dateSql;
+		return $dateSql.' AND ('.implode(' OR ', $sql).') ';
 	}
 
 /* ====================== */
@@ -362,7 +377,13 @@ class AdminModule {
 /* Дополнительные действия над записями	*/
 /* =============== */
 	function actions($item) {
-		return "";
+		return '
+				<div class="btn-group" role="group">
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'"><span class="glyphicon glyphicon-edit" title="'._('Edit').'"></span></a> 
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'&clone"><span class="glyphicon glyphicon-sound-stereo" title="'._('Clone').'"></span></a> 
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&delete&item='.$item['id'].'" onclick="return confirm(\''._('Delete?').'\');"><span class="glyphicon glyphicon-remove" title="'._('Delete').'"></span></a> 
+				</div>		
+';
 	}
 	
 /* =============== */
@@ -520,6 +541,71 @@ class AdminModule {
 		$this->updateFullCache();
 		$this->returnUser();
 	}
+	
+
+/* =============== */
+/* Выдача данных в формате JSON для dataTables	*/
+/* =============== */
+	function dataSource() {
+/*
+		echo "<pre>";
+		print_r($_GET);
+		exit;
+*/
+		
+		$headers = array();		
+		foreach($this->options['form'] as $key=>$value) {
+			if(!empty($value->header)) {
+				$headers[] = $key;
+			}
+		}
+		
+		if(count($_GET['order'])>0) {
+			$this->options['sort'] = '';
+			foreach($_GET['order'] as $order) {
+				if($this->options['sort'] != '') $this->options['sort'] .= ', ';
+				$this->options['sort'] .= $headers[$order['column']-1].' '.$order['dir'];
+			}
+		}
+// 		echo $this->options['sort'];exit;
+		
+		$items = $this->getItems($_GET['start'], $_GET['length']);
+
+		$data = array();
+
+
+		foreach($items as $item) {
+			$row = array('<input type="checkbox" class="row_checkbox" name="item[]" value="'.$item['id'].'" autocomplete="off">');
+			foreach($this->options['form'] as $key=>$value) {
+				if(!empty($value->header)) {
+					
+					$value->fromRow($item);
+										
+					$row[] = $value->toStringTruncated();
+				}
+			}
+			$row[] = $this->actions($item);
+			$row['DT_RowClass'] = $this->getListClass($item);
+			$data[] = $row;
+		}
+		
+
+
+		$result = array(
+			'draw' => (int)$_GET['draw'],
+			'recordsTotal' => $this->itemsCount,
+			'recordsFiltered' => $this->itemsCount,
+			'data' => $data,
+		);
+
+/*
+		echo "<pre>";
+		print_r($result);
+*/
+		echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		
+	}
+	
 
 /* =============== */
 /* Обработка действий по умолчанию	*/
@@ -530,7 +616,12 @@ class AdminModule {
 		$oldDomain = textdomain($this->gettextDomain);	
 		
 
-		if(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX
+		if(isset($_REQUEST['data-source']) ) { // выдача данных для dataTables
+		
+			$this->dataSource();
+			exit;
+			
+		} elseif(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX
 		
 			call_user_func( array( $this->options['form'][$_REQUEST['ajaxField']], $_REQUEST['ajaxMethod'] ) );
 			exit;
