@@ -50,10 +50,10 @@
 		<form method="GET" action="" id="filter_form" class="form-inline">
 <?php if($this->options['date']) { ?>			
 			<div class="form-group">
-				<input type='text' class="form-control" name="df" id='date-from' value="<?= htmlspecialchars(@$_GET['df']) ?>" placeholder="Дата от"/>
+				<input type='text' class="form-control" name="df" id='date-from' value="<?= date('d.m.Y', strtotime($this->dateFrom)) ?>" placeholder="Дата от"/>
 			</div>
 			<div class="form-group">
-				<input type='text' class="form-control" name="dt" id='date-to' value="<?= htmlspecialchars(@$_GET['dt']) ?>" placeholder="до"/>
+				<input type='text' class="form-control" name="dt" id='date-to' value="<?= date('d.m.Y', strtotime($this->dateTo)) ?>" placeholder="до"/>
 			</div>
 			<div class="btn-group" style="margin-right: 20px;">
 			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -87,10 +87,10 @@
 ?>
 </div>
 <form method="POST" action="<?= $this->baseUrl ?>">
-	<div class="btn-group" role="group">
+	<div class="btn-group additional-buttons-top" role="group">
 	<?= $this->topButtons(); ?>
 	</div>
-	<div class="btn-group" role="group">
+	<div class="btn-group main-buttons-top" role="group">
 		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
 		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
 	</div>
@@ -113,7 +113,7 @@
 <? } ?>
 
 
-	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed">	
+	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
 		<tr>
 			<th data-orderable="0"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
@@ -195,10 +195,10 @@
 <? } ?>
 
 	
-	<div class="btn-group" role="group">
+	<div class="btn-group additional-buttons-bottom" role="group">
 	<?= $this->bottomButtons(); ?>
 	</div>
-	<div class="btn-group" role="group">
+	<div class="btn-group main-buttons-bottom" role="group">
 		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
 		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
 	</div>
