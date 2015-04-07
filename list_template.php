@@ -50,10 +50,10 @@
 		<form method="GET" action="" id="filter_form" class="form-inline">
 <?php if($this->options['date']) { ?>			
 			<div class="form-group">
-				<input type='text' class="form-control" name="df" id='date-from' value="<?= date('d.m.Y', strtotime($this->dateFrom)) ?>" placeholder="Дата от"/>
+				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="Дата от"/>
 			</div>
 			<div class="form-group">
-				<input type='text' class="form-control" name="dt" id='date-to' value="<?= date('d.m.Y', strtotime($this->dateTo)) ?>" placeholder="до"/>
+				<input type='text' class="form-control" name="dt" id='date-to' value="<?= $this->dateTo!=''?date('d.m.Y', strtotime($this->dateTo)):'' ?>" placeholder="до"/>
 			</div>
 			<div class="btn-group" style="margin-right: 20px;">
 			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -145,7 +145,6 @@
 	?>
 			<th></th>
 		</tr>
-	</thead>
 	</thead>
 	<tbody>
 	<?
