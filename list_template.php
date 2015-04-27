@@ -11,6 +11,7 @@
 	#filter_form .form-group { position: relative; }
 	#date-from, #date-to { width: 100px; }
 /* 	#date-to { margin-right: 30px; } */
+	.row_checkbox, .checkbox-td { cursor: pointer; }
 </style>
 
 
@@ -28,7 +29,7 @@
 		})
 		
 		$('#header_checkbox').change( function (event, value) {
-			$('.row_checkbox').attr('checked', this.checked);
+			$('.row_checkbox').prop('checked', this.checked);
 		});
 		
 		$('select.filter').change( function () {
@@ -152,7 +153,7 @@
 			foreach($items as $item) {
 	?>
 		<tr class="<?= $this->getListClass($item); ?>">
-			<td>
+			<td class="checkbox-td">
 				<input type="checkbox" class="row_checkbox" name="item[]" value="<?= $item['id'] ?>" autocomplete="off">
 			</td>
 	<?
@@ -290,4 +291,10 @@
 	$("#date-to").on("dp.change",function (e) {
 	$('#date-from').data("DateTimePicker").maxDate(e.date);
 	});	
+	
+	
+	$('.checkbox-td').click(function (e) {
+		if(e.target.className != 'row_checkbox')
+			$(this).find('input.row_checkbox').click();
+	});
 </script>
