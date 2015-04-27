@@ -26,7 +26,7 @@
 			echo $item->toHtml();
 		else {
 ?>
-	<div class="form-group <?=$item->name?> <?=($item->required?'required':'') .' '. (!$item->valid?' has-error':'') ?>">
+	<div class="form-group <?=$item->class?> <?=$item->name?> <?=($item->required?'required':'') .' '. (!$item->valid?' has-error':'') ?>">
 		<?= $item->toHtmlLabel() ?>
 		<div class="col-sm-8">
 			<?= $item->toHtml() ?>
