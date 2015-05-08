@@ -107,6 +107,12 @@
 	  </ul>
 	</div>				
 	<? } ?>	
+	<? if($this->options['import']) { ?>
+	<div class="btn-group ">
+		<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+	</div>				
+	<? } ?>	
+	
 	<div class="clear"></div>
 
 <? if(!$this->options['datatables']) { ?>
@@ -214,6 +220,11 @@
 	  </ul>
 	</div>				
 	<? } ?>
+	<? if($this->options['import']) { ?>
+	<div class="btn-group ">
+		<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+	</div>				
+	<? } ?>	
 </form>
 
 <script>

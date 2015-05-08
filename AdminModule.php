@@ -541,18 +541,85 @@ class AdminModule {
 		$this->updateFullCache();
 		$this->returnUser();
 	}
-	
+
+/* =============== */
+/* Импорт CSV	*/
+/* =============== */
+	function import() {
+		if($_FILES['file']['tmp_name']) {
+			$name = tempnam('/tmp', 'csv_import');
+			if (move_uploaded_file($_FILES['file']['tmp_name'], $name)) {
+				$_SESSION['import_filename'] = $name;
+			} else {
+				unlink($name);
+				unset($_SESSION['import_filename']);
+			}
+		} 
+		
+		if(isset($_POST['import'])) {
+			$this->form = new Form($this->options['form'], $this);
+			
+			$f = fopen($_SESSION['import_filename'], 'r');
+			$inserted = 0;
+			for($i=0;!feof($f);$i++) {
+				$line = fgetcsv($f, 1000, (isset($_REQUEST['delimiter'])?$_REQUEST['delimiter']:';'));
+				if($i<(int)$_REQUEST['skip']) {
+					echo "Skip<br>";
+					continue; // пропуск
+				}
+				if(empty($line)) {
+					echo "Empty<br>";
+					continue; // пропуск
+				}
+				if($_REQUEST['encoding'] == 'windows-1251')
+					$line = @array_map( function ( $str ) { return iconv( "windows-1251", "UTF-8", $str ); }, $line );
+				elseif($_REQUEST['encoding'] == 'macOS')
+					$line = @array_map( function ( $str ) { return iconv( "MacUkraine", "UTF-8", $str ); }, $line );
+				
+				$data = array();
+				foreach($line as $index => $row) {
+					if(empty($_POST["col_{$index}"]) || $_POST["col_{$index}"] == '-') continue;
+					$data[$_POST["col_{$index}"]] = $row;
+				}
+				$this->form->load($data, 'form');
+				if(!$this->form->validate($data)) {
+					echo "Validate<br>";
+					continue; // пропуск
+				} // если данные не проходят валидацию - не вставляем
+//				$id = $this->insertItem($data);
+				$sql = "INSERT IGNORE ".$this->options['table']." SET ".$this->form->save($data);
+				$id = $this->db->query($sql); // return insert id
+				if($id>0) $inserted++;
+
+			}
+			$stats = array('total' => $i, 'inserted' => $inserted);
+			unlink($_SESSION['import_filename']);
+			unset($_SESSION['import_filename']);
+		} elseif(isset($_POST['cancel'])) {
+			unlink($_SESSION['import_filename']);
+			unset($_SESSION['import_filename']);
+			$this->returnUser();
+		} elseif(isset($_SESSION['import_filename'])) {
+			$csv = array();
+			
+			$f = fopen($_SESSION['import_filename'], 'r');
+			for($i=0;$i<12;$i++) {
+				$line = fgetcsv($f, 1000, (isset($_REQUEST['delimiter'])?$_REQUEST['delimiter']:';'));
+				if($_REQUEST['encoding'] == 'windows-1251')
+					$line = @array_map( function ( $str ) { return iconv( "windows-1251", "UTF-8", $str ); }, $line );
+				elseif($_REQUEST['encoding'] == 'macOS')
+					$line = @array_map( function ( $str ) { return iconv( "MacUkraine", "UTF-8", $str ); }, $line );
+				$csv[] = $line;
+			}
+		}
+		
+		include "import_template.php";
+	}	
 
 /* =============== */
 /* Выдача данных в формате JSON для dataTables	*/
 /* =============== */
 	function dataSource() {
-/*
-		echo "<pre>";
-		print_r($_GET);
-		exit;
-*/
-		
 		$headers = array();		
 		foreach($this->options['form'] as $key=>$value) {
 			if(!empty($value->header)) {
@@ -567,7 +634,6 @@ class AdminModule {
 				$this->options['sort'] .= $headers[$order['column']-1].' '.$order['dir'];
 			}
 		}
-// 		echo $this->options['sort'];exit;
 		
 		$items = $this->getItems($_GET['start'], $_GET['length']);
 
@@ -598,12 +664,7 @@ class AdminModule {
 			'data' => $data,
 		);
 
-/*
-		echo "<pre>";
-		print_r($result);
-*/
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		
 	}
 	
 
@@ -643,6 +704,10 @@ class AdminModule {
 	
 			if(isset($_REQUEST['export'])) {
 				$this->export($_REQUEST['format'], $_REQUEST['encoding']);
+			} elseif(isset($_REQUEST['import'])) {
+				$this->navigation->add(_("Import"),"addarticle.php");
+				echo $this->navigation->get();				
+				$this->import();
 			} elseif(isset($_REQUEST['delete'])) {
 				$this->deleteItem($_REQUEST['item']);
 			} elseif(isset($_GET['edit'])) {

@@ -63,7 +63,10 @@ abstract class coreType {
 	public function validate(&$errors) {
 		$this->valid = true;
 
-		if($this->required && is_string($this->value) && trim($this->value) == '' ) {
+		if($this->required && (
+			(is_string($this->value) && (trim($this->value) == '' ) 
+			|| is_null($this->value))
+		)) {
 			$errors[] = sprintf(_("Please fill required field '%s'"), $this->label);
 			$this->errors[] = _('Required field');
 			$this->valid = false;
