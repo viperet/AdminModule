@@ -20,6 +20,7 @@ class htmlType extends textareaType {
 			$full_path = $dir.$_FILES['upload']['name'];
 			$http_path = $this->download_images_url.$_FILES['upload']['name'];
 			$error = '';
+			mkdir($dir, 0777, true);
 			if( move_uploaded_file($_FILES['upload']['tmp_name'], $full_path) ) {
 			} else {
 				$error = 'Что-то пошло не так!';
