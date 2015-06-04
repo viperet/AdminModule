@@ -8,7 +8,7 @@ class dateType extends textType {
 		if(empty($this->value))
 			$date = "";
 		else
-			$date = date("d.m.Y H:i", $this->value);
+			$date = date("d.m.Y", $this->value);
 		if($this->readonly)
 			return "
 	    <div class='input-group' id='{$this->name}'>
