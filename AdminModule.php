@@ -28,6 +28,7 @@ class AdminModule {
 			'sort' => '',
 			'export' => false,
 			'date' => false,
+			'datatables' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -127,7 +128,9 @@ class AdminModule {
 		$per_page  = $this->options['perpage'];
 		$limit = (empty($_GET['s'])?0:(int)$_GET['s']);
 		
-		$items = $this->getItems($limit, $per_page);
+		if(!$this->options['datatables']) {
+			$items = $this->getItems($limit, $per_page);
+		}
 //		echo "<hr>{$this->itemsCount}<hr>";
 //		$pager = new pageSplit($page, $this->itemsCount, '', $per_page);		
 //		$htmlPager = $pager->showNav();
