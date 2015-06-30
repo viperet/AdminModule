@@ -28,7 +28,7 @@
 			return false;
 		})
 		
-		$('#header_checkbox').change( function (event, value) {
+		$('body').on('change', '#header_checkbox', function (event, value) {
 			$('.row_checkbox').prop('checked', this.checked);
 		});
 		
@@ -123,7 +123,7 @@
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
 		<tr>
-			<th data-orderable="0"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+			<th data-orderable="0"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th title='".@$this->options['form'][$header]->label_hint."'>".
@@ -134,7 +134,7 @@
 			<th data-orderable="0"><?= _('Actions') ?></th>
 		</tr>			
 		<tr>
-			<th></th>
+			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th>";
@@ -156,7 +156,8 @@
 	<tbody>
 	<?
 			$count = 0;
-			foreach($items as $item) {
+			if(!$this->options['datatables']) {
+				foreach($items as $item) {
 	?>
 		<tr class="<?= $this->getListClass($item); ?>">
 			<td class="checkbox-td">
@@ -186,13 +187,20 @@
 		</tr>
 	<?
 				$count++;
+				}
+			} else {
+?>
+		<tr>
+			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
+		</tr>
+<?				
 			}
 	?>
 	</tbody>
 	</table>
-<? if(count($items) == 0 && isset($_GET['filter'])) { ?>	
+<? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<? } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
+<? } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
 <? } ?>	
 
@@ -236,6 +244,16 @@
 		order: [],
 		serverSide: true,
 		ajax: '<?= $this->baseUrl ?>&data-source',
+		stateSave: true,
+		pagingType: "full_numbers",
+		language: {
+			paginate: {
+				first: "<?=_('To the begining')?>",	
+				last: "<?=_('To the end')?>",	
+				previous: "<?=_('Previous page')?>",
+				next: "<?=_('Next page')?>",
+			},
+		},
 //		ordering: false,
 // 		scrollY: 300
 	});
@@ -304,8 +322,10 @@
 	});	
 	
 	
-	$('.checkbox-td').click(function (e) {
-		if(e.target.className != 'row_checkbox')
+	$('body').on('click', '.checkbox-td, #admin-table td', function (e) {
+		if($(e.target).hasClass('checkbox-td') )
 			$(this).find('input.row_checkbox').click();
+		else if(e.target.tagName == 'TD')
+			$(this).parent().find('input.row_checkbox').click();
 	});
 </script>
