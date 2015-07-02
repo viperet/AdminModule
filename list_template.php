@@ -12,6 +12,8 @@
 	#date-from, #date-to { width: 100px; }
 /* 	#date-to { margin-right: 30px; } */
 	.row_checkbox, .checkbox-td { cursor: pointer; }
+	.selected-items { margin: 5px 0; visibility: hidden; }
+	.selected-items i { cursor: pointer; }
 </style>
 
 
@@ -29,7 +31,7 @@
 		})
 		
 		$('body').on('change', '#header_checkbox', function (event, value) {
-			$('.row_checkbox').prop('checked', this.checked);
+			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
 		
 		$('select.filter').change( function () {
@@ -117,8 +119,12 @@
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
+<? } else { ?>
+	<div class="selected-items">
+		Выбрано <b id="selected-items-count">0</b> записей <i class="fa fa-times-circle" title="снять выделение"></i>
+		<div id="selected-items-container"></div>
+	</div>
 <? } ?>
-
 
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
@@ -237,6 +243,27 @@
 
 <script>
 <? if($this->options['datatables']) { ?>
+
+	var checkboxed_storage = [];
+	
+	function updateSelectedItems() {
+		var container = $('#selected-items-container').empty();
+		for(var i=0;i<checkboxed_storage.length;++i) {
+			container.append("<input type='hidden' name='item[]' value='"+checkboxed_storage[i]+"'/>");
+		}
+		if(checkboxed_storage.length > 0) {
+			$("#selected-items-count").text(checkboxed_storage.length);
+			$(".selected-items").css('visibility', 'visible');
+		} else {
+			$(".selected-items").css('visibility', 'hidden');
+		}	
+/*
+		var link = "";
+		$(".selected-items a").attr('href', link);
+*/
+	}
+	
+
 	$('#admin-table').dataTable( {
 // 		paginate: false,
 		pageLength: <?=$this->options['perpage']?>,
@@ -256,7 +283,32 @@
 		},
 //		ordering: false,
 // 		scrollY: 300
+	}).on('draw.dt', function () {
+		$('.row_checkbox').each(function () {
+			if(checkboxed_storage.indexOf(this.value) != -1) {
+				$(this).attr('checked', true);
+			} else {
+				$(this).removeAttr('checked');
+			}
+		});
 	});
+	$('body').on('change', '.row_checkbox', function () {
+		var pos = checkboxed_storage.indexOf(this.value);
+		if(this.checked) {
+			if(pos==-1) checkboxed_storage.push(this.value);
+		} else {
+			if(pos!=-1) checkboxed_storage.splice(pos, 1);
+		}
+
+		updateSelectedItems();
+	});
+	$(".selected-items i").click(function () { // очистка выделения
+		checkboxed_storage = [];
+		$('.row_checkbox, #header_checkbox').removeAttr('checked');
+		updateSelectedItems();
+	});
+	
+	
 <? } ?>
 	
 	
