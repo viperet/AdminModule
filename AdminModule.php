@@ -28,6 +28,7 @@ class AdminModule {
 			'sort' => '',
 			'export' => false,
 			'date' => false,
+			'user' => 'unknown',
 		);
 	public $db, $navigation;
 	public $form;
