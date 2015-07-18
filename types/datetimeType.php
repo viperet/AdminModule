@@ -19,7 +19,7 @@ class datetimeType extends textType {
 		</div>";
 		else		
 			return "
-	    <div class='input-group date' id='{$this->name}'>
+	    <div class='input-group datetime' id='{$this->name}'>
 	        <input type='text' class='form-control' name='{$this->name}' value='{$date}' placeholder='"._('DD.MM.YYYY HH:MM')."' />
 	        <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>
 		</div>";
@@ -66,9 +66,9 @@ class datetimeType extends textType {
 <script type="text/javascript">
 	$(function() {
 		if($.fn.datetimepicker.defaults.locale !== undefined)
-			$('.input-group.date').datetimepicker({locale: 'ru'});
+			$('.input-group.datetime').datetimepicker({locale: 'ru'});
 		else
-			$('.input-group.date').datetimepicker({language: 'ru'});
+			$('.input-group.datetime').datetimepicker({language: 'ru'});
 	});
 </script>
 <?
