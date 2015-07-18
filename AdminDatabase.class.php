@@ -66,7 +66,7 @@ class AdminDatabase {
 	
 	static function escape($values) {
 		if(!is_array($values))
-			return "'".mysql_real_escape_string($value)."'";
+			return "'".mysql_real_escape_string($values)."'";
 			
 		foreach($values as &$value) {
 			$value = "'".mysql_real_escape_string($value)."'";
@@ -197,5 +197,17 @@ class AdminDatabase {
 		}
 		return $data;
 	}
+	function insert($table, $fields) {
+		$sql = "INSERT $table SET ";
+		$i = 0;
+		foreach($fields as $key=>$value) {
+			$sql .= "`{$key}` = ".AdminDatabase::escape($value);
+			if(++$i !== count($fields)) $sql .= ', ';
+		}
+		return $this->query($sql); // return inserted id
+	}	
+	function insertIgnore($table, $fields) {
+		return $this->insert("IGNORE ".$table, $fields);
+	} 
 	
 }

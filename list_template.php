@@ -12,6 +12,8 @@
 	#date-from, #date-to { width: 100px; }
 /* 	#date-to { margin-right: 30px; } */
 	.row_checkbox, .checkbox-td { cursor: pointer; }
+	.selected-items { margin: 5px 0; visibility: hidden; }
+	.selected-items i { cursor: pointer; }
 </style>
 
 
@@ -28,8 +30,8 @@
 			return false;
 		})
 		
-		$('#header_checkbox').change( function (event, value) {
-			$('.row_checkbox').prop('checked', this.checked);
+		$('body').on('change', '#header_checkbox', function (event, value) {
+			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
 		
 		$('select.filter').change( function () {
@@ -117,13 +119,17 @@
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
+<? } else { ?>
+	<div class="selected-items">
+		Выбрано <b id="selected-items-count">0</b> записей <i class="fa fa-times-circle" title="снять выделение"></i>
+		<div id="selected-items-container"></div>
+	</div>
 <? } ?>
-
 
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
 		<tr>
-			<th data-orderable="0"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+			<th data-orderable="0"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th title='".@$this->options['form'][$header]->label_hint."'>".
@@ -134,7 +140,7 @@
 			<th data-orderable="0"><?= _('Actions') ?></th>
 		</tr>			
 		<tr>
-			<th></th>
+			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th>";
@@ -156,7 +162,8 @@
 	<tbody>
 	<?
 			$count = 0;
-			foreach($items as $item) {
+			if(!$this->options['datatables']) {
+				foreach($items as $item) {
 	?>
 		<tr class="<?= $this->getListClass($item); ?>">
 			<td class="checkbox-td">
@@ -186,13 +193,20 @@
 		</tr>
 	<?
 				$count++;
+				}
+			} else {
+?>
+		<tr>
+			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
+		</tr>
+<?				
 			}
 	?>
 	</tbody>
 	</table>
-<? if(count($items) == 0 && isset($_GET['filter'])) { ?>	
+<? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<? } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
+<? } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
 <? } ?>	
 
@@ -229,6 +243,27 @@
 
 <script>
 <? if($this->options['datatables']) { ?>
+
+	var checkboxed_storage = [];
+	
+	function updateSelectedItems() {
+		var container = $('#selected-items-container').empty();
+		for(var i=0;i<checkboxed_storage.length;++i) {
+			container.append("<input type='hidden' name='item[]' value='"+checkboxed_storage[i]+"'/>");
+		}
+		if(checkboxed_storage.length > 0) {
+			$("#selected-items-count").text(checkboxed_storage.length);
+			$(".selected-items").css('visibility', 'visible');
+		} else {
+			$(".selected-items").css('visibility', 'hidden');
+		}	
+/*
+		var link = "";
+		$(".selected-items a").attr('href', link);
+*/
+	}
+	
+
 	$('#admin-table').dataTable( {
 // 		paginate: false,
 		pageLength: <?=$this->options['perpage']?>,
@@ -236,9 +271,44 @@
 		order: [],
 		serverSide: true,
 		ajax: '<?= $this->baseUrl ?>&data-source',
+		stateSave: true,
+		pagingType: "full_numbers",
+		language: {
+			paginate: {
+				first: "<?=_('To the begining')?>",	
+				last: "<?=_('To the end')?>",	
+				previous: "<?=_('Previous page')?>",
+				next: "<?=_('Next page')?>",
+			},
+		},
 //		ordering: false,
 // 		scrollY: 300
+	}).on('draw.dt', function () {
+		$('.row_checkbox').each(function () {
+			if(checkboxed_storage.indexOf(this.value) != -1) {
+				$(this).attr('checked', true);
+			} else {
+				$(this).removeAttr('checked');
+			}
+		});
 	});
+	$('body').on('change', '.row_checkbox', function () {
+		var pos = checkboxed_storage.indexOf(this.value);
+		if(this.checked) {
+			if(pos==-1) checkboxed_storage.push(this.value);
+		} else {
+			if(pos!=-1) checkboxed_storage.splice(pos, 1);
+		}
+
+		updateSelectedItems();
+	});
+	$(".selected-items i").click(function () { // очистка выделения
+		checkboxed_storage = [];
+		$('.row_checkbox, #header_checkbox').removeAttr('checked');
+		updateSelectedItems();
+	});
+	
+	
 <? } ?>
 	
 	
@@ -304,8 +374,10 @@
 	});	
 	
 	
-	$('.checkbox-td').click(function (e) {
-		if(e.target.className != 'row_checkbox')
+	$('body').on('click', '.checkbox-td, #admin-table td', function (e) {
+		if($(e.target).hasClass('checkbox-td') )
 			$(this).find('input.row_checkbox').click();
+		else if(e.target.tagName == 'TD')
+			$(this).parent().find('input.row_checkbox').click();
 	});
 </script>

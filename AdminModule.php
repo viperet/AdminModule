@@ -29,6 +29,7 @@ class AdminModule {
 			'export' => false,
 			'date' => false,
 			'user' => 'unknown',
+			'datatables' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -128,7 +129,9 @@ class AdminModule {
 		$per_page  = $this->options['perpage'];
 		$limit = (empty($_GET['s'])?0:(int)$_GET['s']);
 		
-		$items = $this->getItems($limit, $per_page);
+		if(!$this->options['datatables']) {
+			$items = $this->getItems($limit, $per_page);
+		}
 //		echo "<hr>{$this->itemsCount}<hr>";
 //		$pager = new pageSplit($page, $this->itemsCount, '', $per_page);		
 //		$htmlPager = $pager->showNav();
@@ -642,7 +645,7 @@ class AdminModule {
 
 
 		foreach($items as $item) {
-			$row = array('<input type="checkbox" class="row_checkbox" name="item[]" value="'.$item['id'].'" autocomplete="off">');
+			$row = array('<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
 			foreach($this->options['form'] as $key=>$value) {
 				if(!empty($value->header)) {
 					
