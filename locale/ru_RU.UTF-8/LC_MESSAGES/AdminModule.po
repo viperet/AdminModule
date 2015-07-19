@@ -28,7 +28,7 @@ msgstr "Ошибочный запрос"
 msgid "Next"
 msgstr "Следующая"
 
-#: Pagination.class.php:74 Pagination.class.php:78
+#: Pagination.class.php:74 Pagination.class.php:78 list_template.php:281
 msgid "Next page"
 msgstr "Следующая страница"
 
@@ -36,7 +36,7 @@ msgstr "Следующая страница"
 msgid "Previous"
 msgstr "Предидущая"
 
-#: Pagination.class.php:61 Pagination.class.php:64
+#: Pagination.class.php:61 Pagination.class.php:64 list_template.php:280
 msgid "Previous page"
 msgstr "Предидущая страница"
 
@@ -52,78 +52,87 @@ msgstr "Запрос:"
 msgid "Replacement count doesn't match"
 msgstr "Неправильное число подстановок"
 
-#: Pagination.class.php:60 Pagination.class.php:63
+#: Pagination.class.php:60 Pagination.class.php:63 list_template.php:278
 msgid "To the begining"
 msgstr "В начало"
 
-#: Pagination.class.php:76 Pagination.class.php:79
+#: Pagination.class.php:76 Pagination.class.php:79 list_template.php:279
 msgid "To the end"
 msgstr "В конец"
 
 #: AdminModule.php:334 AdminModule.php:352 AdminModule.php:374
-#: AdminModule.php:377 AdminModule.php:393
+#: AdminModule.php:377 AdminModule.php:393 AdminModule.php:420
 msgid "On"
 msgstr "Вкл"
 
 #: AdminModule.php:335 AdminModule.php:353 AdminModule.php:375
-#: AdminModule.php:378 AdminModule.php:394
+#: AdminModule.php:378 AdminModule.php:394 AdminModule.php:421
 msgid "Off"
 msgstr "Выкл"
 
 #: AdminModule.php:406 AdminModule.php:424 AdminModule.php:452
 #: AdminModule.php:456 AdminModule.php:459 AdminModule.php:570
+#: AdminModule.php:732
 msgid "Add record"
 msgstr "Добавить запись"
 
 #: AdminModule.php:408 AdminModule.php:426 AdminModule.php:454
 #: AdminModule.php:458 AdminModule.php:461 AdminModule.php:572
+#: AdminModule.php:734
 msgid "Edit record"
 msgstr "Редактировать запись"
 
 #: form_template.php:38 AdminModule.php:385 AdminModule.php:388
-#: AdminModule.php:404
+#: AdminModule.php:404 AdminModule.php:431
 msgid "Save"
 msgstr "Сохранить"
 
 #: list_template.php:37 list_template.php:71 list_template.php:73
+#: list_template.php:79
 msgid "filter"
 msgstr "фильтр"
 
 #: list_template.php:43 list_template.php:80 list_template.php:183
-#: list_template.php:82 list_template.php:185
+#: list_template.php:82 list_template.php:185 list_template.php:88
+#: list_template.php:208
 msgid "remove filter"
 msgstr "убрать фильтр"
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
 #: list_template.php:89 list_template.php:192 list_template.php:91
-#: list_template.php:194
+#: list_template.php:194 list_template.php:97 list_template.php:222
 msgid "Add"
 msgstr "Добавить"
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
+#: list_template.php:98 list_template.php:223
 msgid "Delete selected records?"
 msgstr "Удалить выбранные записи?"
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
+#: list_template.php:98 list_template.php:223
 msgid "Delete selected"
 msgstr "Удалить выбранное"
 
 #: list_template.php:69 list_template.php:117 list_template.php:119
+#: list_template.php:140
 msgid "Actions"
 msgstr "Действия"
 
 #: list_template.php:121 list_template.php:169 list_template.php:171
+#: AdminModule.php:399
 msgid "Edit"
 msgstr "Редактировать"
 
 #: list_template.php:122 list_template.php:170 list_template.php:172
+#: AdminModule.php:400
 msgid "Clone"
 msgstr "Клонировать"
 
 #: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
-#: list_template.php:171 list_template.php:173
+#: list_template.php:171 list_template.php:173 AdminModule.php:401
 msgid "Delete"
 msgstr "Удалить"
 
@@ -131,11 +140,11 @@ msgstr "Удалить"
 msgid "Form has errors"
 msgstr "Ошибки в форме"
 
-#: types/checkboxType.php:5
+#: types/checkboxType.php:5 types/switchType.php:9
 msgid "Yes"
 msgstr "Да"
 
-#: types/checkboxType.php:5
+#: types/checkboxType.php:5 types/switchType.php:10
 msgid "No"
 msgstr "Нет"
 
@@ -151,60 +160,60 @@ msgstr "Долгота"
 msgid "You can edit coordinates by dragging point on the map"
 msgstr "Координаты можно изменить, перетаскивая точку на карте"
 
-#: types/coreType.php:67
+#: types/coreType.php:67 types/coreType.php:70
 #, php-format
 msgid "Please fill required field '%s'"
 msgstr "Пожалуйста, заполните обязательное поле '%s'"
 
 #: types/coreType.php:68 types/fileType.php:97 types/tagsType.php:86
-#: types/fileType.php:147
+#: types/fileType.php:147 types/coreType.php:71
 msgid "Required field"
 msgstr "Обязательное поле"
 
-#: types/coreType.php:75
+#: types/coreType.php:75 types/coreType.php:78
 msgid "Time format - HH:MM"
 msgstr "Формат времени - ЧЧ:ММ"
 
-#: types/coreType.php:76
+#: types/coreType.php:76 types/coreType.php:79
 #, php-format
 msgid "Wrong time format in '%s'"
 msgstr "Неправильный формат времени в '%s'"
 
-#: types/coreType.php:81
+#: types/coreType.php:81 types/coreType.php:84
 msgid "Date/time format - DD.MM.YYYY HH:MM"
 msgstr "Формат даты/времени - ДД.ММ.ГГГГ ЧЧ:ММ"
 
-#: types/coreType.php:82
+#: types/coreType.php:82 types/coreType.php:85
 #, php-format
 msgid "Wrong date/time format in '%s'"
 msgstr "Неправильный формат даты/времени в '%s'"
 
-#: types/coreType.php:86
+#: types/coreType.php:86 types/coreType.php:89
 msgid "Please enter correct email address"
 msgstr "Введите правильный адрес email"
 
-#: types/coreType.php:90
+#: types/coreType.php:90 types/coreType.php:93
 msgid "Please enter correct URL (http://...)"
 msgstr "Введите правильный URL (http://...)"
 
-#: types/coreType.php:94
+#: types/coreType.php:94 types/coreType.php:97
 msgid "Please enter integer number"
 msgstr "Введите целое число"
 
-#: types/coreType.php:98
+#: types/coreType.php:98 types/coreType.php:101
 msgid "Please enter positive number"
 msgstr "Введите положительное число"
 
-#: types/coreType.php:102
+#: types/coreType.php:102 types/coreType.php:105
 #, php-format
 msgid "Please enter number in '%s'"
 msgstr "Введите положительное число в '%s'"
 
-#: types/coreType.php:103
+#: types/coreType.php:103 types/coreType.php:106
 msgid "Please enter number"
 msgstr "Введите число"
 
-#: types/dateType.php:14
+#: types/dateType.php:14 types/dateType.php:21
 msgid "DD.MM.YYYY"
 msgstr "ДД.ММ.ГГГГ"
 
@@ -227,7 +236,7 @@ msgid "Copy"
 msgstr "Копировать"
 
 #: types/detailsType.php:121 list_template.php:123 list_template.php:171
-#: list_template.php:173
+#: list_template.php:173 AdminModule.php:401
 msgid "Delete?"
 msgstr "Удалить?"
 
@@ -241,7 +250,7 @@ msgstr "Файл не загружен"
 msgid "Delete file"
 msgstr "Удалить файл"
 
-#: types/fileType.php:55 types/fileType.php:96
+#: types/fileType.php:55 types/fileType.php:96 import_template.php:8
 msgid "Upload file"
 msgstr "Загрузить файл"
 
@@ -318,72 +327,97 @@ msgstr "Чтобы сменить пароль - введите новый па�
 msgid "Fill required field '%s'"
 msgstr "Заполните обязательное поле '%s'"
 
-#: types/imageType.php:29 types/imageType.php:34
+#: types/imageType.php:29 types/imageType.php:34 types/imageType.php:35
 msgid "Minimum size"
 msgstr "Минимальный размер"
 
-#: types/imageType.php:29 types/imageType.php:34
+#: types/imageType.php:29 types/imageType.php:34 types/imageType.php:35
 msgid "Any size"
 msgstr "Произвольный размер"
 
-#: types/imageType.php:35 types/imageType.php:40
+#: types/imageType.php:35 types/imageType.php:40 types/imageType.php:42
 msgid "Click on image to crop"
 msgstr "Кликни на картинке для обрезки"
 
-#: types/imageType.php:36 types/imageType.php:41
+#: types/imageType.php:36 types/imageType.php:41 types/imageType.php:43
 msgid "Delete image"
 msgstr "Удалить картинку"
 
-#: types/imageType.php:38 types/imageType.php:43
+#: types/imageType.php:38 types/imageType.php:43 types/imageType.php:45
 msgid "Upload from computer"
 msgstr "Загрузить с компьютера"
 
-#: types/imageType.php:41 types/imageType.php:46
+#: types/imageType.php:41 types/imageType.php:46 types/imageType.php:48
 msgid "find image"
 msgstr "найти картинку"
 
-#: types/imageType.php:41 types/imageType.php:46
+#: types/imageType.php:41 types/imageType.php:46 types/imageType.php:48
 msgid "or upload image from URL"
 msgstr "или загрузить с URL"
 
-#: types/imageType.php:107 types/imageType.php:140
+#: types/imageType.php:107 types/imageType.php:140 types/imageType.php:144
 msgid "Unknown file format in %1, signature %2"
 msgstr "Неизвестный формат файла %1, сигнатура %2"
 
 #: types/imageType.php:211 types/imageType.php:234 types/imageType.php:247
-#: types/imageType.php:270
+#: types/imageType.php:270 types/imageType.php:251 types/imageType.php:274
 msgid "Close"
 msgstr "Закрыть"
 
-#: types/imageType.php:212 types/imageType.php:248
+#: types/imageType.php:212 types/imageType.php:248 types/imageType.php:252
 msgid "Image search"
 msgstr "Поиск изображений"
 
-#: types/imageType.php:217 types/imageType.php:253
+#: types/imageType.php:217 types/imageType.php:253 types/imageType.php:257
 msgid "Search"
 msgstr "Искать"
 
-#: types/imageType.php:235 types/imageType.php:271
+#: types/imageType.php:235 types/imageType.php:271 types/imageType.php:275
 msgid "Image cropping"
 msgstr "Обрезка изображения"
 
-#: types/imageType.php:243 types/imageType.php:279
+#: types/imageType.php:243 types/imageType.php:279 types/imageType.php:283
 msgid "Apply"
 msgstr "Применить"
 
 #: list_template.php:144 list_template.php:95 list_template.php:198
-#: list_template.php:97 list_template.php:200
+#: list_template.php:97 list_template.php:200 list_template.php:103
+#: list_template.php:228
 msgid "Export"
 msgstr "Экспорт"
 
-#: list_template.php:185 list_template.php:187
+#: list_template.php:185 list_template.php:187 list_template.php:210
 msgid "add records"
 msgstr "добавить запись"
 
-#: list_template.php:185
+#: list_template.php:185 list_template.php:208
 msgid "Records not found"
 msgstr "Записи не найдены"
 
-#: list_template.php:187
+#: list_template.php:187 list_template.php:210
 msgid "No records yet,"
 msgstr "Записей пока нет,"
+
+#: AdminModule.php:725 list_template.php:114 list_template.php:239
+msgid "Import"
+msgstr "Импорт"
+
+#: Logger.class.php:61
+#, php-format
+msgid "Data modification in '%s'"
+msgstr "Изменение данных в '%s'"
+
+#: Logger.class.php:64
+#, php-format
+msgid "Data insertion in '%s'"
+msgstr "Добавление данных в '%s'"
+
+#: Logger.class.php:67
+#, php-format
+msgid "Data deletion in '%s'"
+msgstr "Удаление данных в '%s'"
+
+#: Logger.class.php:70
+#, php-format
+msgid "Unknown operation in '%s'"
+msgstr "Неизвестная операция в '%s'"
