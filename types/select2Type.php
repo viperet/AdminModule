@@ -114,11 +114,11 @@ class select2Type extends textType {
 					return { results: data };
 				}
 			}
-		});
+		})".($this->readonly?'.select2("readonly", true)':'').";
 	</script>";
 		} else {
 		
-			$html = "<select name='{$this->name}' placeholder='{$this->placeholder}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."'>";
+			$html = "<select name='{$this->name}' placeholder='{$this->placeholder}' id='{$this->name}' class='form-control {$this->class} ".(!$this->valid?'error':'')."' ".($this->readonly?'readonly':'').">";
 			foreach($this->values as $value=>$label) {
 				if(is_array($label)) {
 					$html .= "<optgroup label='{$value}'>";
@@ -132,7 +132,7 @@ class select2Type extends textType {
 			}
 			$html .= "</select>
 	<script>
-		$('#{$this->name}').select2();
+		$('#{$this->name}').select2()".($this->readonly?'.select2("readonly", true)':'').";
 	</script>";
 		}
 		return $html;
