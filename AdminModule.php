@@ -28,7 +28,9 @@ class AdminModule {
 			'sort' => '',
 			'export' => false,
 			'date' => false,
+			'user' => 'unknown',
 			'datatables' => false,
+			'logger' => false,
 		);
 	public $db, $navigation;
 	public $form;
@@ -38,6 +40,8 @@ class AdminModule {
 	public $helpersUrl;
 	public $itemsCount;
 	public $filter = "", $dateFrom = "", $dateTo = "";
+	
+	public $logger;
 	
 	private $gettextDomain;
 	
@@ -61,6 +65,15 @@ class AdminModule {
 //			$this->baseUrlNoFilter = $this->baseUrlNoPaging = $this->baseUrl = "/admin/datarouter.php?action=edit&id=".(int)$_GET['id'];
 //! BANKER
 
+		if($this->options['logger'] === true) {
+			$this->logger = new Logger($this->db, $this);
+		} elseif(is_object($this->options['logger']) && is_a($this->options['logger'], 'Logger')) {
+			$this->logger = $this->options['logger'];
+		} elseif(!empty($this->options['logger'])) {
+			throw new Exception("Logger must be successor class Logger or true for default logger");
+		} else {
+			$this->logger = new CoreLogger($this->db, $this);
+		}
 		
 		if(isset($_GET['block']))
 			$this->baseUrl .= "&block=".$_GET['block'];
@@ -185,12 +198,17 @@ class AdminModule {
 				}
 			} else {// все ок
 				if($id>0 && !$clone) { // сохранение
+					$this->logger->beforeAction($id, 'update');
 					$res = $this->updateItem($id, $_POST);
+					$item = $this->getItem($id);
+					$this->logger->afterAction($id, 'update', $item);
 				} else { // создание
+					$this->logger->beforeAction(null, 'insert');
 					$id = $this->insertItem($_POST);
+					$item = $this->getItem($id);
+					$this->logger->afterAction($id, 'insert', $item);
 				}
 
-				$item = $this->getItem($id);
 				$this->updateCache($id, $item);
 				$this->updateFullCache();
 				
@@ -213,8 +231,9 @@ class AdminModule {
 /* Обновление записи      */
 /* ====================== */
 	function updateItem($id, $data) {
-		
-		$sql = "UPDATE ".$this->options['table']." SET ".$this->form->save($data)." WHERE id = ". (int)$id;
+		$save = $this->form->save($data);
+		if($save == '') return false;
+		$sql = "UPDATE ".$this->options['table']." SET ".$save." WHERE id = ". (int)$id;
 //		echo $sql; exit;
 		$res =$this->db->query($sql);
 //		if($res !== 1) {
@@ -337,15 +356,13 @@ class AdminModule {
 			$this->form->load($item, 'db');
 			$this->form->delete();
 			
-			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
+			$this->logger->beforeAction(intval($id), 'delete', $item);
+ 
+ 			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
 			$res = $this->db->query($sql);
-/*
-			if($res !== 1) {
-				echo "DELETE error<br>";
-				echo nl2br($res->result->userinfo);
-				exit;
-			}			
-*/
+
+			$this->logger->afterAction(intval($id), 'delete');
+
 			$this->updateCache($id, $item);
 		}
 		$this->updateFullCache();
