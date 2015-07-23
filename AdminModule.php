@@ -65,13 +65,15 @@ class AdminModule {
 //			$this->baseUrlNoFilter = $this->baseUrlNoPaging = $this->baseUrl = "/admin/datarouter.php?action=edit&id=".(int)$_GET['id'];
 //! BANKER
 
-		if($this->options['logger'] === true) {
-			$this->logger = new Logger($this->db, $this);
-		} elseif(is_object($this->options['logger']) && is_a($this->options['logger'], 'Logger')) {
+		if($this->options['logger'] === true) { // default logger
+			$this->logger = new DetailedLogger($this->db, $this);
+		} elseif(is_object($this->options['logger']) && is_a($this->options['logger'], 'CoreLogger')) { // logger object
 			$this->logger = $this->options['logger'];
-		} elseif(!empty($this->options['logger'])) {
+		} elseif(is_string($this->options['logger']) && is_a($this->options['logger'], 'CoreLogger', true)) { // logger class name
+			$this->logger = new $this->options['logger']($this->db, $this);
+		} elseif(!empty($this->options['logger'])) { // wrong logger
 			throw new Exception("Logger must be successor class Logger or true for default logger");
-		} else {
+		} else { // null logger
 			$this->logger = new CoreLogger($this->db, $this);
 		}
 		
@@ -89,6 +91,7 @@ class AdminModule {
 			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
 			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
 			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
+			$this->baseUrlNoPaging .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 		}
 		
 		
