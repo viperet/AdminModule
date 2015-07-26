@@ -197,6 +197,15 @@ class AdminDatabase {
 		}
 		return $data;
 	}
+	function replace($table, $fields) {
+		$sql = "REPLACE $table SET ";
+		$i = 0;
+		foreach($fields as $key=>$value) {
+			$sql .= "`{$key}` = ".AdminDatabase::escape($value);
+			if(++$i !== count($fields)) $sql .= ', ';
+		}
+		return $this->query($sql); // return inserted id
+	}
 	function insert($table, $fields) {
 		$sql = "INSERT $table SET ";
 		$i = 0;
