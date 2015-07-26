@@ -47,6 +47,14 @@ class datetimeType extends textType {
 		return $date;		
 	}
 	
+	public function toListElement() {
+		if(empty($this->value))
+			$date = "";
+		else
+			$date = '<span class="date-string">'.date("d.m.Y", $this->value).'</span> <span class="time-string">'.date("H:i:s", $this->value).'</span>';
+		return $date;		
+	}
+	
 	public function fromForm($value) {
 		$this->value = strtotime($value[$this->name]);
 	}

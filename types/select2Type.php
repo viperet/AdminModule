@@ -62,8 +62,12 @@ class select2Type extends textType {
 	public function lookupValueById($id) {
 		if(isset($this->values[$id])) 
 			return $this->values[$id];
-		if(empty($id)) return "";
-		return $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE {$this->lookup_id} = ?", $id);
+		if(empty($id)) 
+			return "";
+		$res = $this->db->getOne("SELECT {$this->lookup_display} value FROM ".$this->lookup_table." WHERE {$this->lookup_id} = ?", $id);
+		if($res === NULL)
+			return $id;
+		return $res;
 	}
 	
 	public function toString() {

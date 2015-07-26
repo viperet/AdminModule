@@ -15,17 +15,21 @@ class logDetailsType extends coreType {
 		</thead>
 		";
 		$details = json_decode($this->value);
-		foreach($details as $item) {
-			$opcodes = FineDiff::getDiffOpcodes($item->old, $item->new, FineDiff::$wordGranularity);
-			$rendered_diff = FineDiff::renderDiffToHTMLFromOpcodes($item->old, $opcodes);
-			$html .= "<tr>
-				<td>{$item->label}</td>
-				<td>{$rendered_diff}</td>
-			</tr>
-			";
+		if(is_array($details)) {
+			foreach($details as $item) {
+				$opcodes = FineDiff::getDiffOpcodes($item->old, $item->new, FineDiff::$wordGranularity);
+				$rendered_diff = FineDiff::renderDiffToHTMLFromOpcodes($item->old, $opcodes);
+				$html .= "<tr>
+					<td>{$item->label}</td>
+					<td>{$rendered_diff}</td>
+				</tr>
+				";
+			}
+			if(count($details)==0) 
+				$html .= "<tr><td colspan='2'>Нет изменений</td></tr>";
+		} else {
+			$html .= "<tr><td colspan='2'>Нет данных</td></tr>";
 		}
-		if(count($details)==0) 
-			$html .= "<tr><td colspan='2'>Нет изменений</td></tr>";
 		$html .= "</table></div>";
 		
 		return $html;

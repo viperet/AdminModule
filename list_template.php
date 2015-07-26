@@ -19,6 +19,27 @@
 
 
 <script>
+	function getFilters() {
+		var curFilter = $('#filter_input').val().split(';');
+		var filters = {};
+		for(var i=0;i<curFilter.length;++i) {
+			var filter = curFilter[i].split(':');
+			if(filter.length!=2) continue;
+			filters[filter[0]] = filter[1];
+		}
+		return filters;
+	}
+	
+	function setFilters(filters) {
+		var tmpFilter = [];
+		$.each(filters, function (key, value) {
+			if(value != '') 
+				tmpFilter.push(key+':'+value);
+		});
+		$('#filter_input').val(tmpFilter.join(';'));
+		return true;
+	}
+	
 	$(function () {
 		$('#filter_form').submit(function () {
 			var new_location = "<?=$this->baseUrlNoPaging?>&filter="+$('#filter_input').val();
@@ -35,13 +56,19 @@
 		});
 		
 		$('select.filter').change( function () {
+			var filters = getFilters();			
 			var el = $(this);
+			filters[el.data('field')] = this.value;
+			setFilters(filters);
+			$('#filter_form').submit();
+/*
 			if(this.value == '')
 				document.location = "<?= $this->baseUrlNoFilter ?>";
 			else {
 				$('#filter_input').val(el.data('field')+':'+this.value);
 				$('#filter_form').submit();
 			}
+*/
 		});
 	});
 </script>
@@ -132,7 +159,7 @@
 			<th data-orderable="0"></th>
 	<?		
 			foreach($headers as $header) {
-				echo "<th title='".@$this->options['form'][$header]->label_hint."'>".
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
 					htmlspecialchars($this->options['form'][$header]->label);
 				echo "</th>\n";
 			}
@@ -143,13 +170,14 @@
 			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
-				echo "<th>";
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
 				if($this->options['form'][$header]->filterByClick) {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
 					echo "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
 							"<option value=''>-</option>";
 					foreach($fieldValues as $key => $value) {
-						echo "<option value='{$key}'".($this->filter=="{$this->options['form'][$header]->name}:{$key}"?"selected":"").">{$value}</option>"; 
+						$name = $this->options['form'][$header]->name;
+						echo "<option value='{$key}'".(isset($this->filters[$name])&&$this->filters[$name]==$key?"selected":"").">{$value}</option>"; 
 					}
 					echo "</select>";
 				}
@@ -174,13 +202,13 @@
 					$formItem = $this->options['form'][$header];
 					$formItem->fromRow($item);
 	?>
-			<td class="table-data" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
+			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
 	<?	if($formItem->filterByClick)		
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
 	?>
-				<?= $formItem->toStringTruncated() ?>
+				<?= $formItem->toListElement() ?>
 				</a>
 			</td>
 	<?
