@@ -1,5 +1,8 @@
 <?= $this->listHeader(); ?>
 
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
 <style>
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 	.admin-pager  { text-align: center;}
@@ -175,13 +178,7 @@
 					$formItem->fromRow($item);
 	?>
 			<td class="table-data" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?	if($formItem->filterByClick)		
-			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
-		else
-			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
-	?>
-				<?= $formItem->toStringTruncated() ?>
-				</a>
+				<?=	$formItem->toListItem(); ?>
 			</td>
 	<?
 					
@@ -291,6 +288,11 @@
 				$(this).removeAttr('checked');
 			}
 		});
+		
+		$('.editable').editable({
+		    url: '/post',
+		});		
+		
 	});
 	$('body').on('change', '.row_checkbox', function () {
 		var pos = checkboxed_storage.indexOf(this.value);
