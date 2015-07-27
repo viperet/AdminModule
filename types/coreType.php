@@ -38,10 +38,6 @@ abstract class coreType {
 		}
 	}
 	
-	public function toListElement() {
-		return $this->toStringTruncated();
-	}
-	
 	public function toStringTruncated() {
 		$value = $this->toString();
 		$value_truncated = mb_substr($value, 0, $this->truncate, $this->encoding);
