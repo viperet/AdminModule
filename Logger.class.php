@@ -20,19 +20,8 @@ CREATE TABLE IF NOT EXISTS `logs` (
 	class Logger extends CoreLogger {
 		protected $data,
 		          $id,
-		          $operation,
-		          $itemBefore,
-		          $itemAfter;		
+		          $operation;
 		function beforeAction($id, $operation, $item = null) {
-			if(empty($item)) {
-				if(!empty($id))
-					$this->itemBefore = $this->admin->getItem($id);
-				else 
-					$this->itemBefore = array();
-			} else {
-				$this->itemBefore = $item;
-			}
-			
 			if(isset($_SERVER['HTTP_X_REAL_IP']))
 				$ip = $_SERVER['HTTP_X_REAL_IP'];
 			elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']))

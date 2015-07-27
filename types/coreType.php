@@ -21,6 +21,7 @@ abstract class coreType {
 	public $filterByClick = false;
 	public $massAction = false;
 	public $raw = false; // raw - не использовать обрамляющие HTML блоки для отображения элемента
+	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
 	public $inline = false; // разрешить редактировать прямо в таблице
 	
@@ -35,6 +36,10 @@ abstract class coreType {
 				$this->$field = $value;
 			}
 		}
+	}
+	
+	public function toListElement() {
+		return $this->toStringTruncated();
 	}
 	
 	public function toStringTruncated() {

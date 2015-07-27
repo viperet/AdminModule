@@ -40,7 +40,7 @@ class AdminModule {
 	public $helpersUrl;
 	public $itemsCount;
 	public $filter = "", $dateFrom = "", $dateTo = "";
-	
+	public $filters = array();
 	public $logger;
 	
 	private $gettextDomain;
@@ -65,13 +65,15 @@ class AdminModule {
 //			$this->baseUrlNoFilter = $this->baseUrlNoPaging = $this->baseUrl = "/admin/datarouter.php?action=edit&id=".(int)$_GET['id'];
 //! BANKER
 
-		if($this->options['logger'] === true) {
-			$this->logger = new Logger($this->db, $this);
-		} elseif(is_object($this->options['logger']) && is_a($this->options['logger'], 'Logger')) {
+		if($this->options['logger'] === true) { // default logger
+			$this->logger = new DetailedLogger($this->db, $this);
+		} elseif(is_object($this->options['logger']) && is_a($this->options['logger'], 'CoreLogger')) { // logger object
 			$this->logger = $this->options['logger'];
-		} elseif(!empty($this->options['logger'])) {
+		} elseif(is_string($this->options['logger']) && is_a($this->options['logger'], 'CoreLogger', true)) { // logger class name
+			$this->logger = new $this->options['logger']($this->db, $this);
+		} elseif(!empty($this->options['logger'])) { // wrong logger
 			throw new Exception("Logger must be successor class Logger or true for default logger");
-		} else {
+		} else { // null logger
 			$this->logger = new CoreLogger($this->db, $this);
 		}
 		
@@ -81,6 +83,12 @@ class AdminModule {
 			$this->filter = $_GET['filter'];
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
 			$this->baseUrlNoPaging .= "&filter=".urlencode($_GET['filter']);
+			
+			foreach(explode(';', $this->filter) as $filter) {
+				$tmp = explode(':', $filter);
+				if(count($tmp)!=2) continue;
+				$this->filters[$tmp[0]] = $tmp[1];
+			}
 		}
 		if(isset($_GET['s'])) {
 			$this->baseUrl .= "&s=".(int)$_GET['s'];
@@ -89,6 +97,7 @@ class AdminModule {
 			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
 			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
 			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
+			$this->baseUrlNoPaging .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 		}
 		
 		
@@ -273,12 +282,23 @@ class AdminModule {
 		
 		if(trim($this->filter) == '') return $dateSql;
 
+
+		if(count($this->filters)>0) {
+			$filterSql = "";
+			foreach($this->filters as $field => $filter) {
+				$filterSql .= " AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
+			}
+			return $dateSql.$filterSql;
+		}
+
+/*
 		// проверяем фильтрацию по списку полей "поле:значение"
 		if(strpos($this->filter, ':')) {
 			list($field, $filter) = explode(':', $this->filter);
 			if(isset($this->options['form'][$field]))
 				return $dateSql." AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
 		}
+*/
 
 		$filter = $this->filter;
 		
@@ -306,11 +326,11 @@ class AdminModule {
 /* ====================== */
 	function getFieldValues($field) {
 		
-		$sql = "SELECT `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
+		$sql = "SELECT *, `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
 		$res = $this->db->getAll($sql);
 		$items = array();
 		foreach($res as $row) {
-			$field->value = $row['value'];
+			$field->fromRow($row);
 			$items[$row['value']] = $field->toString();
 		}
 		asort($items);
