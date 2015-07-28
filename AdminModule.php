@@ -488,7 +488,7 @@ class AdminModule {
 	function export($format, $encoding) {
 		//$this->itemsCount
 		
-//		var_dump($items);exit;
+//		var_dump($_REQUEST);exit;
 		$csv = array();
 
 		// заголовоки столбцов
@@ -502,7 +502,16 @@ class AdminModule {
 		$per_page = 100;
 		$limit = 0;
 		do {
-			$items = $this->getItems($limit, $per_page);
+			if(isset($_GET['id'])) {
+				$items = array();
+				$ids =  array_slice(explode(',', $_GET['id']), $limit, $per_page);
+				foreach($ids as $id) {
+					$items[] = $this->getItem((int)$id);
+				}
+			}
+			else {
+				$items = $this->getItems($limit, $per_page); // все записи попадающие под фильтр
+			}
 			$limit += $per_page;	
 			//  данные
 			foreach($items as $item) {

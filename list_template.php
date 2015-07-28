@@ -130,9 +130,9 @@
 	    <?= _('Export') ?> <span class="caret"></span>
 	  </button>
 	  <ul class="dropdown-menu" role="menu">
-	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
-	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
-	    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
 	  </ul>
 	</div>				
 	<? } ?>	
@@ -146,11 +146,11 @@
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
-<? } else { ?>
 	<div class="selected-items">
 		Выбрано <b id="selected-items-count">0</b> записей <i class="fa fa-times-circle" title="снять выделение"></i>
-		<div id="selected-items-container"></div>
 	</div>
+<? } else { ?>
+	<div id="selected-items-container"></div>
 <? } ?>
 
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
@@ -270,8 +270,6 @@
 </form>
 
 <script>
-<? if($this->options['datatables']) { ?>
-
 	var checkboxed_storage = [];
 	
 	function updateSelectedItems() {
@@ -285,12 +283,36 @@
 		} else {
 			$(".selected-items").css('visibility', 'hidden');
 		}	
-/*
-		var link = "";
-		$(".selected-items a").attr('href', link);
-*/
+
+		// добавляем к ссылкам параметр по списком ID выбранных записей
+		$('.export-link').each(function () {
+			var el = $(this);
+			var href = el.data('href');
+			if(href === undefined) el.data('href', href = this.href);
+			if(checkboxed_storage.length > 0)
+				this.href = href + '&id=' + checkboxed_storage.join(',');
+			else
+				this.href = href;
+		})
 	}
-	
+
+	$('body').on('change', '.row_checkbox', function () {
+		var pos = checkboxed_storage.indexOf(this.value);
+		if(this.checked) {
+			if(pos==-1) checkboxed_storage.push(this.value);
+		} else {
+			if(pos!=-1) checkboxed_storage.splice(pos, 1);
+		}
+
+		updateSelectedItems();
+	});
+	$(".selected-items i").click(function () { // очистка выделения
+		checkboxed_storage = [];
+		$('.row_checkbox, #header_checkbox').removeAttr('checked');
+		updateSelectedItems();
+	});
+
+<? if($this->options['datatables']) { ?>
 
 	$('#admin-table').dataTable( {
 // 		paginate: false,
@@ -320,21 +342,7 @@
 			}
 		});
 	});
-	$('body').on('change', '.row_checkbox', function () {
-		var pos = checkboxed_storage.indexOf(this.value);
-		if(this.checked) {
-			if(pos==-1) checkboxed_storage.push(this.value);
-		} else {
-			if(pos!=-1) checkboxed_storage.splice(pos, 1);
-		}
 
-		updateSelectedItems();
-	});
-	$(".selected-items i").click(function () { // очистка выделения
-		checkboxed_storage = [];
-		$('.row_checkbox, #header_checkbox').removeAttr('checked');
-		updateSelectedItems();
-	});
 	
 	
 <? } ?>
