@@ -149,8 +149,7 @@ class detailsType extends coreType {
 	}
 
 	public function postSave($id, $params) { 
-		$res = $this->db->query("DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
-
+		$res = $this->db->query($s="DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
 		foreach($this->data as $row) {
 			$sql = "INSERT {$this->details_table} SET `{$this->details_field}` = '{$id}', ";
 			$sql_values = array();
@@ -164,13 +163,14 @@ class detailsType extends coreType {
 			if(count($sql_values)>0) {
 				if(!empty($row['id'])) $sql .= " `id` = '{$row['id']}', ";
 				$sql .= implode(', ', $sql_values);
-/* 				echo $sql."<br>"; */
 				$res = $this->db->query($sql);
+/*
 				if(!$res) {
 					echo "SQL error while saving details<br>";
 					echo nl2br($res->result->userinfo);
 					exit;
 				}	
+*/
 				
 			}
 				
