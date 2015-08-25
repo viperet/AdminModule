@@ -24,7 +24,8 @@ abstract class coreType {
 	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
 	public $inline = false; // разрешить редактировать прямо в таблице
-	
+	public $order = 0; // порядок столбцов
+
 	public $options;
 	public $db;
 	
