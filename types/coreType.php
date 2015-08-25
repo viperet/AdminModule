@@ -22,6 +22,7 @@ abstract class coreType {
 	public $raw = false; // raw - не использовать обрамляющие HTML блоки для отображения элемента
 	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
+	public $order = 0; // порядок столбцов
 	
 	public $options;
 	public $db;

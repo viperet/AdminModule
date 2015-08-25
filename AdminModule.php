@@ -101,6 +101,7 @@ class AdminModule {
 		}
 		
 		
+		// преобразование формы в линейный список
 		$tmp = $this->options['form'];
 		$this->options['form'] = array();
 		foreach($tmp as $name=>&$array) {
@@ -123,6 +124,7 @@ class AdminModule {
 
 // 		echo "<pre>";print_r($this->options['form']);exit;
 		
+		// преобразование в объекты
 		foreach($this->options['form'] as $name=>&$array) {
 			if(isset($this->options['role']) && isset($array['permissions'])) {
 				$role = $this->options['role'];
@@ -138,6 +140,19 @@ class AdminModule {
 			$array->options = $this->options;
 		}
 		unset($array);
+
+
+	}
+
+
+	function sortFields() {
+		// сортируем
+		stable_uasort($this->options['form'], function ($a, $b) {
+		    if ($a->order == $b->order) {
+		        return 0;
+		    }
+		    return ($a->order < $b->order) ? -1 : 1;			
+		});
 	}
 
 /* ================================= */
@@ -145,7 +160,7 @@ class AdminModule {
 /* ================================= */
 	
 	function listItems() {
-		
+		$this->sortFields();
 
 		$per_page  = $this->options['perpage'];
 		$limit = (empty($_GET['s'])?0:(int)$_GET['s']);
@@ -787,4 +802,42 @@ class AdminModule {
 	}
 
 
+}
+
+
+function stable_uasort(&$array, $cmp_function) {
+    if(count($array) < 2) {
+        return;
+    }
+    $halfway = count($array) / 2;
+    $array1 = array_slice($array, 0, $halfway, TRUE);
+    $array2 = array_slice($array, $halfway, NULL, TRUE);
+
+    stable_uasort($array1, $cmp_function);
+    stable_uasort($array2, $cmp_function);
+    if(call_user_func($cmp_function, end($array1), reset($array2)) < 1) {
+        $array = $array1 + $array2;
+        return;
+    }
+    $array = array();
+    reset($array1);
+    reset($array2);
+    while(current($array1) && current($array2)) {
+        if(call_user_func($cmp_function, current($array1), current($array2)) < 1) {
+            $array[key($array1)] = current($array1);
+            next($array1);
+        } else {
+            $array[key($array2)] = current($array2);
+            next($array2);
+        }
+    }
+    while(current($array1)) {
+        $array[key($array1)] = current($array1);
+        next($array1);
+    }
+    while(current($array2)) {
+        $array[key($array2)] = current($array2);
+        next($array2);
+    }
+    return;
 }
