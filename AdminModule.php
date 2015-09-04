@@ -39,7 +39,7 @@ class AdminModule {
 	public $baseUrlNoFilter;
 	public $helpersUrl;
 	public $itemsCount;
-	public $filter = "", $dateFrom = "", $dateTo = "";
+	public $search = "", $filter = "", $dateFrom = "", $dateTo = "";
 	public $filters = array();
 	public $logger;
 	
@@ -89,6 +89,11 @@ class AdminModule {
 				if(count($tmp)!=2) continue;
 				$this->filters[$tmp[0]] = $tmp[1];
 			}
+		}
+		if(isset($_GET['query'])) { 
+			$this->search = $_GET['query'];
+			$this->baseUrl .= "&query=".urlencode($_GET['query']);
+			$this->baseUrlNoPaging .= "&query=".urlencode($_GET['query']);
 		}
 		if(isset($_GET['s'])) {
 			$this->baseUrl .= "&s=".(int)$_GET['s'];
@@ -295,61 +300,63 @@ class AdminModule {
 		}
 		
 		
-		if(trim($this->filter) == '') return $dateSql;
+// 		if(trim($this->filter) == '') return $dateSql;
 
 
 		if(count($this->filters)>0) {
-			$filterSql = "";
+			$filterSql = "1";
 			foreach($this->filters as $field => $filter) {
 				$filterSql .= " AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
 			}
-			return $dateSql.$filterSql;
+// 			return $dateSql.$filterSql;
+		} else {
+			$filterSql = "1";
 		}
 
-/*
-		// проверяем фильтрацию по списку полей "поле:значение"
-		if(strpos($this->filter, ':')) {
-			list($field, $filter) = explode(':', $this->filter);
-			if(isset($this->options['form'][$field]))
-				return $dateSql." AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
-		}
-*/
 
-		$filter = $this->filter;
+		$search = $this->search;
 		
 		
-		$filter = '%'.mysql_real_escape_string($filter).'%';
+		$search = '%'.mysql_real_escape_string($search).'%';
 		$sql = array();
 		if(is_array($additionalFields)) {
 			foreach($additionalFields as $key)
-				$sql[] = "{$key} LIKE '{$filter}'";
+				$sql[] = "{$key} LIKE '{$search}'";
 		}
 		foreach($this->options['form'] as $key=>$value)
 			if($value->filter)
-				$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$filter}'";
+				$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$search}'";
 				
 		if(preg_match('/^%(\d+)%$/', $filter, $m)) {
 			$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
 		}
 		
-		if(count($sql) == 0) return $dateSql;
-		return $dateSql.' AND ('.implode(' OR ', $sql).') ';
+		if(count($sql) > 0) 
+			$searchSql = '( '.implode(' OR ', $sql).' )';
+		else
+			$searchSql = "1";
+
+		return " {$dateSql} AND {$filterSql} AND {$searchSql} ";
+
 	}
 
 /* ====================== */
 /* Получение значений поля для фильтрации */
 /* ====================== */
 	function getFieldValues($field) {
-		
-		$sql = "SELECT *, `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
-		$res = $this->db->getAll($sql);
-		$items = array();
-		foreach($res as $row) {
-			$field->fromRow($row);
-			$items[$row['value']] = $field->toString();
+		if(is_array($field->values) && count($field->values)>0) {
+			return $field->values;
+		} else {
+			$sql = "SELECT *, `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
+			$res = $this->db->getAll($sql);
+			$items = array();
+			foreach($res as $row) {
+				$field->fromRow($row);
+				$items[$row['value']] = $field->toString();
+			}
+			asort($items);
+			return $items;		
 		}
-		asort($items);
-		return $items;		
 	}
 
 /* ====================== */
