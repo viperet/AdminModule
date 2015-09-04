@@ -1,8 +1,5 @@
 <?= $this->listHeader(); ?>
 
-<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-
 <style>
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 	.admin-pager  { text-align: center;}
@@ -45,7 +42,7 @@
 	
 	$(function () {
 		$('#filter_form').submit(function () {
-			var new_location = "<?=$this->baseUrlNoPaging?>&filter="+$('#filter_input').val();
+			var new_location = "<?=$this->baseUrlNoFilter?>&filter="+$('#filter_input').val()+"&query="+$('#search_input').val();
 			if($('#date-from').val())
 				new_location = new_location + "&df="+$('#date-from').val()
 			if($('#date-to').val())
@@ -104,9 +101,10 @@
 			  </ul>
 			</div>			
 <?php } ?>
+			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>"> 
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="<?= _('filter') ?>"> 
+					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>"> 
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
 					</span>
@@ -206,7 +204,13 @@
 					$formItem->fromRow($item);
 	?>
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-				<?=	$formItem->toListItem(); ?>
+	<?	if($formItem->filterByClick)		
+			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
+		else
+			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
+	?>
+				<?= $formItem->toListElement() ?>
+				</a>
 			</td>
 	<?
 					
@@ -338,11 +342,6 @@
 				$(this).removeAttr('checked');
 			}
 		});
-		
-		$('.editable').editable({
-		    url: '/post',
-		});		
-		
 	});
 
 	
