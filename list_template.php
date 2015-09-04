@@ -149,12 +149,12 @@
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
+<? } else { ?>
+<? } ?>
 	<div class="selected-items">
 		Выбрано <b id="selected-items-count">0</b> записей <i class="fa fa-times-circle" title="снять выделение"></i>
 	</div>
-<? } else { ?>
 	<div id="selected-items-container"></div>
-<? } ?>
 
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
