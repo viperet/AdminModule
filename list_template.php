@@ -42,7 +42,7 @@
 	
 	$(function () {
 		$('#filter_form').submit(function () {
-			var new_location = "<?=$this->baseUrlNoPaging?>&filter="+$('#filter_input').val();
+			var new_location = "<?=$this->baseUrlNoFilter?>&filter="+$('#filter_input').val()+"&query="+$('#search_input').val();
 			if($('#date-from').val())
 				new_location = new_location + "&df="+$('#date-from').val()
 			if($('#date-to').val())
@@ -101,9 +101,10 @@
 			  </ul>
 			</div>			
 <?php } ?>
+			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>"> 
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>" placeholder="<?= _('filter') ?>"> 
+					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>"> 
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
 					</span>
@@ -146,12 +147,12 @@
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
+<? } else { ?>
+<? } ?>
 	<div class="selected-items">
 		Выбрано <b id="selected-items-count">0</b> записей <i class="fa fa-times-circle" title="снять выделение"></i>
 	</div>
-<? } else { ?>
 	<div id="selected-items-container"></div>
-<? } ?>
 
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
