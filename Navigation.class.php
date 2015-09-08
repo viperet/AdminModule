@@ -24,4 +24,10 @@ class Navigation {
 		return $html;
 		
 	}
+	
+	function title() {
+		if(count($this->breadcrumbs) == 0) return false;
+		return implode(' - ', array_reverse($this->breadcrumbs));
+		
+	}	
 }
