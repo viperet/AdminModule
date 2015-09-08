@@ -26,12 +26,19 @@ CREATE TABLE IF NOT EXISTS `logs` (
 			foreach($this->itemAfter as $key => $item) {
 				if(isset($this->itemBefore[$key]) && $this->itemBefore[$key] != $this->itemAfter[$key]) {
 					$field = $this->admin->options['form'][$key];
-					$field->fromRow($this->itemBefore);
-					$old = $field->toString();
-					$field->fromRow($this->itemAfter);
-					$new = $field->toString();
+					if(is_object($field)) {
+						$field->fromRow($this->itemBefore);
+						$old = $field->toString();
+						$field->fromRow($this->itemAfter);
+						$new = $field->toString();
+						$label = $field->label;
+					} else {
+						$old = $this->itemBefore[$key];
+						$new = $this->itemAfter[$key];
+						$label = $key;
+					}
 					$data[] = array(
-							'label' => $field->label,
+							'label' => $label,
 							'field' => $key,
 							'old_raw' => $this->itemBefore[$key],
 							'new_raw' => $this->itemAfter[$key],
