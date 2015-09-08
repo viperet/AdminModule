@@ -35,9 +35,9 @@ class Form {
 		if(isset($values['_session_id'])) $this->session_id = $values['_session_id'];
 		
 		foreach($this->form as $id => &$item) {
-			if($source == 'db')
+			if($source == 'db') {
 				$item->fromRow($values);
-			else
+			} else
 				$item->fromForm($values);
 		}
 	}
@@ -81,6 +81,8 @@ class Form {
 	function save($params) {
 		foreach($this->form as $id => &$item) {
 //			$item->fromForm($params);
+			if(is_callable($item->onSave)) 
+				$item->value = call_user_func($item->onSave, $item->value);
 			$itemSql = $item->toSql();
 			if(!empty($itemSql))
 				$sql[] = $itemSql;

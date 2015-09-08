@@ -25,6 +25,9 @@ abstract class coreType {
 	public $permissions;
 	public $inline = false; // разрешить редактировать прямо в таблице
 	public $order = 0; // порядок столбцов
+	
+	public $onLoad = null; // callback for transforming data after loading from db
+	public $onSave = null; // callback for transforming data before saving to db
 
 	public $options;
 	public $db;
@@ -62,6 +65,9 @@ abstract class coreType {
 			die(AdminDatabase::showError($row));
 		}
 		$this->value = $row[$this->name];
+		if(is_callable($this->onLoad)) {
+			$this->value = call_user_func($this->onLoad, $this->value);
+		}
 		$this->id = $row['id'];
 	}
 	
@@ -129,7 +135,10 @@ abstract class coreType {
 		"</label>";
 
 	}
-	
+
+	public function toListElement() {
+		return $this->toStringTruncated();
+	}	
 	public function toListItem() {
 		ob_start();
 		if($this->inline)

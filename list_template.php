@@ -202,6 +202,7 @@
 				foreach($headers as $header) {
 					$formItem = $this->options['form'][$header];
 					$formItem->fromRow($item);
+					
 	?>
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
 	<?	if($formItem->filterByClick)		
