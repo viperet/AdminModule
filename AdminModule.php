@@ -262,7 +262,7 @@ class AdminModule {
 	function updateItem($id, $data) {
 		$save = $this->form->save($data);
 		if($save == '') return false;
-		$sql = "UPDATE ".$this->options['table']." SET ".$save." WHERE id = ". (int)$id;
+		$sql = "UPDATE `".$this->options['table']."` SET ".$save." WHERE id = ". (int)$id;
 //		echo $sql; exit;
 		$res =$this->db->query($sql);
 //		if($res !== 1) {
