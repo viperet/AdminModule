@@ -60,6 +60,10 @@ class AdminDatabase {
 		$this->linkId = $linkId;
 	}
 	
+	function selectDb($name) {
+		mysql_select_db($name, $this->linkId);
+	}
+	
 	static function isError($row) {
 		return false;
 	}
@@ -136,7 +140,23 @@ class AdminDatabase {
 	        $sql = preg_replace($pattern2, $replacements2, $sql, 1);
 		}
 		
-		$res = mysql_query($sql, $this->linkId);
+        $backtraceInfo = debug_backtrace();
+        // get some variables from the back trace array
+        for($i=0;$i<10;$i++) {
+	        $callerFile = $backtraceInfo[$i]["file"];		
+	        $callerLine = $backtraceInfo[$i]["line"];		
+	        $callerMethod = @$backtraceInfo[$i+1]["function"];
+	        $baseName =basename($callerFile);
+	        if($baseName!='AdminDatabase.class.php' && $baseName!='NewsEvents.class.php') break;
+	    }
+        // unset the backtrace array
+        unset($backtraceInfo);
+
+        // executes the query
+		$callerFileRel = str_replace(ROOT_PATH, '', $callerFile);
+		
+		
+		$res = mysql_query("/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql, $this->linkId);
 		if(!$res) {
 			echo "<pre>";
 			debug_print_backtrace();

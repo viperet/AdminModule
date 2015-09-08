@@ -718,7 +718,7 @@ class AdminModule {
 					
 					$value->fromRow($item);
 										
-					$row[] = $value->toStringTruncated();
+					$row[] = $value->toListItem();
 				}
 			}
 			$row[] = $this->actions($item);

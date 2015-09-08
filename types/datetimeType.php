@@ -47,12 +47,15 @@ class datetimeType extends textType {
 		return $date;		
 	}
 	
-	public function toListElement() {
+	public function toListItem() {
 		if(empty($this->value))
 			$date = "";
 		else
 			$date = '<span class="date-string">'.date("d.m.Y", $this->value).'</span> <span class="time-string">'.date("H:i:s", $this->value).'</span>';
-		return $date;		
+		if($this->options['datatables'])
+		    return $date;
+		else
+		    return "<a href='{$this->baseUrl}&edit={$this->id}'>{$date}</a>";
 	}
 	
 	public function fromForm($value) {

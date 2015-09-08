@@ -1,6 +1,7 @@
 <?
 
 abstract class coreType {
+	public $id;
 	public $name;
 	public $type;
 	public $value = '';
@@ -22,8 +23,9 @@ abstract class coreType {
 	public $raw = false; // raw - не использовать обрамляющие HTML блоки для отображения элемента
 	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
+	public $inline = false; // разрешить редактировать прямо в таблице
 	public $order = 0; // порядок столбцов
-	
+
 	public $options;
 	public $db;
 	
@@ -35,10 +37,6 @@ abstract class coreType {
 				$this->$field = $value;
 			}
 		}
-	}
-	
-	public function toListElement() {
-		return $this->toStringTruncated();
 	}
 	
 	public function toStringTruncated() {
@@ -64,6 +62,7 @@ abstract class coreType {
 			die(AdminDatabase::showError($row));
 		}
 		$this->value = $row[$this->name];
+		$this->id = $row['id'];
 	}
 	
 	public function validate(&$errors) {
@@ -129,6 +128,19 @@ abstract class coreType {
 		($this->label_hint?"<small class='show' style='font-weight:normal'>{$this->label_hint}</small>":"").
 		"</label>";
 
+	}
+	
+	public function toListItem() {
+		ob_start();
+		if($this->inline)
+			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toStringTruncated()."</a>";
+		elseif($this->options['datatables'])
+			echo $this->toStringTruncated();
+		elseif($this->filterByClick)		
+			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toStringTruncated()."</a>";
+		else
+			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toStringTruncated()."</a>";
+		return ob_get_clean();
 	}
 
 	public function delete() { return; }

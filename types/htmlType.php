@@ -6,7 +6,6 @@ class htmlType extends textareaType {
 	public $download_images_url = null; // путь куда скачивать картинки найденные в тексте
 	public $download_images_hook = null; // callback для преобразования url картинок
 	public $rows = 10;
-	private $id = null;
 
 	public static function pageHeader() {
 	?>
