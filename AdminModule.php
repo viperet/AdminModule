@@ -315,20 +315,20 @@ class AdminModule {
 
 
 		$search = $this->search;
-		
-		
-		$search = '%'.mysql_real_escape_string($search).'%';
 		$sql = array();
-		if(is_array($additionalFields)) {
-			foreach($additionalFields as $key)
-				$sql[] = "{$key} LIKE '{$search}'";
-		}
-		foreach($this->options['form'] as $key=>$value)
-			if($value->filter)
-				$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$search}'";
-				
-		if(preg_match('/^%(\d+)%$/', $filter, $m)) {
-			$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
+		if(trim($search) != '') {
+			$search = '%'.mysql_real_escape_string($search).'%';
+			if(is_array($additionalFields)) {
+				foreach($additionalFields as $key)
+					$sql[] = "{$key} LIKE '{$search}'";
+			}
+			foreach($this->options['form'] as $key=>$value)
+				if($value->filter)
+					$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$search}'";
+					
+			if(preg_match('/^%(\d+)%$/', $filter, $m)) {
+				$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
+			}
 		}
 		
 		if(count($sql) > 0) 
