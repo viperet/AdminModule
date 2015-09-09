@@ -245,8 +245,10 @@ class AdminModule {
 				if($postSql) {
 					$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
 				}
-				header("Location: ".$this->baseUrl);
-				exit;
+				if(isset($_POST['editForm_save'])) {
+					header("Location: ".$this->baseUrl);
+					exit;
+				}
 			}
 			$htmlForm = $this->form->build();
 		} else {
@@ -473,7 +475,8 @@ class AdminModule {
 /* Возвращает кнопки для формы редактирования	*/
 /* =============== */	
 	function formButtons() {
-		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">'._('Save').'</button>';
+		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">'._('Save').'</button> '.
+		       '<button type="submit" class="btn btn-default" id="editForm_save_stay" name="editForm_save_stay">'._('Save and stay').'</button>';
 	}
 	
 	function bottomButtons() {

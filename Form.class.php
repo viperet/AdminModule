@@ -75,7 +75,7 @@ class Form {
 	}
 	
 	function filled($params) {
-		return isset($params[$this->formId.'_save']);
+		return isset($params[$this->formId.'_save']) || isset($params[$this->formId.'_save_stay']);
 	}
 
 	function save($params) {

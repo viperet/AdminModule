@@ -14,39 +14,42 @@ msgstr ""
 
 #: AdminDatabase.class.php:95 AdminDatabase.class.php:143
 #: AdminDatabase.class.php:96 AdminDatabase.class.php:144
+#: AdminDatabase.class.php:100 AdminDatabase.class.php:164
 msgid "Query:"
 msgstr ""
 
 #: AdminDatabase.class.php:97 AdminDatabase.class.php:98
+#: AdminDatabase.class.php:102
 msgid "Replacement count doesn't match"
 msgstr ""
 
 #: AdminDatabase.class.php:144 AdminDatabase.class.php:145
+#: AdminDatabase.class.php:165
 msgid "Invalid query:"
 msgstr ""
 
 #: AdminModule.php:374 AdminModule.php:377 AdminModule.php:393
-#: AdminModule.php:420
+#: AdminModule.php:420 AdminModule.php:467
 msgid "On"
 msgstr ""
 
 #: AdminModule.php:375 AdminModule.php:378 AdminModule.php:394
-#: AdminModule.php:421
+#: AdminModule.php:421 AdminModule.php:468
 msgid "Off"
 msgstr ""
 
 #: AdminModule.php:385 AdminModule.php:388 AdminModule.php:404
-#: AdminModule.php:431
+#: AdminModule.php:431 AdminModule.php:478
 msgid "Save"
 msgstr ""
 
 #: AdminModule.php:452 AdminModule.php:456 AdminModule.php:459
-#: AdminModule.php:570 AdminModule.php:732
+#: AdminModule.php:570 AdminModule.php:732 AdminModule.php:789
 msgid "Add record"
 msgstr ""
 
 #: AdminModule.php:454 AdminModule.php:458 AdminModule.php:461
-#: AdminModule.php:572 AdminModule.php:734
+#: AdminModule.php:572 AdminModule.php:734 AdminModule.php:791
 msgid "Edit record"
 msgstr ""
 
@@ -55,10 +58,12 @@ msgid "Form has errors"
 msgstr ""
 
 #: Pagination.class.php:60 Pagination.class.php:63 list_template.php:278
+#: list_template.php:330
 msgid "To the begining"
 msgstr ""
 
 #: Pagination.class.php:61 Pagination.class.php:64 list_template.php:280
+#: list_template.php:332
 msgid "Previous page"
 msgstr ""
 
@@ -67,6 +72,7 @@ msgid "Previous"
 msgstr ""
 
 #: Pagination.class.php:74 Pagination.class.php:78 list_template.php:281
+#: list_template.php:333
 msgid "Next page"
 msgstr ""
 
@@ -75,55 +81,60 @@ msgid "Next"
 msgstr ""
 
 #: Pagination.class.php:76 Pagination.class.php:79 list_template.php:279
+#: list_template.php:331
 msgid "To the end"
 msgstr ""
 
 #: list_template.php:37 list_template.php:71 list_template.php:73
-#: list_template.php:79
+#: list_template.php:79 list_template.php:107
 msgid "filter"
 msgstr ""
 
 #: list_template.php:43 list_template.php:80 list_template.php:183
 #: list_template.php:82 list_template.php:185 list_template.php:88
-#: list_template.php:208
+#: list_template.php:208 list_template.php:116 list_template.php:238
 msgid "remove filter"
 msgstr ""
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
 #: list_template.php:89 list_template.php:192 list_template.php:91
 #: list_template.php:194 list_template.php:97 list_template.php:222
+#: list_template.php:125 list_template.php:252
 msgid "Add"
 msgstr ""
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
-#: list_template.php:98 list_template.php:223
+#: list_template.php:98 list_template.php:223 list_template.php:126
+#: list_template.php:253
 msgid "Delete selected records?"
 msgstr ""
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
-#: list_template.php:98 list_template.php:223
+#: list_template.php:98 list_template.php:223 list_template.php:126
+#: list_template.php:253
 msgid "Delete selected"
 msgstr ""
 
 #: list_template.php:69 list_template.php:117 list_template.php:119
-#: list_template.php:140
+#: list_template.php:140 list_template.php:168
 msgid "Actions"
 msgstr ""
 
 #: list_template.php:121 list_template.php:169 list_template.php:171
-#: AdminModule.php:399
+#: AdminModule.php:399 AdminModule.php:446
 msgid "Edit"
 msgstr ""
 
 #: list_template.php:122 list_template.php:170 list_template.php:172
-#: AdminModule.php:400
+#: AdminModule.php:400 AdminModule.php:447
 msgid "Clone"
 msgstr ""
 
 #: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
 #: list_template.php:171 list_template.php:173 AdminModule.php:401
+#: AdminModule.php:448
 msgid "Delete"
 msgstr ""
 
@@ -147,56 +158,56 @@ msgstr ""
 msgid "You can edit coordinates by dragging point on the map"
 msgstr ""
 
-#: types/coreType.php:67 types/coreType.php:70
+#: types/coreType.php:67 types/coreType.php:70 types/coreType.php:81
 #, php-format
 msgid "Please fill required field '%s'"
 msgstr ""
 
 #: types/coreType.php:68 types/fileType.php:97 types/tagsType.php:86
-#: types/fileType.php:147 types/coreType.php:71
+#: types/fileType.php:147 types/coreType.php:71 types/coreType.php:82
 msgid "Required field"
 msgstr ""
 
-#: types/coreType.php:75 types/coreType.php:78
+#: types/coreType.php:75 types/coreType.php:78 types/coreType.php:89
 msgid "Time format - HH:MM"
 msgstr ""
 
-#: types/coreType.php:76 types/coreType.php:79
+#: types/coreType.php:76 types/coreType.php:79 types/coreType.php:90
 #, php-format
 msgid "Wrong time format in '%s'"
 msgstr ""
 
-#: types/coreType.php:81 types/coreType.php:84
+#: types/coreType.php:81 types/coreType.php:84 types/coreType.php:95
 msgid "Date/time format - DD.MM.YYYY HH:MM"
 msgstr ""
 
-#: types/coreType.php:82 types/coreType.php:85
+#: types/coreType.php:82 types/coreType.php:85 types/coreType.php:96
 #, php-format
 msgid "Wrong date/time format in '%s'"
 msgstr ""
 
-#: types/coreType.php:86 types/coreType.php:89
+#: types/coreType.php:86 types/coreType.php:89 types/coreType.php:100
 msgid "Please enter correct email address"
 msgstr ""
 
-#: types/coreType.php:90 types/coreType.php:93
+#: types/coreType.php:90 types/coreType.php:93 types/coreType.php:104
 msgid "Please enter correct URL (http://...)"
 msgstr ""
 
-#: types/coreType.php:94 types/coreType.php:97
+#: types/coreType.php:94 types/coreType.php:97 types/coreType.php:108
 msgid "Please enter integer number"
 msgstr ""
 
-#: types/coreType.php:98 types/coreType.php:101
+#: types/coreType.php:98 types/coreType.php:101 types/coreType.php:112
 msgid "Please enter positive number"
 msgstr ""
 
-#: types/coreType.php:102 types/coreType.php:105
+#: types/coreType.php:102 types/coreType.php:105 types/coreType.php:116
 #, php-format
 msgid "Please enter number in '%s'"
 msgstr ""
 
-#: types/coreType.php:103 types/coreType.php:106
+#: types/coreType.php:103 types/coreType.php:106 types/coreType.php:117
 msgid "Please enter number"
 msgstr ""
 
@@ -223,7 +234,7 @@ msgid "Copy"
 msgstr ""
 
 #: types/detailsType.php:121 list_template.php:123 list_template.php:171
-#: list_template.php:173 AdminModule.php:401
+#: list_template.php:173 AdminModule.php:401 AdminModule.php:448
 msgid "Delete?"
 msgstr ""
 
@@ -369,42 +380,48 @@ msgstr ""
 
 #: list_template.php:144 list_template.php:95 list_template.php:198
 #: list_template.php:97 list_template.php:200 list_template.php:103
-#: list_template.php:228
+#: list_template.php:228 list_template.php:131 list_template.php:258
 msgid "Export"
 msgstr ""
 
 #: list_template.php:185 list_template.php:187 list_template.php:210
+#: list_template.php:240
 msgid "add records"
 msgstr ""
 
-#: list_template.php:185 list_template.php:208
+#: list_template.php:185 list_template.php:208 list_template.php:238
 msgid "Records not found"
 msgstr ""
 
-#: list_template.php:187 list_template.php:210
+#: list_template.php:187 list_template.php:210 list_template.php:240
 msgid "No records yet,"
 msgstr ""
 
 #: AdminModule.php:725 list_template.php:114 list_template.php:239
+#: AdminModule.php:782 list_template.php:142 list_template.php:269
 msgid "Import"
 msgstr ""
 
-#: Logger.class.php:61
+#: Logger.class.php:61 Logger.class.php:38
 #, php-format
 msgid "Data modification in '%s'"
 msgstr ""
 
-#: Logger.class.php:64
+#: Logger.class.php:64 Logger.class.php:41
 #, php-format
 msgid "Data insertion in '%s'"
 msgstr ""
 
-#: Logger.class.php:67
+#: Logger.class.php:67 Logger.class.php:44
 #, php-format
 msgid "Data deletion in '%s'"
 msgstr ""
 
-#: Logger.class.php:70
+#: Logger.class.php:70 Logger.class.php:47
 #, php-format
 msgid "Unknown operation in '%s'"
+msgstr ""
+
+#: AdminModule.php:479
+msgid "Save and stay"
 msgstr ""
