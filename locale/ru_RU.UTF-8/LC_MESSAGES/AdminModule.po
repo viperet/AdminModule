@@ -41,7 +41,7 @@ msgstr "Предидущая"
 #: Pagination.class.php:61 Pagination.class.php:64 list_template.php:280
 #: list_template.php:332
 msgid "Previous page"
-msgstr "Предидущая страница"
+msgstr "Предыдущая страница"
 
 #: AdminDatabase.class.php:32 AdminDatabase.class.php:79
 #: AdminDatabase.class.php:35 AdminDatabase.class.php:82
