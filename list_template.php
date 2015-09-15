@@ -14,6 +14,8 @@
 	.row_checkbox, .checkbox-td { cursor: pointer; }
 	.selected-items { margin: 5px 0; visibility: hidden; }
 	.selected-items i { cursor: pointer; }
+	nav.page-navigation { text-align: right; }
+	.pagination { margin-bottom: 0; }
 </style>
 
 
@@ -325,13 +327,33 @@
 		ajax: '<?= $this->baseUrl ?>&data-source',
 		stateSave: true,
 		pagingType: "full_numbers",
+		dom:
+			"<'row'<'col-sm-3'i><'col-sm-9'p>>" +
+			"<'row'<'col-sm-12'tr>>" +
+//			"<'row'<'col-sm-12'p>>" +
+			"<'row'<'col-sm-3'l><'col-sm-9'p>>",
+		lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Все"] ],
 		language: {
 			paginate: {
-				first: "<?=_('To the begining')?>",	
-				last: "<?=_('To the end')?>",	
-				previous: "<?=_('Previous page')?>",
-				next: "<?=_('Next page')?>",
+				first: "&laquo;",	
+				last: "&raquo;",	
+				previous: "<?=_('Previous')?>",
+				next: "<?=_('Next')?>",
 			},
+			"processing": "Подождите...",
+			"search": "Поиск:",
+			"lengthMenu": "Показать _MENU_ записей",
+			"info": "Записи с _START_ до _END_ из _TOTAL_ записей",
+			"infoEmpty": "Записи с 0 до 0 из 0 записей",
+			"infoFiltered": "(отфильтровано из _MAX_ записей)",
+			"infoPostFix": "",
+			"loadingRecords": "Загрузка записей...",
+			"zeroRecords": "Записи отсутствуют.",
+			"emptyTable": "В таблице отсутствуют данные",
+			"aria": {
+				"sortAscending": ": активировать для сортировки столбца по возрастанию",
+				"sortDescending": ": активировать для сортировки столбца по убыванию"
+			}
 		},
 //		ordering: false,
 // 		scrollY: 300
