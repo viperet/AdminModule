@@ -56,12 +56,14 @@ $objectForm = array(
 			'type' => 'text',
 			'readonly' => true,
 			'header' => true,
+			'filter' => true,
 		),
 	'row_title' => array(
 			'label' => 'Запись',
 			'type' => 'text',
 			'readonly' => true,
 			'header' => true,
+			'filter' => true,
 		),
 	'details' => array(
 			'label' => 'Подобности',
