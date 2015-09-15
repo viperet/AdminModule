@@ -36,7 +36,7 @@ msgstr "Следующая страница"
 
 #: Pagination.class.php:61 Pagination.class.php:64
 msgid "Previous"
-msgstr "Предидущая"
+msgstr "Предыдущая"
 
 #: Pagination.class.php:61 Pagination.class.php:64 list_template.php:280
 #: list_template.php:332
