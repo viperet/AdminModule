@@ -3,9 +3,9 @@
 <style>
 	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 	.admin-pager  { text-align: center;}
-	div.filter { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
-	div.filter form { margin: 0;	}
-	select.filter { max-width: 150px; }
+	div.filter-panel { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
+	div.filter-panel form { margin: 0;	}
+	.filter {  width: 100%; max-width: 150px; }
 	.clear { clear: both; }	
 	table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
 	#filter_form .form-group { position: relative; }
@@ -16,6 +16,26 @@
 	.selected-items i { cursor: pointer; }
 	nav.page-navigation { text-align: right; }
 	.pagination { margin-bottom: 0; }
+	table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
+
+.select2-drop {
+  font-size: 12px;
+  font-weight: normal;
+}
+.select2-container.input-xs .select2-choice {
+  height: 21px;
+  line-height: 0.5;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: normal;
+  box-shadow: none;
+}
+.select2-container.input-xs .select2-choice .select2-arrow b,
+.select2-container.input-xs .select2-choice div b {
+  background-position: 0 -2px;
+}
+
+
 </style>
 
 
@@ -76,7 +96,7 @@
 </script>
 
 
-<div class="filter">
+<div class="filter-panel">
 
 
 		<form method="GET" action="" id="filter_form" class="form-inline">
@@ -176,7 +196,11 @@
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
 				if($this->options['form'][$header]->filterByClick) {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-					echo "<select class='filter' data-field='{$this->options['form'][$header]->name}'>".
+					if($this->options['form'][$header]->filterByClick === 'search')
+						$filterClass = 'select2';
+					else 
+						$filterClass = 'selectpicker';
+					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'>".
 							"<option value=''>-</option>";
 					foreach($fieldValues as $key => $value) {
 						$name = $this->options['form'][$header]->name;
@@ -413,10 +437,16 @@
 		$('#filter_form').submit();
 	}
 	
-	$('select.filter').selectpicker({ 
+	$('select.filter.selectpicker').selectpicker({ 
 		 width: '100%',
 		 style: 'btn-default btn-xs',
 	});
+
+	$('select.filter.select2').select2({
+		containerCssClass: 'input-xs',
+		dropdownAutoWidth: true,
+	});
+
 	
 	if($.fn.datetimepicker.defaults.locale !== undefined)
 		options = {locale: 'ru'};
