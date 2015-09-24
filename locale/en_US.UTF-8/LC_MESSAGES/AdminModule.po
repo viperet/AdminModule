@@ -45,11 +45,13 @@ msgstr ""
 
 #: AdminModule.php:452 AdminModule.php:456 AdminModule.php:459
 #: AdminModule.php:570 AdminModule.php:732 AdminModule.php:789
+#: AdminModule.php:790
 msgid "Add record"
 msgstr ""
 
 #: AdminModule.php:454 AdminModule.php:458 AdminModule.php:461
 #: AdminModule.php:572 AdminModule.php:734 AdminModule.php:791
+#: AdminModule.php:792
 msgid "Edit record"
 msgstr ""
 
@@ -67,7 +69,7 @@ msgstr ""
 msgid "Previous page"
 msgstr ""
 
-#: Pagination.class.php:61 Pagination.class.php:64
+#: Pagination.class.php:61 Pagination.class.php:64 list_template.php:371
 msgid "Previous"
 msgstr ""
 
@@ -76,7 +78,7 @@ msgstr ""
 msgid "Next page"
 msgstr ""
 
-#: Pagination.class.php:74 Pagination.class.php:78
+#: Pagination.class.php:74 Pagination.class.php:78 list_template.php:372
 msgid "Next"
 msgstr ""
 
@@ -86,39 +88,41 @@ msgid "To the end"
 msgstr ""
 
 #: list_template.php:37 list_template.php:71 list_template.php:73
-#: list_template.php:79 list_template.php:107
+#: list_template.php:79 list_template.php:107 list_template.php:127
 msgid "filter"
 msgstr ""
 
 #: list_template.php:43 list_template.php:80 list_template.php:183
 #: list_template.php:82 list_template.php:185 list_template.php:88
 #: list_template.php:208 list_template.php:116 list_template.php:238
+#: list_template.php:136 list_template.php:264
 msgid "remove filter"
 msgstr ""
 
 #: list_template.php:52 list_template.php:139 types/detailsType.php:146
 #: list_template.php:89 list_template.php:192 list_template.php:91
 #: list_template.php:194 list_template.php:97 list_template.php:222
-#: list_template.php:125 list_template.php:252
+#: list_template.php:125 list_template.php:252 list_template.php:146
+#: list_template.php:278
 msgid "Add"
 msgstr ""
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
-#: list_template.php:253
+#: list_template.php:253 list_template.php:147 list_template.php:279
 msgid "Delete selected records?"
 msgstr ""
 
 #: list_template.php:53 list_template.php:140 list_template.php:90
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
-#: list_template.php:253
+#: list_template.php:253 list_template.php:147 list_template.php:279
 msgid "Delete selected"
 msgstr ""
 
 #: list_template.php:69 list_template.php:117 list_template.php:119
-#: list_template.php:140 list_template.php:168
+#: list_template.php:140 list_template.php:168 list_template.php:190
 msgid "Actions"
 msgstr ""
 
@@ -381,24 +385,28 @@ msgstr ""
 #: list_template.php:144 list_template.php:95 list_template.php:198
 #: list_template.php:97 list_template.php:200 list_template.php:103
 #: list_template.php:228 list_template.php:131 list_template.php:258
+#: list_template.php:152 list_template.php:284
 msgid "Export"
 msgstr ""
 
 #: list_template.php:185 list_template.php:187 list_template.php:210
-#: list_template.php:240
+#: list_template.php:240 list_template.php:266
 msgid "add records"
 msgstr ""
 
 #: list_template.php:185 list_template.php:208 list_template.php:238
+#: list_template.php:264
 msgid "Records not found"
 msgstr ""
 
 #: list_template.php:187 list_template.php:210 list_template.php:240
+#: list_template.php:266
 msgid "No records yet,"
 msgstr ""
 
 #: AdminModule.php:725 list_template.php:114 list_template.php:239
 #: AdminModule.php:782 list_template.php:142 list_template.php:269
+#: AdminModule.php:783 list_template.php:163 list_template.php:295
 msgid "Import"
 msgstr ""
 
@@ -424,4 +432,8 @@ msgstr ""
 
 #: AdminModule.php:479
 msgid "Save and stay"
+msgstr ""
+
+#: list_template.php:358
+msgid "Columns"
 msgstr ""

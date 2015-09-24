@@ -34,8 +34,6 @@
 .select2-container.input-xs .select2-choice div b {
   background-position: 0 -2px;
 }
-
-
 </style>
 
 
@@ -140,30 +138,32 @@
 ?>
 </div>
 <form method="POST" action="<?= $this->baseUrl ?>">
-	<div class="btn-group additional-buttons-top" role="group">
-	<?= $this->topButtons(); ?>
+	<div class="top-toolbar">
+		<div class="btn-group additional-buttons-top" role="group">
+		<?= $this->topButtons(); ?>
+		</div>
+		<div class="btn-group main-buttons-top" role="group">
+			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
+			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
+		</div>
+		<? if($this->options['export']) { ?>
+		<div class="btn-group">
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+		  </ul>
+		</div>				
+		<? } ?>	
+		<? if($this->options['import']) { ?>
+		<div class="btn-group ">
+			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+		</div>				
+		<? } ?>	
 	</div>
-	<div class="btn-group main-buttons-top" role="group">
-		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
-		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
-	</div>
-	<? if($this->options['export']) { ?>
-	<div class="btn-group">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-	    <?= _('Export') ?> <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu" role="menu">
-	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
-	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
-	    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
-	  </ul>
-	</div>				
-	<? } ?>	
-	<? if($this->options['import']) { ?>
-	<div class="btn-group ">
-		<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-	</div>				
-	<? } ?>	
 	
 	<div class="clear"></div>
 
@@ -270,31 +270,32 @@
 	<div class="admin-pager"><?= $htmlPager ?></div>
 <? } ?>
 
-	
-	<div class="btn-group additional-buttons-bottom" role="group">
-	<?= $this->bottomButtons(); ?>
+	<div class="bottom-toolbar">
+		<div class="btn-group additional-buttons-bottom" role="group">
+		<?= $this->bottomButtons(); ?>
+		</div>
+		<div class="btn-group main-buttons-bottom" role="group">
+			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
+			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
+		</div>
+		<? if($this->options['export']) { ?>
+		<div class="btn-group dropup">
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+		    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+		  </ul>
+		</div>				
+		<? } ?>
+		<? if($this->options['import']) { ?>
+		<div class="btn-group ">
+			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+		</div>				
+		<? } ?>	
 	</div>
-	<div class="btn-group main-buttons-bottom" role="group">
-		<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><?= _('Add') ?></a>
-		<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><?= _('Delete selected') ?></button>
-	</div>
-	<? if($this->options['export']) { ?>
-	<div class="btn-group dropup">
-	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-	    <?= _('Export') ?> <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu" role="menu">
-	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
-	    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
-	    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
-	  </ul>
-	</div>				
-	<? } ?>
-	<? if($this->options['import']) { ?>
-	<div class="btn-group ">
-		<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-	</div>				
-	<? } ?>	
 </form>
 
 <script>
@@ -342,7 +343,7 @@
 
 <? if($this->options['datatables']) { ?>
 
-	$('#admin-table').dataTable( {
+	var datatable = $('#admin-table').dataTable( {
 // 		paginate: false,
 		pageLength: <?=$this->options['perpage']?>,
 		orderCellsTop: true,
@@ -351,8 +352,14 @@
 		ajax: '<?= $this->baseUrl ?>&data-source',
 		stateSave: true,
 		pagingType: "full_numbers",
+		buttons: [
+	        {
+		        extend: 'colvis',
+		        text: '<i class="fa fa-table"></i> <?=_('Columns')?> <span class="caret"></span>',
+		    }
+	    ],
 		dom:
-			"<'row'<'col-sm-3'i><'col-sm-9'p>>" +
+			"<'row'<'col-sm-3'i><'col-sm-9'Bp>>" +
 			"<'row'<'col-sm-12'tr>>" +
 //			"<'row'<'col-sm-12'p>>" +
 			"<'row'<'col-sm-3'l><'col-sm-9'p>>",
@@ -389,8 +396,13 @@
 				$(this).removeAttr('checked');
 			}
 		});
-	});
-
+	}).api();
+	
+	try {
+		datatable.buttons().container().appendTo('.top-toolbar');
+	} catch(e) {
+    	console.log('datatables buttons error');
+	}
 	
 	
 <? } ?>
