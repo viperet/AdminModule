@@ -238,5 +238,15 @@ class AdminDatabase {
 	function insertIgnore($table, $fields) {
 		return $this->insert("IGNORE ".$table, $fields);
 	} 
+	function update($table, $id, $fields) {
+		$sql = "UPDATE $table SET ";
+		$i = 0;
+		foreach($fields as $key=>$value) {
+			$sql .= "`{$key}` = ".AdminDatabase::escape($value);
+			if(++$i !== count($fields)) $sql .= ', ';
+		}
+		$sql .= " WHERE id = ".AdminDatabase::escape($id);
+		return $this->query($sql); // return inserted id
+	}	
 	
 }
