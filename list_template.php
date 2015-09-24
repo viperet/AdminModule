@@ -321,7 +321,7 @@
 		pageLength: <?=$this->options['perpage']?>,
 		orderCellsTop: true,
 		order: [],
-		serverSide: true,
+		serverSide: <?= ($this->options['datatables'] === 'client' ? 'false' : 'true') ?>,
 		ajax: '<?= $this->baseUrl ?>&data-source',
 		stateSave: true,
 		pagingType: "full_numbers",

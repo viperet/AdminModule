@@ -368,7 +368,7 @@ class AdminModule {
 		
 		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
 			($this->options['sort']?" ORDER By {$this->options['sort']}":"").
-			" LIMIT $from,$count";
+			(isset($from) && isset($count) ? " LIMIT $from,$count" : "");
 		$items = $this->db->getAll($sql);
 		$this->itemsCount = $this->db->foundRows;
 		return $items;	
@@ -694,6 +694,7 @@ class AdminModule {
 /* Выдача данных в формате JSON для dataTables	*/
 /* =============== */
 	function dataSource() {
+		$this->sortFields();
 		$headers = array();		
 		foreach($this->options['form'] as $key=>$value) {
 			if(!empty($value->header)) {
