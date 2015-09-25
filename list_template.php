@@ -51,8 +51,8 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 .select2-container.input-xs .select2-choice div b {
   background-position: 0 -2px;
 }
-.top-toolbar .btn-group,
-.bottom-toolbar .btn-group { margin: 0 0 5px 0; }
+.top-toolbar > .btn-group,
+.bottom-toolbar > .btn-group { margin: 0 0 5px 0; }
 
 </style>
 
