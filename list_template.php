@@ -369,7 +369,13 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 		orderCellsTop: true,
 		order: [],
 		serverSide: <?= ($this->options['datatables'] === 'client' ? 'false' : 'true') ?>,
-		ajax: '<?= $this->baseUrl ?>&data-source',
+		ajax: {
+			url: '<?= $this->baseUrl ?>&data-source',
+			data: function(data) { // добавление параметров к запросу
+				return $.extend((typeof datatablesCustomParams === 'undefined' ? {} : datatablesCustomParams), data);
+			},
+		},
+
 		stateSave: true,
 		pagingType: "full_numbers",
 		fixedHeader: true,
