@@ -1,22 +1,39 @@
 <?= $this->listHeader(); ?>
 
 <style>
-	.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
-	.admin-pager  { text-align: center;}
-	div.filter-panel { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
-	div.filter-panel form { margin: 0;	}
-	.filter {  width: 100%; max-width: 150px; }
-	.clear { clear: both; }	
-	table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
-	#filter_form .form-group { position: relative; }
-	#date-from, #date-to { width: 100px; }
+.link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
+.admin-pager  { text-align: center;}
+div.filter-panel { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
+div.filter-panel form { margin: 0;	}
+.filter {  width: 100%; max-width: 150px; }
+.clear { clear: both; }	
+table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
+#filter_form .form-group { position: relative; }
+#date-from, #date-to { width: 100px; }
 /* 	#date-to { margin-right: 30px; } */
-	.row_checkbox, .checkbox-td { cursor: pointer; }
-	.selected-items { margin: 5px 0; visibility: hidden; }
-	.selected-items i { cursor: pointer; }
-	nav.page-navigation { text-align: right; }
-	.pagination { margin-bottom: 0; }
-	table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
+.row_checkbox, .checkbox-td { cursor: pointer; }
+.selected-items { margin: 5px 0; visibility: hidden; }
+.selected-items i { cursor: pointer; }
+nav.page-navigation { text-align: right; }
+.pagination { margin-bottom: 0; }
+table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
+
+.dropdown-menu > li > button {
+    clear: both;
+    color: #333333;
+    display: block;
+    font-weight: normal;
+    line-height: 1.42857;
+    padding: 3px 20px;
+    white-space: nowrap;
+    width: 100%;
+    background: white;
+    border: none;
+    text-align: left;
+}
+.dropdown-menu > li > button:hover {
+	background-color: #f5f5f5;
+}
 
 .select2-drop {
   font-size: 12px;
@@ -34,6 +51,9 @@
 .select2-container.input-xs .select2-choice div b {
   background-position: 0 -2px;
 }
+.top-toolbar .btn-group,
+.bottom-toolbar .btn-group { margin: 0 0 5px 0; }
+
 </style>
 
 
@@ -352,6 +372,7 @@
 		ajax: '<?= $this->baseUrl ?>&data-source',
 		stateSave: true,
 		pagingType: "full_numbers",
+		fixedHeader: true,
 		buttons: [
 	        {
 		        extend: 'colvis',

@@ -464,8 +464,22 @@ class AdminModule {
 		$html = "";
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">{$value->label} "._('On')."</button>&nbsp;";
-				$html .= "<button class='btn btn-default' type='button' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">{$value->label} "._('Off')."</button>&nbsp;";
+				$html .= "
+  <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+    {$value->label} <span class='caret'></span>
+  </button>
+  <ul class='dropdown-menu'>
+    <li><button type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">"._('On')."</button></li>
+    <li><button type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">"._('Off')."</button></li>
+  </ul>
+";
+				
+				
+/*
+				
+				$html .= "<button class='btn btn-default' type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">{$value->label} "._('On')."</button>&nbsp;";
+				$html .= "<button class='btn btn-default' type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">{$value->label} "._('Off')."</button>&nbsp;";
+*/
 			}
 		}
 		if($html!='') $html .= '&nbsp;&nbsp;&nbsp;';
@@ -602,11 +616,6 @@ class AdminModule {
 
 		$sql = "UPDATE `".$this->options['table']."` SET `{$field}`='{$value}' WHERE id IN (".implode(',', $ids).")";
 		$res = $this->db->query($sql);
-		if($res !== 1) {
-			echo "massAction error<br>";
-			echo nl2br($res->result->userinfo);
-			exit;
-		}			
 		
 		foreach($ids as $id) {
 			$item = $this->getItem($id);
