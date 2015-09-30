@@ -17,6 +17,12 @@ table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
 nav.page-navigation { text-align: right; }
 .pagination { margin-bottom: 0; }
 table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
+table.dataTable tr.totals-row { display: none; }
+table.dataTable tr.totals-row th {
+    border-bottom: 1px solid #e1e1e1 !important;
+    border-top: 1px solid #e1e1e1 !important;
+    padding: 5px;
+}
 
 .dropdown-menu > li > button {
     clear: both;
@@ -233,6 +239,16 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 	?>
 			<th></th>
 		</tr>
+		<tr class="totals-row">
+			<th class="checkbox-cell"></th>
+	<?		
+			foreach($headers as $header) {
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+				echo "</th>\n";
+			}
+	?>
+			<th class="actions-cell"></th>
+		</tr>
 	</thead>
 	<tbody>
 	<?
@@ -279,6 +295,18 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			}
 	?>
 	</tbody>
+	<tfoot>
+		<tr class="totals-row">
+			<th></th>
+	<?		
+			foreach($headers as $header) {
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+				echo "</th>\n";
+			}
+	?>
+			<th></th>
+		</tr>
+	</tfoot>
 	</table>
 <? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
@@ -375,10 +403,16 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 				return $.extend((typeof datatablesCustomParams === 'undefined' ? {} : datatablesCustomParams), data);
 			},
 		},
-
+		 columns: [
+		        { data: 'checkbox-cell' },
+	<?		foreach($headers as $header) { ?>
+		        { data: '<?= $this->options['form'][$header]->cell_class ?>' },
+	<?		}	?>
+		        { data: 'actions-cell' }
+	    ],
 		stateSave: true,
 		pagingType: "full_numbers",
-		fixedHeader: true,
+//		fixedHeader: true,
 		buttons: [
 	        {
 		        extend: 'colvis',
@@ -415,6 +449,19 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 		},
 //		ordering: false,
 // 		scrollY: 300
+	}).on('xhr.dt', function (e, settings, json, xhr) {
+		if(json.header) {
+			var cells = $('.dataTable thead .totals-row th').empty();
+/*
+			cells.each(function (index, cell) {
+				$(cell).html(json.header[index]);
+			});
+*/
+			$.each(json.header, function (key, value) {
+				cells.filter('.'+key).html(value);
+			});
+			$('.dataTable thead .totals-row').show();
+		}		
 	}).on('draw.dt', function () {
 		$('.row_checkbox').each(function () {
 			if(checkboxed_storage.indexOf(this.value) != -1) {
@@ -424,6 +471,11 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			}
 		});
 	}).api();
+
+new $.fn.dataTable.FixedHeader( datatable, {
+    // options
+} );
+
 	
 	try {
 		datatable.buttons().container().appendTo('.top-toolbar');

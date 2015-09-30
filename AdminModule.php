@@ -725,16 +725,16 @@ class AdminModule {
 
 
 		foreach($items as $item) {
-			$row = array('<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
+			$row = array('checkbox-cell' => '<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
 			foreach($this->options['form'] as $key=>$value) {
 				if(!empty($value->header)) {
 					
 					$value->fromRow($item);
 										
-					$row[] = $value->toListItem();
+					$row[$value->cell_class] = $value->toListItem();
 				}
 			}
-			$row[] = $this->actions($item);
+			$row['actions-cell'] = $this->actions($item);
 			$row['DT_RowClass'] = $this->getListClass($item);
 			$data[] = $row;
 		}
@@ -748,7 +748,7 @@ class AdminModule {
 			'data' => $data,
 		);
 
-		echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		return $result;
 	}
 	
 
@@ -763,7 +763,7 @@ class AdminModule {
 
 		if(isset($_REQUEST['data-source']) ) { // выдача данных для dataTables
 		
-			$this->dataSource();
+			echo json_encode($this->dataSource(), JSON_UNESCAPED_UNICODE);
 			exit;
 			
 		} elseif(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX

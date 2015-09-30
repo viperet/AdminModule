@@ -3,6 +3,7 @@
 abstract class coreType {
 	public $id;
 	public $name;
+	public $cell_class;
 	public $type;
 	public $value = '';
 	public $label;
@@ -34,6 +35,7 @@ abstract class coreType {
 	
 	function __construct($db, $name, $array) {
 		$this->name = $name;
+		$this->cell_class = str_replace('_', '-', $this->name).'-cell';
 		$this->db = $db;
 		foreach($array as $field => $value) {
 			if(property_exists(get_class($this), $field)) {
