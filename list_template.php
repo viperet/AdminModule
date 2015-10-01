@@ -60,6 +60,16 @@ table.dataTable tr.totals-row th {
 .top-toolbar > .btn-group,
 .bottom-toolbar > .btn-group { margin: 0 0 5px 0; }
 
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 1100;
+}
+
 </style>
 
 
@@ -88,6 +98,7 @@ table.dataTable tr.totals-row th {
 	
 	$(function () {
 		$('#filter_form').submit(function () {
+			$('.overlay').show();
 			var new_location = "<?=$this->baseUrlNoFilter?>&filter="+$('#filter_input').val()+"&query="+$('#search_input').val();
 			if($('#date-from').val())
 				new_location = new_location + "&df="+$('#date-from').val()
@@ -365,6 +376,9 @@ table.dataTable tr.totals-row th {
 	</div>
 </form>
 
+
+<div class="overlay" style="display: none;"></div> <!-- шторка для закрывания на время загрузки -->
+
 <script>
 	var checkboxed_storage = [];
 	
@@ -468,7 +482,10 @@ table.dataTable tr.totals-row th {
 		},
 //		ordering: false,
 // 		scrollY: 300
+	}).on('preXhr.dt', function (e) {
+		$('.overlay').show();
 	}).on('xhr.dt', function (e, settings, json, xhr) {
+		$('.overlay').hide();
 		if(typeof json === 'undefined') return;
 		if(json.header) {
 			var cells = $('.dataTable thead .totals-row th').empty();
@@ -582,3 +599,4 @@ new $.fn.dataTable.FixedHeader( datatable, {
 			$(this).parent().find('input.row_checkbox').click();
 	});
 </script>
+
