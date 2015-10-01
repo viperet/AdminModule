@@ -101,20 +101,36 @@ table.dataTable tr.totals-row th {
 			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
 		
-		$('select.filter').change( function () {
+		$('select.filter.multiple').on('hidden.bs.select show.bs.select', function (e) {
+			
+			console.log(e);
+			
+			var filters = getFilters();			
+			var el = $(this);
+			values = [];
+			for(var i=0;i<this.options.length;++i) {
+				if(this.options[i].selected)
+					values.push(this.options[i].value);
+			}
+			var values_list = values.join('|');
+			if(e.type == 'show') {
+				el.data('old_values', values_list);	
+			} else {
+				console.log(values);
+				var old_values = el.data('old_values');
+				if(values_list != old_values) {
+					filters[el.data('field')] = values_list;
+					setFilters(filters);
+					$('#filter_form').submit();
+				}
+			}
+		});
+		$('select.filter').not('[multiple]').change( function () {
 			var filters = getFilters();			
 			var el = $(this);
 			filters[el.data('field')] = this.value;
 			setFilters(filters);
 			$('#filter_form').submit();
-/*
-			if(this.value == '')
-				document.location = "<?= $this->baseUrlNoFilter ?>";
-			else {
-				$('#filter_input').val(el.data('field')+':'+this.value);
-				$('#filter_form').submit();
-			}
-*/
 		});
 	});
 </script>
@@ -224,13 +240,16 @@ table.dataTable tr.totals-row th {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
 					if($this->options['form'][$header]->filterByClick === 'search')
 						$filterClass = 'select2';
+					elseif($this->options['form'][$header]->filterByClick === 'multiple')
+						$filterClass = 'selectpicker multiple';
 					else 
 						$filterClass = 'selectpicker';
-					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'>".
+					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}' ".
+						($this->options['form'][$header]->filterByClick === 'multiple'?'multiple':'')." data-title='-'>".
 							"<option value=''>-</option>";
 					foreach($fieldValues as $key => $value) {
 						$name = $this->options['form'][$header]->name;
-						echo "<option value='{$key}'".(isset($this->filters[$name])&&$this->filters[$name]==$key?"selected":"").">{$value}</option>"; 
+						echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
 					}
 					echo "</select>";
 				}
@@ -450,6 +469,7 @@ table.dataTable tr.totals-row th {
 //		ordering: false,
 // 		scrollY: 300
 	}).on('xhr.dt', function (e, settings, json, xhr) {
+		if(typeof json === 'undefined') return;
 		if(json.header) {
 			var cells = $('.dataTable thead .totals-row th').empty();
 /*

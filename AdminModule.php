@@ -85,9 +85,9 @@ class AdminModule {
 			$this->baseUrlNoPaging .= "&filter=".urlencode($_GET['filter']);
 			
 			foreach(explode(';', $this->filter) as $filter) {
-				$tmp = explode(':', $filter);
-				if(count($tmp)!=2) continue;
-				$this->filters[$tmp[0]] = $tmp[1];
+				list($param, $value) = explode(':', $filter);
+				if(empty($param)) continue;
+				$this->filters[$param] = explode('|', $value);
 			}
 		}
 		if(isset($_GET['query'])) { 
@@ -308,7 +308,12 @@ class AdminModule {
 		if(count($this->filters)>0) {
 			$filterSql = "1";
 			foreach($this->filters as $field => $filter) {
-				$filterSql .= " AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
+				
+				foreach($filter as &$filter_value) {
+					$filter_value = "'".mysql_real_escape_string($filter_value)."'";
+				}
+				
+				$filterSql .= " AND `{$this->options['table']}`.`{$field}` IN (".implode(',', $filter).")";
 			}
 // 			return $dateSql.$filterSql;
 		} else {
