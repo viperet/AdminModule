@@ -23,6 +23,7 @@ table.dataTable tr.totals-row th {
     border-top: 1px solid #e1e1e1 !important;
     padding: 5px;
 }
+.additional-buttons-top, .additional-buttons-bottom { display: inline-block; }
 
 .dropdown-menu > li > button {
     clear: both;
@@ -57,8 +58,8 @@ table.dataTable tr.totals-row th {
 .select2-container.input-xs .select2-choice div b {
   background-position: 0 -2px;
 }
-.top-toolbar > .btn-group,
-.bottom-toolbar > .btn-group { margin: 0 0 5px 0; }
+.top-toolbar .btn-group,
+.bottom-toolbar .btn-group { margin: 0 0 5px 0; }
 
 .overlay {
 	position: fixed;
@@ -192,7 +193,7 @@ table.dataTable tr.totals-row th {
 </div>
 <form method="POST" action="<?= $this->baseUrl ?>">
 	<div class="top-toolbar">
-		<div class="btn-group additional-buttons-top" role="group">
+		<div class=" additional-buttons-top" role="group">
 		<?= $this->topButtons(); ?>
 		</div>
 		<div class="btn-group main-buttons-top" role="group">
@@ -349,7 +350,7 @@ table.dataTable tr.totals-row th {
 <? } ?>
 
 	<div class="bottom-toolbar">
-		<div class="btn-group additional-buttons-bottom" role="group">
+		<div class="additional-buttons-bottom" role="group">
 		<?= $this->bottomButtons(); ?>
 		</div>
 		<div class="btn-group main-buttons-bottom" role="group">
@@ -486,7 +487,7 @@ table.dataTable tr.totals-row th {
 		$('.overlay').show();
 	}).on('xhr.dt', function (e, settings, json, xhr) {
 		$('.overlay').hide();
-		if(typeof json === 'undefined') return;
+		if(json === null) return;
 		if(json.header) {
 			var cells = $('.dataTable thead .totals-row th').empty();
 /*
