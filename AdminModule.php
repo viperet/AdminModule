@@ -248,6 +248,9 @@ class AdminModule {
 				if(isset($_POST['editForm_save'])) {
 					header("Location: ".$this->baseUrl);
 					exit;
+				} else {
+					header("Location: ".$this->baseUrl."&edit={$id}");
+					exit;
 				}
 			}
 			$htmlForm = $this->form->build();
