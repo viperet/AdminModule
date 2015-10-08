@@ -437,10 +437,14 @@ table.dataTable tr.totals-row th {
 				return $.extend((typeof datatablesCustomParams === 'undefined' ? {} : datatablesCustomParams), data);
 			},
 		},
-		 columns: [
+		columnDefs: [ {
+			targets: "_all",
+			orderSequence: [ "desc", "asc"]
+		} ],
+		columns: [
 		        { data: 'checkbox-cell' },
 	<?		foreach($headers as $header) { ?>
-		        { data: '<?= $this->options['form'][$header]->cell_class ?>' },
+		        { data: '<?= $this->options['form'][$header]->cell_class ?>', },
 	<?		}	?>
 		        { data: 'actions-cell' }
 	    ],
