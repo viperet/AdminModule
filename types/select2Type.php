@@ -142,4 +142,21 @@ class select2Type extends textType {
 		return $html;
 	}
 	
+	/* Get values list for filtering */
+	public function getValues() {
+		if(count($this->values)>0 && $this->ajax == false) {
+			$values = [];
+			foreach($this->values as $key=>$value) {
+				if(is_array($value)) {
+					$values += $value;
+				} else {
+					$values[$key] = $value;
+				}
+			}
+			return $values;
+		} else {
+			return parent::getValues();
+		}
+	}	
+	
 }

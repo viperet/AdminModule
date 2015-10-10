@@ -161,6 +161,19 @@ abstract class coreType {
 			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toStringTruncated()."</a>";
 		return ob_get_clean();
 	}
+	
+	/* Get values list for filtering */
+	public function getValues() {
+		$sql = "SELECT *, `{$this->name}` value FROM `{$this->options['table']}` GROUP By `{$this->name}`";
+		$res = $this->db->getAll($sql);
+		$items = array();
+		foreach($res as $row) {
+			$this->fromRow($row);
+			$items[$row['value']] = $this->toString();
+		}
+		asort($items);
+		return $items;		
+	}
 
 	public function delete() { return; }
 	

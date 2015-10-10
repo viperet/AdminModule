@@ -354,19 +354,7 @@ class AdminModule {
 /* Получение значений поля для фильтрации */
 /* ====================== */
 	function getFieldValues($field) {
-		if(is_array($field->values) && count($field->values)>0) {
-			return $field->values;
-		} else {
-			$sql = "SELECT *, `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
-			$res = $this->db->getAll($sql);
-			$items = array();
-			foreach($res as $row) {
-				$field->fromRow($row);
-				$items[$row['value']] = $field->toString();
-			}
-			asort($items);
-			return $items;		
-		}
+		return $field->getValues();
 	}
 
 /* ====================== */
