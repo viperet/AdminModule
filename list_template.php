@@ -17,6 +17,13 @@ table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
 nav.page-navigation { text-align: right; }
 .pagination { margin-bottom: 0; }
 table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
+table.dataTable tr.totals-row { display: none; }
+table.dataTable tr.totals-row th {
+    border-bottom: 1px solid #e1e1e1 !important;
+    border-top: 1px solid #e1e1e1 !important;
+    padding: 5px;
+}
+.additional-buttons-top, .additional-buttons-bottom { display: inline-block; }
 
 .dropdown-menu > li > button {
     clear: both;
@@ -51,8 +58,18 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 .select2-container.input-xs .select2-choice div b {
   background-position: 0 -2px;
 }
-.top-toolbar > .btn-group,
-.bottom-toolbar > .btn-group { margin: 0 0 5px 0; }
+.top-toolbar .btn-group,
+.bottom-toolbar .btn-group { margin: 0 0 5px 0; }
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: 1100;
+}
 
 </style>
 
@@ -82,6 +99,7 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 	
 	$(function () {
 		$('#filter_form').submit(function () {
+			$('.overlay').show();
 			var new_location = "<?=$this->baseUrlNoFilter?>&filter="+$('#filter_input').val()+"&query="+$('#search_input').val();
 			if($('#date-from').val())
 				new_location = new_location + "&df="+$('#date-from').val()
@@ -95,20 +113,36 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
 		
-		$('select.filter').change( function () {
+		$('select.filter.multiple').on('hidden.bs.select show.bs.select', function (e) {
+			
+			console.log(e);
+			
+			var filters = getFilters();			
+			var el = $(this);
+			values = [];
+			for(var i=0;i<this.options.length;++i) {
+				if(this.options[i].selected)
+					values.push(this.options[i].value);
+			}
+			var values_list = values.join('|');
+			if(e.type == 'show') {
+				el.data('old_values', values_list);	
+			} else {
+				console.log(values);
+				var old_values = el.data('old_values');
+				if(values_list != old_values) {
+					filters[el.data('field')] = values_list;
+					setFilters(filters);
+					$('#filter_form').submit();
+				}
+			}
+		});
+		$('select.filter').not('[multiple]').change( function () {
 			var filters = getFilters();			
 			var el = $(this);
 			filters[el.data('field')] = this.value;
 			setFilters(filters);
 			$('#filter_form').submit();
-/*
-			if(this.value == '')
-				document.location = "<?= $this->baseUrlNoFilter ?>";
-			else {
-				$('#filter_input').val(el.data('field')+':'+this.value);
-				$('#filter_form').submit();
-			}
-*/
 		});
 	});
 </script>
@@ -159,7 +193,7 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 </div>
 <form method="POST" action="<?= $this->baseUrl ?>">
 	<div class="top-toolbar">
-		<div class="btn-group additional-buttons-top" role="group">
+		<div class=" additional-buttons-top" role="group">
 		<?= $this->topButtons(); ?>
 		</div>
 		<div class="btn-group main-buttons-top" role="group">
@@ -218,13 +252,16 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
 					if($this->options['form'][$header]->filterByClick === 'search')
 						$filterClass = 'select2';
+					elseif($this->options['form'][$header]->filterByClick === 'multiple')
+						$filterClass = 'selectpicker multiple';
 					else 
 						$filterClass = 'selectpicker';
-					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'>".
+					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}' ".
+						($this->options['form'][$header]->filterByClick === 'multiple'?'multiple':'')." data-title='-'>".
 							"<option value=''>-</option>";
 					foreach($fieldValues as $key => $value) {
 						$name = $this->options['form'][$header]->name;
-						echo "<option value='{$key}'".(isset($this->filters[$name])&&$this->filters[$name]==$key?"selected":"").">{$value}</option>"; 
+						echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
 					}
 					echo "</select>";
 				}
@@ -232,6 +269,16 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			}
 	?>
 			<th></th>
+		</tr>
+		<tr class="totals-row">
+			<th class="checkbox-cell"></th>
+	<?		
+			foreach($headers as $header) {
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+				echo "</th>\n";
+			}
+	?>
+			<th class="actions-cell"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -279,6 +326,18 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			}
 	?>
 	</tbody>
+	<tfoot>
+		<tr class="totals-row">
+			<th></th>
+	<?		
+			foreach($headers as $header) {
+				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+				echo "</th>\n";
+			}
+	?>
+			<th></th>
+		</tr>
+	</tfoot>
 	</table>
 <? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
@@ -291,7 +350,7 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 <? } ?>
 
 	<div class="bottom-toolbar">
-		<div class="btn-group additional-buttons-bottom" role="group">
+		<div class="additional-buttons-bottom" role="group">
 		<?= $this->bottomButtons(); ?>
 		</div>
 		<div class="btn-group main-buttons-bottom" role="group">
@@ -317,6 +376,9 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 		<? } ?>	
 	</div>
 </form>
+
+
+<div class="overlay" style="display: none;"></div> <!-- шторка для закрывания на время загрузки -->
 
 <script>
 	var checkboxed_storage = [];
@@ -369,10 +431,22 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 		orderCellsTop: true,
 		order: [],
 		serverSide: <?= ($this->options['datatables'] === 'client' ? 'false' : 'true') ?>,
-		ajax: '<?= $this->baseUrl ?>&data-source',
+		ajax: {
+			url: '<?= $this->baseUrl ?>&data-source',
+			data: function(data) { // добавление параметров к запросу
+				return $.extend((typeof datatablesCustomParams === 'undefined' ? {} : datatablesCustomParams), data);
+			},
+		},
+		 columns: [
+		        { data: 'checkbox-cell' },
+	<?		foreach($headers as $header) { ?>
+		        { data: '<?= $this->options['form'][$header]->cell_class ?>' },
+	<?		}	?>
+		        { data: 'actions-cell' }
+	    ],
 		stateSave: true,
 		pagingType: "full_numbers",
-		fixedHeader: true,
+//		fixedHeader: true,
 		buttons: [
 	        {
 		        extend: 'colvis',
@@ -409,6 +483,23 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 		},
 //		ordering: false,
 // 		scrollY: 300
+	}).on('preXhr.dt', function (e) {
+		$('.overlay').show();
+	}).on('xhr.dt', function (e, settings, json, xhr) {
+		$('.overlay').hide();
+		if(json === null) return;
+		if(json.header) {
+			var cells = $('.dataTable thead .totals-row th').empty();
+/*
+			cells.each(function (index, cell) {
+				$(cell).html(json.header[index]);
+			});
+*/
+			$.each(json.header, function (key, value) {
+				cells.filter('.'+key).html(value);
+			});
+			$('.dataTable thead .totals-row').show();
+		}		
 	}).on('draw.dt', function () {
 		$('.row_checkbox').each(function () {
 			if(checkboxed_storage.indexOf(this.value) != -1) {
@@ -418,6 +509,11 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			}
 		});
 	}).api();
+
+new $.fn.dataTable.FixedHeader( datatable, {
+    // options
+} );
+
 	
 	try {
 		datatable.buttons().container().appendTo('.top-toolbar');
@@ -504,3 +600,4 @@ table.dataTable thead > tr > th.cell-filter { padding-right: 8px;}
 			$(this).parent().find('input.row_checkbox').click();
 	});
 </script>
+

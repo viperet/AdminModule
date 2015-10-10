@@ -85,9 +85,9 @@ class AdminModule {
 			$this->baseUrlNoPaging .= "&filter=".urlencode($_GET['filter']);
 			
 			foreach(explode(';', $this->filter) as $filter) {
-				$tmp = explode(':', $filter);
-				if(count($tmp)!=2) continue;
-				$this->filters[$tmp[0]] = $tmp[1];
+				list($param, $value) = explode(':', $filter);
+				if(empty($param)) continue;
+				$this->filters[$param] = explode('|', $value);
 			}
 		}
 		if(isset($_GET['query'])) { 
@@ -248,6 +248,9 @@ class AdminModule {
 				if(isset($_POST['editForm_save'])) {
 					header("Location: ".$this->baseUrl);
 					exit;
+				} else {
+					header("Location: ".$this->baseUrl."&edit={$id}");
+					exit;
 				}
 			}
 			$htmlForm = $this->form->build();
@@ -308,7 +311,12 @@ class AdminModule {
 		if(count($this->filters)>0) {
 			$filterSql = "1";
 			foreach($this->filters as $field => $filter) {
-				$filterSql .= " AND `{$this->options['table']}`.`{$field}` = '".mysql_real_escape_string($filter)."'";
+				
+				foreach($filter as &$filter_value) {
+					$filter_value = "'".mysql_real_escape_string($filter_value)."'";
+				}
+				
+				$filterSql .= " AND `{$this->options['table']}`.`{$field}` IN (".implode(',', $filter).")";
 			}
 // 			return $dateSql.$filterSql;
 		} else {
@@ -725,16 +733,16 @@ class AdminModule {
 
 
 		foreach($items as $item) {
-			$row = array('<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
+			$row = array('checkbox-cell' => '<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
 			foreach($this->options['form'] as $key=>$value) {
 				if(!empty($value->header)) {
 					
 					$value->fromRow($item);
 										
-					$row[] = $value->toListItem();
+					$row[$value->cell_class] = $value->toListItem();
 				}
 			}
-			$row[] = $this->actions($item);
+			$row['actions-cell'] = $this->actions($item);
 			$row['DT_RowClass'] = $this->getListClass($item);
 			$data[] = $row;
 		}
@@ -748,7 +756,7 @@ class AdminModule {
 			'data' => $data,
 		);
 
-		echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		return $result;
 	}
 	
 
@@ -763,7 +771,7 @@ class AdminModule {
 
 		if(isset($_REQUEST['data-source']) ) { // выдача данных для dataTables
 		
-			$this->dataSource();
+			echo json_encode($this->dataSource(), JSON_UNESCAPED_UNICODE);
 			exit;
 			
 		} elseif(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX

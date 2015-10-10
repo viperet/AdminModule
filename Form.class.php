@@ -81,9 +81,11 @@ class Form {
 	function save($params) {
 		foreach($this->form as $id => &$item) {
 //			$item->fromForm($params);
+			$old_value = $item->value;
 			if(is_callable($item->onSave)) 
 				$item->value = call_user_func($item->onSave, $item->value);
 			$itemSql = $item->toSql();
+			$item->value = $old_value;
 			if(!empty($itemSql))
 				$sql[] = $itemSql;
 		}
