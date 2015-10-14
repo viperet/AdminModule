@@ -461,6 +461,7 @@ class AdminModule {
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
 				$html .= "
+<div class='btn-group'>
   <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
     {$value->label} <span class='caret'></span>
   </button>
@@ -468,6 +469,7 @@ class AdminModule {
     <li><button type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">"._('On')."</button></li>
     <li><button type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">"._('Off')."</button></li>
   </ul>
+</div>
 ";
 				
 				
