@@ -336,7 +336,7 @@ class AdminModule {
 				if($value->filter)
 					$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$search}'";
 					
-			if(preg_match('/^%(\d+)%$/', $filter, $m)) {
+			if(preg_match('/^%(\d+)%$/', $this->search, $m)) {
 				$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
 			}
 		}
