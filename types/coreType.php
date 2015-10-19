@@ -122,9 +122,17 @@ abstract class coreType {
 			$this->valid = false;
 			$this->errors[] = $this->validation_message;
 		}
-		if( preg_match('#^/.*/$#', $this->validation) && ($this->value!='' && !preg_match($this->validation, $this->value))) {
+		if( is_string($this->validation) && preg_match('#^/.*/$#', $this->validation) && ($this->value!='' && !preg_match($this->validation, $this->value))) {
 			$this->valid = false;
 			$this->errors[] = $this->validation_message;
+		}
+		if( is_callable($this->validation) && ($message =call_user_func($this->validation, $this)) !== true ) {
+			$this->valid = false;
+			if($message === false)
+				$this->errors[] = $this->validation_message;
+			else 
+				$this->errors[] = $message;
+			
 		}
 		
 		return $this->valid;
@@ -152,6 +160,19 @@ abstract class coreType {
 		else
 			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toStringTruncated()."</a>";
 		return ob_get_clean();
+	}
+	
+	/* Get values list for filtering */
+	public function getValues() {
+		$sql = "SELECT *, `{$this->name}` value FROM `{$this->options['table']}` GROUP By `{$this->name}`";
+		$res = $this->db->getAll($sql);
+		$items = array();
+		foreach($res as $row) {
+			$this->fromRow($row);
+			$items[$row['value']] = $this->toString();
+		}
+		asort($items);
+		return $items;		
 	}
 
 	public function delete() { return; }

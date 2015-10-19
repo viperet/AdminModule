@@ -354,19 +354,7 @@ class AdminModule {
 /* Получение значений поля для фильтрации */
 /* ====================== */
 	function getFieldValues($field) {
-		if(is_array($field->values) && count($field->values)>0) {
-			return $field->values;
-		} else {
-			$sql = "SELECT *, `{$field->name}` value FROM `{$this->options['table']}` GROUP By `{$field->name}`";
-			$res = $this->db->getAll($sql);
-			$items = array();
-			foreach($res as $row) {
-				$field->fromRow($row);
-				$items[$row['value']] = $field->toString();
-			}
-			asort($items);
-			return $items;		
-		}
+		return $field->getValues();
 	}
 
 /* ====================== */
@@ -473,6 +461,7 @@ class AdminModule {
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
 				$html .= "
+<div class='btn-group'>
   <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
     {$value->label} <span class='caret'></span>
   </button>
@@ -480,6 +469,7 @@ class AdminModule {
     <li><button type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">"._('On')."</button></li>
     <li><button type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">"._('Off')."</button></li>
   </ul>
+</div>
 ";
 				
 				
