@@ -40,5 +40,21 @@ class selectType extends textType {
 		$html .= "</select>";
 		return $html;
 	}
+	/* Get values list for filtering */
+	public function getValues() {
+		if(count($this->values)>0) {
+			$values = [];
+			foreach($this->values as $key=>$value) {
+				if(is_array($value)) {
+					$values += $value;
+				} else {
+					$values[$key] = $value;
+				}
+			}
+			return $values;
+		} else {
+			return parent::getValues();
+		}
+	}		
 	
 }
