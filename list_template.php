@@ -449,6 +449,7 @@ table.dataTable tr.totals-row th {
 		        { data: 'actions-cell' }
 	    ],
 		stateSave: true,
+		stateDuration: 0, // хранить настройки без ограничения по времени
 		pagingType: "full_numbers",
 //		fixedHeader: true,
 		buttons: [
