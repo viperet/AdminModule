@@ -217,6 +217,20 @@ class AdminDatabase {
 		}
 		return $data;
 	}
+
+
+	// Executes SQL and returns list of values of first SQL result field
+	function getList($sql, $args = NULL) {
+		if($args!==NULL &&!is_array($args))
+			$args = array_slice(func_get_args(), 1);
+		$res = $this->query($sql, $args);
+		$data = array();
+		foreach($res as $row) {
+				$data[] = reset($row);
+		}
+		return $data;
+	}
+
 	function replace($table, $fields) {
 		$sql = "REPLACE $table SET ";
 		$i = 0;
