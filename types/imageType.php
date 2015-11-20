@@ -64,6 +64,9 @@ class imageType extends fileType {
 		parent::fromForm($value);
 		
 		if(!empty($value[$this->name.'_url'])) { // загрузка по ссылке
+			if(!preg_match('#^https?://#', $value[$this->name.'_url']))
+				$value[$this->name.'_url'] = 'http://'.$value[$this->name.'_url'];
+			
 			$fileName = $this->download_url = $value[$this->name.'_url'];
 
 			$translit_filename = 'tmp_image.jpg';
@@ -127,8 +130,8 @@ class imageType extends fileType {
 			return "";
 			
 			
-		$image = file_get_contents($fileName);	
-		
+		$image = @file_get_contents($fileName);	
+		if($image == "") return '';
 
 
 
