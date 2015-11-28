@@ -28,6 +28,7 @@ table.table th {
 		<tr>
 	<?		
 			foreach($headers as $header) {
+				if(!$this->options['form'][$header]->print) continue;
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
 					htmlspecialchars($this->options['form'][$header]->label);
 				echo "</th>\n";
@@ -44,6 +45,7 @@ table.table th {
 	<?
 				foreach($headers as $header) {
 					$formItem = $this->options['form'][$header];
+					if(!$formItem->print) continue;
 					$formItem->fromRow($item);
 					
 	?>
