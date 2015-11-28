@@ -247,6 +247,8 @@ table.dataTable tr.totals-row th {
 		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
 		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
 		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+		    <li role="separator" class="divider"></li>
+		    <li><a class="export-link" href="<?= $this->baseUrl ?>&print">Print</a></li>
 		  </ul>
 		</div>				
 		<? } ?>	
@@ -271,7 +273,7 @@ table.dataTable tr.totals-row th {
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
 		<tr>
-			<th data-orderable="0"></th>
+			<th class="checkbox-cell" data-orderable="0"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
@@ -279,10 +281,10 @@ table.dataTable tr.totals-row th {
 				echo "</th>\n";
 			}
 	?>
-			<th data-orderable="0"><?= _('Actions') ?></th>
+			<th class="table-actions" data-orderable="0"><?= _('Actions') ?></th>
 		</tr>			
 		<tr>
-			<th><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+			<th class="checkbox-cell"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
@@ -330,7 +332,7 @@ table.dataTable tr.totals-row th {
 				echo "</th>\n";
 			}
 	?>
-			<th></th>
+			<th class="table-actions"></th>
 		</tr>
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
@@ -340,7 +342,7 @@ table.dataTable tr.totals-row th {
 				echo "</th>\n";
 			}
 	?>
-			<th class="actions-cell"></th>
+			<th class="table-actions"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -390,14 +392,14 @@ table.dataTable tr.totals-row th {
 	</tbody>
 	<tfoot>
 		<tr class="totals-row">
-			<th></th>
+			<th class="checkbox-cell"></th>
 	<?		
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
 				echo "</th>\n";
 			}
 	?>
-			<th></th>
+			<th class="table-actions"></th>
 		</tr>
 	</tfoot>
 	</table>

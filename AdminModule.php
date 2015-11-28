@@ -193,6 +193,31 @@ class AdminModule {
 		include('list_template.php');
 
 	}
+/* ================================= */
+/* Печать списка записей в таблице */
+/* ================================= */
+	
+	function printItems() {
+		$this->sortFields();
+
+		$per_page  = 1000000;
+		$limit = 0;
+		
+		$items = $this->getItems($limit, $per_page);
+		
+		
+		$headers = array();
+		$this->options['form'] = array_merge(array('id' => new textType($this->db, 'id', array('type'=>'text', 'label'=>'ID'))), $this->options['form']);
+
+		foreach($this->options['form'] as $key=>$value) {
+			if(!empty($value->header)) {
+				$headers[] = $key;
+			}
+		}
+		
+		include('print_template.php');
+
+	}
 
 /* ================================	 */
 /* Редактирование/добавление записи	 */
@@ -786,6 +811,12 @@ class AdminModule {
 	
 			if(isset($_REQUEST['export'])) {
 				$this->export($_REQUEST['format'], $_REQUEST['encoding']);
+			} elseif(isset($_REQUEST['print'])) {
+				ob_clean();
+				ob_start();
+				$this->printItems();
+				ob_end_flush();
+				exit;
 			} elseif(isset($_REQUEST['import'])) {
 				$this->navigation->add(_("Import"),"addarticle.php");
 				echo $this->navigation->get();				
