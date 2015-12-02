@@ -25,7 +25,7 @@ table.dataTable tr.totals-row th {
 }
 .additional-buttons-top, .additional-buttons-bottom { display: inline-block; }
 
-.dropdown-menu > li > button {
+.mass-action .dropdown-menu > li > button {
     clear: both;
     color: #333333;
     display: block;
@@ -38,8 +38,37 @@ table.dataTable tr.totals-row th {
     border: none;
     text-align: left;
 }
-.dropdown-menu > li > button:hover {
-	background-color: #f5f5f5;
+
+.mass-action .dropdown-menu > li > button:hover { background-color: #f5f5f5; }
+
+
+.filter .dropdown-toggle {   
+    overflow: hidden;
+    padding-right: 24px /* Optional for caret */;
+    text-align: left;
+    text-overflow: ellipsis;    
+    width: 100%;
+}
+
+/* Optional for caret */
+.filter .dropdown-toggle .caret {
+    position: absolute;
+    right: 12px;
+    top: calc(50% - 2px);
+}
+
+.filter .dropdown-menu li input[type=checkbox] {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.filter .dropdown-menu li label {
+	font-size: 12px;
+	display: block;
+	margin: 0;
+	padding-bottom: 5px;
+}
+.filter .btn .badge {
+	padding: 2px 6px !important;
 }
 
 .select2-drop {
@@ -113,19 +142,28 @@ table.dataTable tr.totals-row th {
 			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
 		
-		$('select.filter.multiple').on('hidden.bs.select show.bs.select', function (e) {
+		$('.filter.multiple').on('hidden.bs.dropdown show.bs.dropdown triggerEvent', function (e) {
 			
 			console.log(e);
 			
 			var filters = getFilters();			
 			var el = $(this);
 			values = [];
-			for(var i=0;i<this.options.length;++i) {
-				if(this.options[i].selected)
-					values.push(this.options[i].value);
+			
+			el.find('input:checked').each(function () {
+				values.push(this.value);
+			})
+			if(values.length>0) {
+				el.find('button .badge').text(values.length);
+				el.find('button .text').text('');
+			} else {
+				el.find('button .badge').text('');
+				el.find('button .text').text('-');
 			}
 			var values_list = values.join('|');
-			if(e.type == 'show') {
+			if(e.type == 'triggerEvent') {
+				return;
+			} else if(e.type == 'show') {
 				el.data('old_values', values_list);	
 			} else {
 				console.log(values);
@@ -136,7 +174,7 @@ table.dataTable tr.totals-row th {
 					$('#filter_form').submit();
 				}
 			}
-		});
+		}).trigger('triggerEvent');
 		$('select.filter').not('[multiple]').change( function () {
 			var filters = getFilters();			
 			var el = $(this);
@@ -250,20 +288,44 @@ table.dataTable tr.totals-row th {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
 				if($this->options['form'][$header]->filterByClick) {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-					if($this->options['form'][$header]->filterByClick === 'search')
-						$filterClass = 'select2';
-					elseif($this->options['form'][$header]->filterByClick === 'multiple')
-						$filterClass = 'selectpicker multiple';
-					else 
-						$filterClass = 'selectpicker';
-					echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}' ".
-						($this->options['form'][$header]->filterByClick === 'multiple'?'multiple':'')." data-title='-'>".
-							"<option value=''>-</option>";
-					foreach($fieldValues as $key => $value) {
+					
+					// фильтрация 
+					if($this->options['form'][$header]->filterByClick === 'multiple') {
 						$name = $this->options['form'][$header]->name;
-						echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
+?>
+				<div class="filter multiple btn-group btn-group-xs" data-field="<?=$name?>">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="text">-</span> <span class="badge"></span> <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+<? 						foreach($fieldValues as $key => $value) { ?>
+						<li>
+							<label for="prio_{$priority}">
+								<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>> 
+								<?=$value?>
+							</label></li>
+<? } /* foreach */ ?>
+
+						<li role="separator" class="divider"></li>
+						<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> фильтровать</button></li>
+					</ul>
+				</div>	
+<?
+
+						
+					} else {
+						if($this->options['form'][$header]->filterByClick === 'search')
+							$filterClass = 'select2';
+						else 
+							$filterClass = 'selectpicker';
+						echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'  data-title='-'>".
+								"<option value=''>-</option>";
+						foreach($fieldValues as $key => $value) {
+							$name = $this->options['form'][$header]->name;
+							echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
+						}
+						echo "</select>";
 					}
-					echo "</select>";
 				}
 				echo "</th>\n";
 			}
@@ -449,6 +511,7 @@ table.dataTable tr.totals-row th {
 		        { data: 'actions-cell' }
 	    ],
 		stateSave: true,
+		stateDuration: 0, // хранить настройки без ограничения по времени
 		pagingType: "full_numbers",
 //		fixedHeader: true,
 		buttons: [

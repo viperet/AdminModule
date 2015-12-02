@@ -461,7 +461,7 @@ class AdminModule {
 		foreach($this->options['form'] as $key=>$value) {
 			if($value->massAction && $value->type == 'checkbox') {
 				$html .= "
-<div class='btn-group'>
+<div class='btn-group mass-action'>
   <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
     {$value->label} <span class='caret'></span>
   </button>
