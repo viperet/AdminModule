@@ -299,7 +299,7 @@ class AdminModule {
 	function getFilterSQL($additionalFields = NULL) {
 		
 		if($this->dateFrom != '' && $this->dateTo != '') {
-			$dateSql = " DATE(`{$this->options['table']}`.`{$this->options['date']}`) >=  '{$this->dateFrom}' AND DATE(`{$this->options['table']}`.`{$this->options['date']}`) <=  '{$this->dateTo}' ";
+			$dateSql = " `{$this->options['table']}`.`{$this->options['date']}` >=  '{$this->dateFrom} 00:00:00' AND `{$this->options['table']}`.`{$this->options['date']}` <=  '{$this->dateTo} 23:59:59' ";
 		} else {
 			$dateSql = "1";
 		}
@@ -362,11 +362,13 @@ class AdminModule {
 /* ====================== */
 	function getItems($from=0, $count=100) {
 		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
+		$sql = "SELECT * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
 			($this->options['sort']?" ORDER By {$this->options['sort']}":"").
 			(isset($from) && isset($count) ? " LIMIT $from,$count" : "");
 		$items = $this->db->getAll($sql);
-		$this->itemsCount = $this->db->foundRows;
+		$sql = "SELECT  COUNT(*) FROM {$this->options['table']} WHERE ".$this->getFilterSQL();
+		
+		$this->itemsCount = $this->db->getOne($sql);
 		return $items;	
 	}
 

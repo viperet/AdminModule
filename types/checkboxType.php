@@ -21,4 +21,8 @@ class checkboxType extends textType {
 		return "`{$this->name}`='". ($this->value=='on'?1:0)."'";
 		
 	}	
+	
+	public function getValues() {
+		return array(0 => _('No'), 1 => _('Yes'));
+	}
 }
