@@ -1,5 +1,27 @@
 <?
 
+/*
+-- SQL:
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tags` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tag` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tag` (`tag`),
+  FULLTEXT KEY `tag_2` (`tag`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=856 ;
+
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tags_content` (
+  `tag_id` int(10) unsigned NOT NULL,
+  `content_id` int(10) unsigned NOT NULL,
+  `content_table` varchar(255) NOT NULL,
+  PRIMARY KEY (`tag_id`,`content_id`,`content_table`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+*/
+
+
+
 class tagsType extends coreType {
 
 	public function toSql() {

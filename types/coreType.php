@@ -25,7 +25,7 @@ abstract class coreType {
 	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
 	public $inline = false; // разрешить редактировать прямо в таблице
-	public $order = 0; // порядок столбцов
+	public $order = 999999; // порядок столбцов
 	
 	public $onLoad = null; // callback for transforming data after loading from db
 	public $onSave = null; // callback for transforming data before saving to db
@@ -152,13 +152,13 @@ abstract class coreType {
 	public function toListItem() {
 		ob_start();
 		if($this->inline)
-			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toListElement()."</a>";
 		elseif($this->options['datatables'])
-			echo $this->toStringTruncated();
+			echo $this->toListElement();
 		elseif($this->filterByClick)		
-			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toListElement()."</a>";
 		else
-			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toListElement()."</a>";
 		return ob_get_clean();
 	}
 	
