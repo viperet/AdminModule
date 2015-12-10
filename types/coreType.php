@@ -164,9 +164,6 @@ abstract class coreType {
 	
 	/* Get values list for filtering */
 	public function getValues() {
-		var_dump($field->name);
-
-
 		$sql = "SELECT *, `{$this->name}` value FROM `{$this->options['table']}` GROUP By `{$this->name}`";
 		$res = $this->db->getAll($sql);
 		$items = array();
