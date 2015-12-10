@@ -389,26 +389,28 @@ $(function() {
 	function search(id, start) {
 		var query = encodeURIComponent($('#imageSearch #q').val());
 		var size = encodeURIComponent($('#'+id+'_size').val());
-		$.getJSON('https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start='+start+'&imgsz=image_size&q='+query+'&callback=?', function (data) {
+		
+		$.getJSON('https://www.googleapis.com/customsearch/v1?q='+query+'&startIndex='+start+'&filetype=png&cx=002678885553542504836:qge42psoiiq&searchType=image&num=10&key=AIzaSyCiGJKDOHAU5W5Tno2ku-dfiDCH4X3SPkA&callback=?', function (data) {
+			console.log(data);
 			var sr = $('#searchResults');
 			sr.empty();
 			var results = $('<div class="searchResults"></div>').appendTo(sr);
 			var pages = $('<div class="searchPages"></div>').appendTo(sr);
-			$.each(data.responseData.results, function () {
+			$.each(data.items, function () {
 				results.append("<div class='searchResult'>"+
-						"<a href='"+this.url+"'>"+
-						"<img src='"+this.tbUrl+"'>"+
-						"<div>"+this.width+"x"+this.height+"</div>"+
+						"<a href='"+this.link+"'>"+
+						"<img src='"+this.image.thumbnailLink+"'>"+
+						"<div>"+this.image.width+"x"+this.image.height+"</div>"+
 						"</a>"+
 					"</div"
 				);
 			})
-			$.each(data.responseData.cursor.pages, function () {
-				pages.append("<div class='searchPage "+(start == this.start?'active':'')+"' onClick='search(\""+id+"\", "+this.start+")'>"+
-						this.label+
+			for(var s=0;s<data.searchInformation.totalResults && s<100;s+=11) {
+				pages.append("<div class='searchPage "+(start == s?'active':'')+"' onClick='search(\""+id+"\", "+s+")'>"+
+						(s/11+1)+
 					"</div"
 				);
-			})
+			}
 		})
 	}
 
