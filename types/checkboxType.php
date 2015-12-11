@@ -9,7 +9,7 @@ class checkboxType extends textType {
 	}
 	public function toHtml() {
 		return "<div class='checkbox'><label class='".(!$this->valid?'error':'')."'>
-		<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." />
+		<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." ".($this->readonly?'disabled':'')."/>
 		{$this->label}
 		</label>".
 		($this->label_hint?"<span id='helpBlock' class='help-block'>{$this->label_hint}</span>":"").
