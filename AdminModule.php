@@ -315,8 +315,13 @@ class AdminModule {
 				foreach($filter as &$filter_value) {
 					$filter_value = "'".mysql_real_escape_string($filter_value)."'";
 				}
+				if(strpos($field, '.') === false) {
+					$field_name = "`{$this->options['table']}`.`{$field}`";
+				} else {
+					$field_name = $field;
+				}
 				
-				$filterSql .= " AND `{$this->options['table']}`.`{$field}` IN (".implode(',', $filter).")";
+				$filterSql .= " AND {$field_name} IN (".implode(',', $filter).")";
 			}
 // 			return $dateSql.$filterSql;
 		} else {

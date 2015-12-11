@@ -42,6 +42,9 @@ abstract class coreType {
 				$this->$field = $value;
 			}
 		}
+		if(strpos($name, '.') !== false) {
+			$this->readonly = true;
+		}
 	}
 	
 	public function toStringTruncated() {
@@ -66,7 +69,13 @@ abstract class coreType {
 			echo "</pre>";
 			die(AdminDatabase::showError($row));
 		}
-		$this->value = $row[$this->name];
+
+		if(($pos = strpos($this->name, '.')) === false) {
+			$this->value = $row[$this->name];
+		} else {
+			$this->value = $row[substr($this->name, $pos+1)];
+		}
+		
 		if(is_callable($this->onLoad)) {
 			$this->value = call_user_func($this->onLoad, $this->value);
 		}
