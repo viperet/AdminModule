@@ -66,6 +66,10 @@ table.dataTable tr.totals-row th {
 	display: block;
 	margin: 0;
 	padding-bottom: 5px;
+	padding-right: 10px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .filter .btn .badge {
 	padding: 2px 6px !important;
