@@ -59,7 +59,9 @@ abstract class coreType {
 	
 	public function fromForm($value) {
 /* 		echo $this->name." - ".$value[$this->name]."<br>"; */
-		$this->value = $value[$this->name];
+		if(isset($value[$this->name])) {
+			$this->value = $value[$this->name];
+		}
 	}
 	
 	public function fromRow($row) {

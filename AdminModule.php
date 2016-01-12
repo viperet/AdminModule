@@ -652,11 +652,11 @@ class AdminModule {
 			for($i=0;!feof($f);$i++) {
 				$line = fgetcsv($f, 1000, (isset($_REQUEST['delimiter'])?$_REQUEST['delimiter']:';'));
 				if($i<(int)$_REQUEST['skip']) {
-					echo "Skip<br>";
+//					echo "Skip<br>";
 					continue; // пропуск
 				}
 				if(empty($line)) {
-					echo "Empty<br>";
+//					echo "Empty<br>";
 					continue; // пропуск
 				}
 				if($_REQUEST['encoding'] == 'windows-1251')
@@ -671,7 +671,7 @@ class AdminModule {
 				}
 				$this->form->load($data, 'form');
 				if(!$this->form->validate($data)) {
-					echo "Validate<br>";
+//					echo "Validate<br>";
 					continue; // пропуск
 				} // если данные не проходят валидацию - не вставляем
 //				$id = $this->insertItem($data);
