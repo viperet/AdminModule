@@ -226,31 +226,42 @@ class AdminModule {
 					array_unshift($this->form->errorMessage, $error);
 				}
 			} else {// все ок
-				if($id>0 && !$clone) { // сохранение
-					$this->logger->beforeAction($id, 'update');
-					$res = $this->updateItem($id, $_POST);
-					$item = $this->getItem($id);
-					$this->logger->afterAction($id, 'update', $item);
-				} else { // создание
-					$this->logger->beforeAction(null, 'insert');
-					$id = $this->insertItem($_POST);
-					$item = $this->getItem($id);
-					$this->logger->afterAction($id, 'insert', $item);
-				}
-
-				$this->updateCache($id, $item);
-				$this->updateFullCache();
 				
-				$postSql = $this->form->postSave($id, $_POST, $item);
-				if($postSql) {
-					$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
-				}
-				if(isset($_POST['editForm_save'])) {
-					header("Location: ".$this->baseUrl);
-					exit;
-				} else {
-					header("Location: ".$this->baseUrl."&edit={$id}");
-					exit;
+				try {
+					if($id>0 && !$clone) { // сохранение
+						$this->logger->beforeAction($id, 'update');
+						$res = $this->updateItem($id, $_POST);
+						$item = $this->getItem($id);
+						$this->logger->afterAction($id, 'update', $item);
+					} else { // создание
+						$this->logger->beforeAction(null, 'insert');
+						$id = $this->insertItem($_POST);
+						$item = $this->getItem($id);
+						$this->logger->afterAction($id, 'insert', $item);
+					}
+
+					$this->updateCache($id, $item);
+					$this->updateFullCache();
+					
+					$postSql = $this->form->postSave($id, $_POST, $item);
+					if($postSql) {
+						$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
+					}
+					if(isset($_POST['editForm_save'])) {
+						header("Location: ".$this->baseUrl);
+						exit;
+					} else {
+						header("Location: ".$this->baseUrl."&edit={$id}");
+						exit;
+					}
+				} catch(AdminDatabaseException $e) {
+					switch($e->getCode()) {
+						case AdminDatabaseException::DUPLICATE_KEY:
+							$error = _("Can't insert duplicate data").' ('.$e->getMessage().')'; break;
+						default: 
+							$error = $e->getMessage();
+					}
+					array_unshift($this->form->errorMessage, $error);						
 				}
 			}
 			$htmlForm = $this->form->build();

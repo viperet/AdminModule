@@ -1,4 +1,14 @@
 <?php
+	
+class AdminDatabaseException extends RuntimeException {
+	const DUPLICATE_KEY = 1062;
+	
+	protected $sql;
+	public function __construct ($message = "", $code = 0, $sql = "") {
+		$this->sql = $sql;
+		return parent::__construct($message, $code);
+	}
+}
 
 class Rowset implements Iterator, Countable {
 	public $resource;	
@@ -158,11 +168,16 @@ class AdminDatabase {
 		
 		$res = mysql_query("/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql, $this->linkId);
 		if(!$res) {
+			$error_no = mysql_errno($this->linkId);
+			$error_msg = mysql_error($this->linkId);
+			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+/*
 			echo "<pre>";
 			debug_print_backtrace();
 			echo "</pre>";
 			echo _("Query:")." {$sql}<br>";
 		    die(_('Invalid query:').' ' . mysql_error());
+*/
 		}
 		
 		
