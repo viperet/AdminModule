@@ -15,7 +15,7 @@ class switchType extends textType {
 		return ($this->value?$this->on_text:$this->off_text);
 	}
 	public function toHtml() {
-		return "<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox bootstrap-switch {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." />
+		return "<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox bootstrap-switch {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." ".($this->readonly?'readonly':'')." />
 		<script>$('#{$this->name}').bootstrapSwitch({onText: '{$this->on_text}', offText: '{$this->off_text}'});</script>";
 	}
 	
