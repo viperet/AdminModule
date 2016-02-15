@@ -1,6 +1,15 @@
 <?
 
 class checkboxType extends textType {
+	
+	public function fromForm($value) {
+		if(isset($value[$this->name])) {
+			$this->value = $value[$this->name];
+		} else {
+			$this->value = '';
+		}
+	}	
+	
 	public function toString() {
 		return ($this->value?_('Yes'):_('No'));
 	}
@@ -9,7 +18,7 @@ class checkboxType extends textType {
 	}
 	public function toHtml() {
 		return "<div class='checkbox'><label class='".(!$this->valid?'error':'')."'>
-		<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." />
+		<input type='checkbox' autocomplete='off' name='{$this->name}' id='{$this->name}' class='form-checkbox {$this->class} ".(!$this->valid?'error':'')."' ".($this->value?'checked':'')." ".($this->readonly?'disabled':'')."/>
 		{$this->label}
 		</label>".
 		($this->label_hint?"<span id='helpBlock' class='help-block'>{$this->label_hint}</span>":"").
@@ -21,4 +30,8 @@ class checkboxType extends textType {
 		return "`{$this->name}`='". ($this->value=='on'?1:0)."'";
 		
 	}	
+	
+	public function getValues() {
+		return array(0 => _('No'), 1 => _('Yes'));
+	}
 }

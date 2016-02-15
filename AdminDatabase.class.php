@@ -252,6 +252,23 @@ class AdminDatabase {
 	function insertIgnore($table, $fields) {
 		return $this->insert("IGNORE ".$table, $fields);
 	} 
+
+	function insertUpdate($table, $fields) {
+		$sql = "INSERT $table SET ";
+		$i = 0;
+		foreach($fields as $key=>$value) {
+			$sql .= "`{$key}` = ".AdminDatabase::escape($value);
+			if(++$i !== count($fields)) $sql .= ', ';
+		}
+		$i = 0;
+		$sql .= ' ON DUPLICATE KEY UPDATE ';
+		foreach($fields as $key=>$value) {
+			$sql .= "`{$key}` = VALUES(`{$key}`)";
+			if(++$i !== count($fields)) $sql .= ', ';
+		}
+		return $this->query($sql); // return inserted id
+	}	
+
 	function update($table, $id, $fields) {
 		$sql = "UPDATE $table SET ";
 		$i = 0;

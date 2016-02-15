@@ -252,31 +252,42 @@ class AdminModule {
 					array_unshift($this->form->errorMessage, $error);
 				}
 			} else {// все ок
-				if($id>0 && !$clone) { // сохранение
-					$this->logger->beforeAction($id, 'update');
-					$res = $this->updateItem($id, $_POST);
-					$item = $this->getItem($id);
-					$this->logger->afterAction($id, 'update', $item);
-				} else { // создание
-					$this->logger->beforeAction(null, 'insert');
-					$id = $this->insertItem($_POST);
-					$item = $this->getItem($id);
-					$this->logger->afterAction($id, 'insert', $item);
-				}
-
-				$this->updateCache($id, $item);
-				$this->updateFullCache();
 				
-				$postSql = $this->form->postSave($id, $_POST, $item);
-				if($postSql) {
-					$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
-				}
-				if(isset($_POST['editForm_save'])) {
-					header("Location: ".$this->baseUrl);
-					exit;
-				} else {
-					header("Location: ".$this->baseUrl."&edit={$id}");
-					exit;
+				try {
+					if($id>0 && !$clone) { // сохранение
+						$this->logger->beforeAction($id, 'update');
+						$res = $this->updateItem($id, $_POST);
+						$item = $this->getItem($id);
+						$this->logger->afterAction($id, 'update', $item);
+					} else { // создание
+						$this->logger->beforeAction(null, 'insert');
+						$id = $this->insertItem($_POST);
+						$item = $this->getItem($id);
+						$this->logger->afterAction($id, 'insert', $item);
+					}
+
+					$this->updateCache($id, $item);
+					$this->updateFullCache();
+					
+					$postSql = $this->form->postSave($id, $_POST, $item);
+					if($postSql) {
+						$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
+					}
+					if(isset($_POST['editForm_save'])) {
+						header("Location: ".$this->baseUrl);
+						exit;
+					} else {
+						header("Location: ".$this->baseUrl."&edit={$id}");
+						exit;
+					}
+				} catch(AdminDatabaseException $e) {
+					switch($e->getCode()) {
+						case AdminDatabaseException::DUPLICATE_KEY:
+							$error = _("Can't insert duplicate data").' ('.$e->getMessage().')'; break;
+						default: 
+							$error = $e->getMessage();
+					}
+					array_unshift($this->form->errorMessage, $error);						
 				}
 			}
 			$htmlForm = $this->form->build();
@@ -325,7 +336,7 @@ class AdminModule {
 	function getFilterSQL($additionalFields = NULL) {
 		
 		if($this->dateFrom != '' && $this->dateTo != '') {
-			$dateSql = " DATE(`{$this->options['table']}`.`{$this->options['date']}`) >=  '{$this->dateFrom}' AND DATE(`{$this->options['table']}`.`{$this->options['date']}`) <=  '{$this->dateTo}' ";
+			$dateSql = " `{$this->options['table']}`.`{$this->options['date']}` >=  '{$this->dateFrom} 00:00:00' AND `{$this->options['table']}`.`{$this->options['date']}` <=  '{$this->dateTo} 23:59:59' ";
 		} else {
 			$dateSql = "1";
 		}
@@ -341,8 +352,13 @@ class AdminModule {
 				foreach($filter as &$filter_value) {
 					$filter_value = "'".mysql_real_escape_string($filter_value)."'";
 				}
+				if(strpos($field, '.') === false) {
+					$field_name = "`{$this->options['table']}`.`{$field}`";
+				} else {
+					$field_name = $field;
+				}
 				
-				$filterSql .= " AND `{$this->options['table']}`.`{$field}` IN (".implode(',', $filter).")";
+				$filterSql .= " AND {$field_name} IN (".implode(',', $filter).")";
 			}
 // 			return $dateSql.$filterSql;
 		} else {
@@ -388,11 +404,13 @@ class AdminModule {
 /* ====================== */
 	function getItems($from=0, $count=100) {
 		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
+		$sql = "SELECT * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
 			($this->options['sort']?" ORDER By {$this->options['sort']}":"").
 			(isset($from) && isset($count) ? " LIMIT $from,$count" : "");
 		$items = $this->db->getAll($sql);
-		$this->itemsCount = $this->db->foundRows;
+		$sql = "SELECT  COUNT(*) FROM {$this->options['table']} WHERE ".$this->getFilterSQL();
+		
+		$this->itemsCount = $this->db->getOne($sql);
 		return $items;	
 	}
 
@@ -678,11 +696,11 @@ class AdminModule {
 			for($i=0;!feof($f);$i++) {
 				$line = fgetcsv($f, 1000, (isset($_REQUEST['delimiter'])?$_REQUEST['delimiter']:';'));
 				if($i<(int)$_REQUEST['skip']) {
-					echo "Skip<br>";
+//					echo "Skip<br>";
 					continue; // пропуск
 				}
 				if(empty($line)) {
-					echo "Empty<br>";
+//					echo "Empty<br>";
 					continue; // пропуск
 				}
 				if($_REQUEST['encoding'] == 'windows-1251')
@@ -697,7 +715,7 @@ class AdminModule {
 				}
 				$this->form->load($data, 'form');
 				if(!$this->form->validate($data)) {
-					echo "Validate<br>";
+//					echo "Validate<br>";
 					continue; // пропуск
 				} // если данные не проходят валидацию - не вставляем
 //				$id = $this->insertItem($data);

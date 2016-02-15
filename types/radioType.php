@@ -21,5 +21,12 @@ class radioType extends textType {
 			$html .= "<label class='radio-inline'><input type='radio' name='{$this->name}' class='form_radio {$this->class} ".(!$this->valid?'error':'')."' id='{$this->name}_{$value}' value='{$value}' ".($this->value==$value?"checked='1'":'')."> ".htmlspecialchars($label)."</label>";
 		return $html;
 	}
-	
+	/* Get values list for filtering */
+	public function getValues() {
+		if(count($this->values)>0) {
+			return $this->values;
+		} else {
+			return parent::getValues();
+		}
+	}	
 }

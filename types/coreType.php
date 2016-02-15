@@ -44,6 +44,9 @@ abstract class coreType {
 				$this->$field = $value;
 			}
 		}
+		if(strpos($name, '.') !== false) {
+			$this->readonly = true;
+		}
 	}
 	
 	public function toStringTruncated() {
@@ -58,7 +61,9 @@ abstract class coreType {
 	
 	public function fromForm($value) {
 /* 		echo $this->name." - ".$value[$this->name]."<br>"; */
-		$this->value = $value[$this->name];
+		if(isset($value[$this->name])) {
+			$this->value = $value[$this->name];
+		}
 	}
 	
 	public function fromRow($row) {
@@ -68,7 +73,13 @@ abstract class coreType {
 			echo "</pre>";
 			die(AdminDatabase::showError($row));
 		}
-		$this->value = $row[$this->name];
+
+		if(($pos = strpos($this->name, '.')) === false) {
+			$this->value = $row[$this->name];
+		} else {
+			$this->value = $row[substr($this->name, $pos+1)];
+		}
+		
 		if(is_callable($this->onLoad)) {
 			$this->value = call_user_func($this->onLoad, $this->value);
 		}
@@ -154,13 +165,13 @@ abstract class coreType {
 	public function toListItem() {
 		ob_start();
 		if($this->inline)
-			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toListElement()."</a>";
 		elseif($this->options['datatables'])
-			echo $this->toStringTruncated();
+			echo $this->toListElement();
 		elseif($this->filterByClick)		
-			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toListElement()."</a>";
 		else
-			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toStringTruncated()."</a>";
+			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toListElement()."</a>";
 		return ob_get_clean();
 	}
 	
