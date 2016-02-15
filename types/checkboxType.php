@@ -1,6 +1,15 @@
 <?
 
 class checkboxType extends textType {
+	
+	public function fromForm($value) {
+		if(isset($value[$this->name])) {
+			$this->value = $value[$this->name];
+		} else {
+			$this->value = '';
+		}
+	}	
+	
 	public function toString() {
 		return ($this->value?_('Yes'):_('No'));
 	}
