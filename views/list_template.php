@@ -394,8 +394,11 @@ table.dataTable tr.totals-row th {
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
 	<?		
+			$totals = $this->getTotals();
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+				if(isset($totals[$this->options['form'][$header]->name])) 
+					echo  $totals[$this->options['form'][$header]->name];
 				echo "</th>\n";
 			}
 	?>

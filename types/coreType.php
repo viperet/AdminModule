@@ -27,6 +27,7 @@ abstract class coreType {
 	public $inline = false; // разрешить редактировать прямо в таблице
 	public $order = 0; // порядок столбцов
 	public $print = true; // выводить поле на печатной версии
+	public $series = false; // выводить в график
 	
 	public $onLoad = null; // callback for transforming data after loading from db
 	public $onSave = null; // callback for transforming data before saving to db

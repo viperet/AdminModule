@@ -15,6 +15,7 @@ spl_autoload_register('AdminModuleAutoloader');
 require_once("Translate.class.php");			
 require_once("Form.class.php");			
 require_once("AdminDatabase.class.php");			
+require_once("AdminChart.class.php");			
 require_once("Navigation.class.php");			
 require_once("Pagination.class.php");			
 //require_once(PATH_ROOT ."classes/pageSplit.class.php");
@@ -190,7 +191,7 @@ class AdminModule {
 			}
 		}
 		
-		include('list_template.php');
+		include('views/list_template.php');
 
 	}
 /* ================================= */
@@ -215,7 +216,7 @@ class AdminModule {
 			}
 		}
 		
-		include('print_template.php');
+		include('views/print_template.php');
 
 	}
 
@@ -402,6 +403,13 @@ class AdminModule {
 		
 		$row = $this->db->getRow("SELECT * FROM `".$this->options['table']."` WHERE id=?", array($id));
 		return $row;
+	}
+
+/* ====================== */
+/* Получение итоговых данных */
+/* ====================== */
+	function getTotals() {
+		return false;		
 	}
 
 /* =============== */
@@ -719,7 +727,7 @@ class AdminModule {
 			}
 		}
 		
-		include "import_template.php";
+		include "views/import_template.php";
 	}	
 
 /* =============== */

@@ -29,29 +29,29 @@ msgid "Invalid query:"
 msgstr ""
 
 #: AdminModule.php:374 AdminModule.php:377 AdminModule.php:393
-#: AdminModule.php:420 AdminModule.php:467
+#: AdminModule.php:420 AdminModule.php:467 AdminModule.php:502
 msgid "On"
 msgstr ""
 
 #: AdminModule.php:375 AdminModule.php:378 AdminModule.php:394
-#: AdminModule.php:421 AdminModule.php:468
+#: AdminModule.php:421 AdminModule.php:468 AdminModule.php:503
 msgid "Off"
 msgstr ""
 
 #: AdminModule.php:385 AdminModule.php:388 AdminModule.php:404
-#: AdminModule.php:431 AdminModule.php:478
+#: AdminModule.php:431 AdminModule.php:478 AdminModule.php:523
 msgid "Save"
 msgstr ""
 
 #: AdminModule.php:452 AdminModule.php:456 AdminModule.php:459
 #: AdminModule.php:570 AdminModule.php:732 AdminModule.php:789
-#: AdminModule.php:790
+#: AdminModule.php:790 AdminModule.php:836
 msgid "Add record"
 msgstr ""
 
 #: AdminModule.php:454 AdminModule.php:458 AdminModule.php:461
 #: AdminModule.php:572 AdminModule.php:734 AdminModule.php:791
-#: AdminModule.php:792
+#: AdminModule.php:792 AdminModule.php:838
 msgid "Edit record"
 msgstr ""
 
@@ -70,6 +70,7 @@ msgid "Previous page"
 msgstr ""
 
 #: Pagination.class.php:61 Pagination.class.php:64 list_template.php:371
+#: views/list_template.php:538
 msgid "Previous"
 msgstr ""
 
@@ -79,6 +80,7 @@ msgid "Next page"
 msgstr ""
 
 #: Pagination.class.php:74 Pagination.class.php:78 list_template.php:372
+#: views/list_template.php:539
 msgid "Next"
 msgstr ""
 
@@ -89,13 +91,15 @@ msgstr ""
 
 #: list_template.php:37 list_template.php:71 list_template.php:73
 #: list_template.php:79 list_template.php:107 list_template.php:127
+#: views/list_template.php:219
 msgid "filter"
 msgstr ""
 
 #: list_template.php:43 list_template.php:80 list_template.php:183
 #: list_template.php:82 list_template.php:185 list_template.php:88
 #: list_template.php:208 list_template.php:116 list_template.php:238
-#: list_template.php:136 list_template.php:264
+#: list_template.php:136 list_template.php:264 views/list_template.php:228
+#: views/list_template.php:410 views/print_template.php:67
 msgid "remove filter"
 msgstr ""
 
@@ -103,7 +107,8 @@ msgstr ""
 #: list_template.php:89 list_template.php:192 list_template.php:91
 #: list_template.php:194 list_template.php:97 list_template.php:222
 #: list_template.php:125 list_template.php:252 list_template.php:146
-#: list_template.php:278
+#: list_template.php:278 views/list_template.php:238
+#: views/list_template.php:424
 msgid "Add"
 msgstr ""
 
@@ -111,6 +116,7 @@ msgstr ""
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
 #: list_template.php:253 list_template.php:147 list_template.php:279
+#: views/list_template.php:239 views/list_template.php:425
 msgid "Delete selected records?"
 msgstr ""
 
@@ -118,27 +124,29 @@ msgstr ""
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
 #: list_template.php:253 list_template.php:147 list_template.php:279
+#: views/list_template.php:239 views/list_template.php:425
 msgid "Delete selected"
 msgstr ""
 
 #: list_template.php:69 list_template.php:117 list_template.php:119
 #: list_template.php:140 list_template.php:168 list_template.php:190
+#: views/list_template.php:284
 msgid "Actions"
 msgstr ""
 
 #: list_template.php:121 list_template.php:169 list_template.php:171
-#: AdminModule.php:399 AdminModule.php:446
+#: AdminModule.php:399 AdminModule.php:446 AdminModule.php:475
 msgid "Edit"
 msgstr ""
 
 #: list_template.php:122 list_template.php:170 list_template.php:172
-#: AdminModule.php:400 AdminModule.php:447
+#: AdminModule.php:400 AdminModule.php:447 AdminModule.php:476
 msgid "Clone"
 msgstr ""
 
 #: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
 #: list_template.php:171 list_template.php:173 AdminModule.php:401
-#: AdminModule.php:448
+#: AdminModule.php:448 AdminModule.php:477
 msgid "Delete"
 msgstr ""
 
@@ -163,55 +171,67 @@ msgid "You can edit coordinates by dragging point on the map"
 msgstr ""
 
 #: types/coreType.php:67 types/coreType.php:70 types/coreType.php:81
+#: types/coreType.php:85
 #, php-format
 msgid "Please fill required field '%s'"
 msgstr ""
 
 #: types/coreType.php:68 types/fileType.php:97 types/tagsType.php:86
 #: types/fileType.php:147 types/coreType.php:71 types/coreType.php:82
+#: types/coreType.php:86
 msgid "Required field"
 msgstr ""
 
 #: types/coreType.php:75 types/coreType.php:78 types/coreType.php:89
+#: types/coreType.php:93
 msgid "Time format - HH:MM"
 msgstr ""
 
 #: types/coreType.php:76 types/coreType.php:79 types/coreType.php:90
+#: types/coreType.php:94
 #, php-format
 msgid "Wrong time format in '%s'"
 msgstr ""
 
 #: types/coreType.php:81 types/coreType.php:84 types/coreType.php:95
+#: types/coreType.php:99
 msgid "Date/time format - DD.MM.YYYY HH:MM"
 msgstr ""
 
 #: types/coreType.php:82 types/coreType.php:85 types/coreType.php:96
+#: types/coreType.php:100
 #, php-format
 msgid "Wrong date/time format in '%s'"
 msgstr ""
 
 #: types/coreType.php:86 types/coreType.php:89 types/coreType.php:100
+#: types/coreType.php:104
 msgid "Please enter correct email address"
 msgstr ""
 
 #: types/coreType.php:90 types/coreType.php:93 types/coreType.php:104
+#: types/coreType.php:108
 msgid "Please enter correct URL (http://...)"
 msgstr ""
 
 #: types/coreType.php:94 types/coreType.php:97 types/coreType.php:108
+#: types/coreType.php:112
 msgid "Please enter integer number"
 msgstr ""
 
 #: types/coreType.php:98 types/coreType.php:101 types/coreType.php:112
+#: types/coreType.php:116
 msgid "Please enter positive number"
 msgstr ""
 
 #: types/coreType.php:102 types/coreType.php:105 types/coreType.php:116
+#: types/coreType.php:120
 #, php-format
 msgid "Please enter number in '%s'"
 msgstr ""
 
 #: types/coreType.php:103 types/coreType.php:106 types/coreType.php:117
+#: types/coreType.php:121
 msgid "Please enter number"
 msgstr ""
 
@@ -239,6 +259,7 @@ msgstr ""
 
 #: types/detailsType.php:121 list_template.php:123 list_template.php:171
 #: list_template.php:173 AdminModule.php:401 AdminModule.php:448
+#: AdminModule.php:477
 msgid "Delete?"
 msgstr ""
 
@@ -253,6 +274,7 @@ msgid "Delete file"
 msgstr ""
 
 #: types/fileType.php:55 types/fileType.php:96 import_template.php:8
+#: views/import_template.php:8
 msgid "Upload file"
 msgstr ""
 
@@ -358,55 +380,66 @@ msgid "or upload image from URL"
 msgstr ""
 
 #: types/imageType.php:107 types/imageType.php:140 types/imageType.php:144
+#: types/imageType.php:147
 msgid "Unknown file format in %1, signature %2"
 msgstr ""
 
 #: types/imageType.php:211 types/imageType.php:234 types/imageType.php:247
 #: types/imageType.php:270 types/imageType.php:251 types/imageType.php:274
+#: types/imageType.php:254 types/imageType.php:277
 msgid "Close"
 msgstr ""
 
 #: types/imageType.php:212 types/imageType.php:248 types/imageType.php:252
+#: types/imageType.php:255
 msgid "Image search"
 msgstr ""
 
 #: types/imageType.php:217 types/imageType.php:253 types/imageType.php:257
+#: types/imageType.php:260
 msgid "Search"
 msgstr ""
 
 #: types/imageType.php:235 types/imageType.php:271 types/imageType.php:275
+#: types/imageType.php:278
 msgid "Image cropping"
 msgstr ""
 
 #: types/imageType.php:243 types/imageType.php:279 types/imageType.php:283
+#: types/imageType.php:286
 msgid "Apply"
 msgstr ""
 
 #: list_template.php:144 list_template.php:95 list_template.php:198
 #: list_template.php:97 list_template.php:200 list_template.php:103
 #: list_template.php:228 list_template.php:131 list_template.php:258
-#: list_template.php:152 list_template.php:284
+#: list_template.php:152 list_template.php:284 views/list_template.php:244
+#: views/list_template.php:430
 msgid "Export"
 msgstr ""
 
 #: list_template.php:185 list_template.php:187 list_template.php:210
-#: list_template.php:240 list_template.php:266
+#: list_template.php:240 list_template.php:266 views/list_template.php:412
+#: views/print_template.php:69
 msgid "add records"
 msgstr ""
 
 #: list_template.php:185 list_template.php:208 list_template.php:238
-#: list_template.php:264
+#: list_template.php:264 views/list_template.php:410
+#: views/print_template.php:67
 msgid "Records not found"
 msgstr ""
 
 #: list_template.php:187 list_template.php:210 list_template.php:240
-#: list_template.php:266
+#: list_template.php:266 views/list_template.php:412
+#: views/print_template.php:69
 msgid "No records yet,"
 msgstr ""
 
 #: AdminModule.php:725 list_template.php:114 list_template.php:239
 #: AdminModule.php:782 list_template.php:142 list_template.php:269
 #: AdminModule.php:783 list_template.php:163 list_template.php:295
+#: AdminModule.php:829 views/list_template.php:257 views/list_template.php:441
 msgid "Import"
 msgstr ""
 
@@ -430,10 +463,22 @@ msgstr ""
 msgid "Unknown operation in '%s'"
 msgstr ""
 
-#: AdminModule.php:479
+#: AdminModule.php:479 AdminModule.php:524
 msgid "Save and stay"
 msgstr ""
 
-#: list_template.php:358
+#: list_template.php:358 views/list_template.php:525
 msgid "Columns"
+msgstr ""
+
+#: views/chart_template.php:77
+msgid "Filters"
+msgstr ""
+
+#: views/chart_template.php:86
+msgid "Date"
+msgstr ""
+
+#: views/chart_template.php:96
+msgid "Show"
 msgstr ""

@@ -26,6 +26,7 @@ msgid "Invalid query:"
 msgstr "Невірний запит"
 
 #: Pagination.class.php:74 Pagination.class.php:78 list_template.php:372
+#: views/list_template.php:539
 msgid "Next"
 msgstr "Наступна"
 
@@ -35,6 +36,7 @@ msgid "Next page"
 msgstr "Наступна сторінка"
 
 #: Pagination.class.php:61 Pagination.class.php:64 list_template.php:371
+#: views/list_template.php:538
 msgid "Previous"
 msgstr "Попередня"
 
@@ -69,42 +71,47 @@ msgstr "В кінець"
 
 #: AdminModule.php:334 AdminModule.php:352 AdminModule.php:374
 #: AdminModule.php:377 AdminModule.php:393 AdminModule.php:420
-#: AdminModule.php:467
+#: AdminModule.php:467 AdminModule.php:502
 msgid "On"
 msgstr "Вкл"
 
 #: AdminModule.php:335 AdminModule.php:353 AdminModule.php:375
 #: AdminModule.php:378 AdminModule.php:394 AdminModule.php:421
-#: AdminModule.php:468
+#: AdminModule.php:468 AdminModule.php:503
 msgid "Off"
 msgstr "Викл"
 
 #: AdminModule.php:406 AdminModule.php:424 AdminModule.php:452
 #: AdminModule.php:456 AdminModule.php:459 AdminModule.php:570
 #: AdminModule.php:732 AdminModule.php:789 AdminModule.php:790
+#: AdminModule.php:836
 msgid "Add record"
 msgstr "Створення"
 
 #: AdminModule.php:408 AdminModule.php:426 AdminModule.php:454
 #: AdminModule.php:458 AdminModule.php:461 AdminModule.php:572
 #: AdminModule.php:734 AdminModule.php:791 AdminModule.php:792
+#: AdminModule.php:838
 msgid "Edit record"
 msgstr "Редагування"
 
 #: form_template.php:38 AdminModule.php:385 AdminModule.php:388
 #: AdminModule.php:404 AdminModule.php:431 AdminModule.php:478
+#: AdminModule.php:523
 msgid "Save"
 msgstr "Зберегти"
 
 #: list_template.php:37 list_template.php:71 list_template.php:73
 #: list_template.php:79 list_template.php:107 list_template.php:127
+#: views/list_template.php:219
 msgid "filter"
 msgstr "фільтр"
 
 #: list_template.php:43 list_template.php:80 list_template.php:183
 #: list_template.php:82 list_template.php:185 list_template.php:88
 #: list_template.php:208 list_template.php:116 list_template.php:238
-#: list_template.php:136 list_template.php:264
+#: list_template.php:136 list_template.php:264 views/list_template.php:228
+#: views/list_template.php:410 views/print_template.php:67
 msgid "remove filter"
 msgstr "відключити фільтр"
 
@@ -112,7 +119,8 @@ msgstr "відключити фільтр"
 #: list_template.php:89 list_template.php:192 list_template.php:91
 #: list_template.php:194 list_template.php:97 list_template.php:222
 #: list_template.php:125 list_template.php:252 list_template.php:146
-#: list_template.php:278
+#: list_template.php:278 views/list_template.php:238
+#: views/list_template.php:424
 msgid "Add"
 msgstr "Додати"
 
@@ -120,6 +128,7 @@ msgstr "Додати"
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
 #: list_template.php:253 list_template.php:147 list_template.php:279
+#: views/list_template.php:239 views/list_template.php:425
 msgid "Delete selected records?"
 msgstr "Видалити вибрані записи?"
 
@@ -127,27 +136,29 @@ msgstr "Видалити вибрані записи?"
 #: list_template.php:193 list_template.php:92 list_template.php:195
 #: list_template.php:98 list_template.php:223 list_template.php:126
 #: list_template.php:253 list_template.php:147 list_template.php:279
+#: views/list_template.php:239 views/list_template.php:425
 msgid "Delete selected"
 msgstr "Видалити вибране"
 
 #: list_template.php:69 list_template.php:117 list_template.php:119
 #: list_template.php:140 list_template.php:168 list_template.php:190
+#: views/list_template.php:284
 msgid "Actions"
 msgstr "Дії"
 
 #: list_template.php:121 list_template.php:169 list_template.php:171
-#: AdminModule.php:399 AdminModule.php:446
+#: AdminModule.php:399 AdminModule.php:446 AdminModule.php:475
 msgid "Edit"
 msgstr "Редагувати"
 
 #: list_template.php:122 list_template.php:170 list_template.php:172
-#: AdminModule.php:400 AdminModule.php:447
+#: AdminModule.php:400 AdminModule.php:447 AdminModule.php:476
 msgid "Clone"
 msgstr "Клонувати"
 
 #: list_template.php:123 types/detailsType.php:116 types/detailsType.php:121
 #: list_template.php:171 list_template.php:173 AdminModule.php:401
-#: AdminModule.php:448
+#: AdminModule.php:448 AdminModule.php:477
 msgid "Delete"
 msgstr "Видалити"
 
@@ -159,6 +170,7 @@ msgstr "Заповніть обов'язкове поле '%s'"
 #: types/coreType.php:65 types/fileType.php:91 types/tagsType.php:78
 #: types/fileType.php:97 types/tagsType.php:86 types/coreType.php:68
 #: types/fileType.php:147 types/coreType.php:71 types/coreType.php:82
+#: types/coreType.php:86
 msgid "Required field"
 msgstr "Обов'язкове поле"
 
@@ -174,7 +186,7 @@ msgid "Delete file"
 msgstr "Видалити файл"
 
 #: types/fileType.php:50 types/fileType.php:55 types/fileType.php:96
-#: import_template.php:8
+#: import_template.php:8 views/import_template.php:8
 msgid "Upload file"
 msgstr "Завантажити файл"
 
@@ -235,50 +247,61 @@ msgid "You can edit coordinates by dragging point on the map"
 msgstr "Ви можете редагувати координати, перетягнувши точку на карті"
 
 #: types/coreType.php:67 types/coreType.php:70 types/coreType.php:81
+#: types/coreType.php:85
 #, php-format
 msgid "Please fill required field '%s'"
 msgstr "Будь ласка, заповніть обов'язкове поле '%s'"
 
 #: types/coreType.php:75 types/coreType.php:78 types/coreType.php:89
+#: types/coreType.php:93
 msgid "Time format - HH:MM"
 msgstr "Формат часу - ЧЧ:ХХ"
 
 #: types/coreType.php:76 types/coreType.php:79 types/coreType.php:90
+#: types/coreType.php:94
 #, php-format
 msgid "Wrong time format in '%s'"
 msgstr "Неправильний формат часу в '%s'"
 
 #: types/coreType.php:81 types/coreType.php:84 types/coreType.php:95
+#: types/coreType.php:99
 msgid "Date/time format - DD.MM.YYYY HH:MM"
 msgstr "Формат дати/часу - ДД.ММ.РРРР ЧЧ:ХХ"
 
 #: types/coreType.php:82 types/coreType.php:85 types/coreType.php:96
+#: types/coreType.php:100
 #, php-format
 msgid "Wrong date/time format in '%s'"
 msgstr "Неправильний формат дати/часу в '%s'"
 
 #: types/coreType.php:86 types/coreType.php:89 types/coreType.php:100
+#: types/coreType.php:104
 msgid "Please enter correct email address"
 msgstr "Введіть корректний адрес email"
 
 #: types/coreType.php:90 types/coreType.php:93 types/coreType.php:104
+#: types/coreType.php:108
 msgid "Please enter correct URL (http://...)"
 msgstr "Введіть корректний URL (http://...)"
 
 #: types/coreType.php:94 types/coreType.php:97 types/coreType.php:108
+#: types/coreType.php:112
 msgid "Please enter integer number"
 msgstr "Введіть ціле число"
 
 #: types/coreType.php:98 types/coreType.php:101 types/coreType.php:112
+#: types/coreType.php:116
 msgid "Please enter positive number"
 msgstr "Введіть позитивне число"
 
 #: types/coreType.php:102 types/coreType.php:105 types/coreType.php:116
+#: types/coreType.php:120
 #, php-format
 msgid "Please enter number in '%s'"
 msgstr "Введіть число в '%s'"
 
 #: types/coreType.php:103 types/coreType.php:106 types/coreType.php:117
+#: types/coreType.php:121
 msgid "Please enter number"
 msgstr "Введіть число"
 
@@ -306,6 +329,7 @@ msgstr "Копіювати"
 
 #: types/detailsType.php:121 list_template.php:123 list_template.php:171
 #: list_template.php:173 AdminModule.php:401 AdminModule.php:448
+#: AdminModule.php:477
 msgid "Delete?"
 msgstr "Видалити?"
 
@@ -374,55 +398,66 @@ msgid "or upload image from URL"
 msgstr "або завантажити з URL"
 
 #: types/imageType.php:107 types/imageType.php:140 types/imageType.php:144
+#: types/imageType.php:147
 msgid "Unknown file format in %1, signature %2"
 msgstr "Невідомий формат файла в %1, сигнатура %2"
 
 #: types/imageType.php:211 types/imageType.php:234 types/imageType.php:247
 #: types/imageType.php:270 types/imageType.php:251 types/imageType.php:274
+#: types/imageType.php:254 types/imageType.php:277
 msgid "Close"
 msgstr "Закрити"
 
 #: types/imageType.php:212 types/imageType.php:248 types/imageType.php:252
+#: types/imageType.php:255
 msgid "Image search"
 msgstr "Пошук зображень"
 
 #: types/imageType.php:217 types/imageType.php:253 types/imageType.php:257
+#: types/imageType.php:260
 msgid "Search"
 msgstr "Пошук"
 
 #: types/imageType.php:235 types/imageType.php:271 types/imageType.php:275
+#: types/imageType.php:278
 msgid "Image cropping"
 msgstr "Обрізання зображення"
 
 #: types/imageType.php:243 types/imageType.php:279 types/imageType.php:283
+#: types/imageType.php:286
 msgid "Apply"
 msgstr "Обрізати"
 
 #: list_template.php:144 list_template.php:95 list_template.php:198
 #: list_template.php:97 list_template.php:200 list_template.php:103
 #: list_template.php:228 list_template.php:131 list_template.php:258
-#: list_template.php:152 list_template.php:284
+#: list_template.php:152 list_template.php:284 views/list_template.php:244
+#: views/list_template.php:430
 msgid "Export"
 msgstr "Експорт"
 
 #: list_template.php:185 list_template.php:187 list_template.php:210
-#: list_template.php:240 list_template.php:266
+#: list_template.php:240 list_template.php:266 views/list_template.php:412
+#: views/print_template.php:69
 msgid "add records"
 msgstr "додати запис"
 
 #: list_template.php:185 list_template.php:208 list_template.php:238
-#: list_template.php:264
+#: list_template.php:264 views/list_template.php:410
+#: views/print_template.php:67
 msgid "Records not found"
 msgstr "Немає записів"
 
 #: list_template.php:187 list_template.php:210 list_template.php:240
-#: list_template.php:266
+#: list_template.php:266 views/list_template.php:412
+#: views/print_template.php:69
 msgid "No records yet,"
 msgstr "Записів ще немає,"
 
 #: AdminModule.php:725 list_template.php:114 list_template.php:239
 #: AdminModule.php:782 list_template.php:142 list_template.php:269
 #: AdminModule.php:783 list_template.php:163 list_template.php:295
+#: AdminModule.php:829 views/list_template.php:257 views/list_template.php:441
 msgid "Import"
 msgstr "Імпорт"
 
@@ -446,10 +481,22 @@ msgstr "Видалення даних в '%s'"
 msgid "Unknown operation in '%s'"
 msgstr "Невідома операція в '%s'"
 
-#: AdminModule.php:479
+#: AdminModule.php:479 AdminModule.php:524
 msgid "Save and stay"
 msgstr "Зберегти та залишитись"
 
-#: list_template.php:358
+#: list_template.php:358 views/list_template.php:525
 msgid "Columns"
 msgstr "Стовбчики"
+
+#: views/chart_template.php:77
+msgid "Filters"
+msgstr ""
+
+#: views/chart_template.php:86
+msgid "Date"
+msgstr ""
+
+#: views/chart_template.php:96
+msgid "Show"
+msgstr ""
