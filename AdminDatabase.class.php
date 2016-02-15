@@ -260,6 +260,7 @@ class AdminDatabase {
 			$sql .= "`{$key}` = ".AdminDatabase::escape($value);
 			if(++$i !== count($fields)) $sql .= ', ';
 		}
+		$i = 0;
 		$sql .= ' ON DUPLICATE KEY UPDATE ';
 		foreach($fields as $key=>$value) {
 			$sql .= "`{$key}` = VALUES(`{$key}`)";
