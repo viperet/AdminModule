@@ -23,7 +23,7 @@ class numericType extends textType {
 		if($this->value === "" || $this->value === NULL)
 			return "`{$this->name}`=NULL";
 		else
-			return "`{$this->name}`='". mysql_real_escape_string($this->value)."'";
+			return "`{$this->name}`=".$this->db->escaoe($this->value);
 		
 	}	
 }

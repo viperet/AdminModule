@@ -14,7 +14,7 @@ class textType extends coreType {
 	
 	public function toSql() {
 		if($this->readonly) return "";
-		return "`{$this->name}`='". mysql_real_escape_string($this->value)."'";
+		return "`{$this->name}`=".$this->db->escape($this->value);
 		
 	}
 	public function getValues() {

@@ -148,7 +148,7 @@ class detailsType extends coreType {
 		
 	}
 
-	public function postSave($id, $params) { 
+	public function postSave($id, $params, $item) { 
 		$res = $this->db->query($s="DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
 		foreach($this->data as $row) {
 			$sql = "INSERT {$this->details_table} SET `{$this->details_field}` = '{$id}', ";

@@ -90,7 +90,7 @@ ymaps.ready(function () {
 	
 	public function toSql() {
 		if($this->readonly) return "";
-		return "`lat`='". mysql_real_escape_string($this->lat)."',  `lon`='". mysql_real_escape_string($this->lon)."' ";
+		return "`lat`=". $this->db->escape($this->lat).",  `lon`=".$this->db->escape($this->lon)." ";
 		
 	}
 	

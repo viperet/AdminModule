@@ -38,7 +38,7 @@ class select2Type extends textType {
 		
 		$result = array();
 		$sql = "SELECT {$this->lookup_id} _key, ".$this->lookup_display." value FROM ".$this->lookup_table." WHERE {$this->lookup_where} ".
-			(!empty($value) ? " AND {$this->lookup_field} LIKE '%".mysql_real_escape_string($value)."%' " : "").
+			(!empty($value) ? " AND {$this->lookup_field} LIKE '%".$this->db->escape($value, false)."%' " : "").
 			" ORDER BY ".$this->lookup_sort.
 			(!empty($limit) ? " LIMIT $limit" : "");
 //		echo $sql;
