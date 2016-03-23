@@ -104,6 +104,17 @@ class AdminDatabase {
         return false;
     }
 
+    private function refValues($arr){
+        if (strnatcmp(phpversion(),'5.3') >= 0) //Reference is required for PHP 5.3+
+        {
+            $refs = array();
+            foreach($arr as $key => $value)
+                $refs[$key] = &$arr[$key];
+            return $refs;
+        }
+        return $arr;
+    }
+
     function query($sql, $args = NULL) {
 
         if($this->linkId === false) return false;
@@ -142,14 +153,17 @@ class AdminDatabase {
 
         if(is_array($args)) {
             if($stmt = mysqli_prepare($this->linkId, "/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql)) {
+                $types = "";
                 foreach($args as $arg) {
                     if(is_float($arg))
-                        mysqli_stmt_bind_param($stmt, "d", $arg);
+                        $types .= 'd';
                     elseif(is_integer($arg))
-                        mysqli_stmt_bind_param($stmt, "i", $arg);
+                        $types .= 'i';
                     elseif(is_string($arg))
-                        mysqli_stmt_bind_param($stmt, "s", $arg);
+                        $types .= 's';
                 }
+                call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $types), $this->refValues($args)));
+//                mysqli_stmt_bind_param($stmt, "d", $arg);
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
             } else {
