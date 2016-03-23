@@ -169,6 +169,8 @@ class AdminDatabase {
             }
         }
 
+        $this->insertId = mysqli_insert_id($this->linkId);
+        $this->affectedRows = mysqli_affected_rows($this->linkId);
         if(is_object($res)) { // SELECT, SHOW, DESCRIBE, EXPLAIN
             if(strpos($sql, 'SQL_CALC_FOUND_ROWS') > 0) {
                 $this->foundRows = $this->getOne("SELECT FOUND_ROWS()");
@@ -249,7 +251,9 @@ class AdminDatabase {
             $sql .= "`{$key}` = ".AdminDatabase::escape($value);
             if(++$i !== count($fields)) $sql .= ', ';
         }
-        return $this->query($sql); // return inserted id
+        $this->query($sql);
+        // return inserted id
+        return $this->insertId;
     }
     function insertIgnore($table, $fields) {
         return $this->insert("IGNORE ".$table, $fields);
@@ -268,7 +272,9 @@ class AdminDatabase {
             $sql .= "`{$key}` = VALUES(`{$key}`)";
             if(++$i !== count($fields)) $sql .= ', ';
         }
-        return $this->query($sql); // return inserted id
+        $this->query($sql);
+        // return inserted id
+        return $this->insertId;
     }
 
     function update($table, $id, $fields) {
@@ -279,7 +285,8 @@ class AdminDatabase {
             if(++$i !== count($fields)) $sql .= ', ';
         }
         $sql .= " WHERE id = ".AdminDatabase::escape($id);
-        return $this->query($sql); // return inserted id
+        $this->query($sql); // return inserted id
+        return $this->affectedRows;
     }
 
 }
