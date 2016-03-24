@@ -95,7 +95,7 @@ class imageType extends fileType {
 			$this->value = $this->path.$this->value;
 	}
 	
-	public function postSave($id, $params, $item) { 
+	public function postSave($id, $params) { 
 		
 		if($this->readonly) return "";
 	
@@ -156,7 +156,7 @@ class imageType extends fileType {
 		if($this->width==0 && $this->height==0) {
 			file_put_contents($name, $image);
 			$this->cleanup();
-			return "`{$this->name}` = ".$this->db->escape($url);
+			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 		} elseif(!empty($this->w) && !empty($this->h)) {
 			$img_r = imagecreatefromstring($image);
 			$dst_r = ImageCreateTrueColor($this->width, $this->height);
@@ -167,13 +167,13 @@ class imageType extends fileType {
 			else
 				imagepng($dst_r, $name);
 			$this->cleanup();
-			return "`{$this->name}` = ".$this->db->escape($url);
+			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 				
 		} else {
 			$params = array('w'=>$this->width,'h'=>$this->height,'zc'=>$this->zc,'q'=>$this->quality);
 			if(ImageResizer::resizeImgAdvanced($image, $name, $ext, $params)) {
 				$this->cleanup();
-				return "`{$this->name}` = ".$this->db->escape($url);
+				return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 			}
 		}
 		$this->cleanup();

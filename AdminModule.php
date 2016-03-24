@@ -322,6 +322,12 @@ class AdminModule {
 		
 		$sql = "INSERT ".$this->options['table']." SET ".$this->form->save($data);
 		return $this->db->query($sql); // return insert id
+//		if($res !== 1) {
+//			echo "INSERT error<br>";
+//			echo nl2br($res->result->userinfo);
+//			exit;
+//		}
+		return mysql_insert_id();
 	}
 
 /* ====================== */
@@ -344,7 +350,7 @@ class AdminModule {
 			foreach($this->filters as $field => $filter) {
 				
 				foreach($filter as &$filter_value) {
-					$filter_value = $this->db->escape($filter_value);
+					$filter_value = "'".mysql_real_escape_string($filter_value)."'";
 				}
 				if(strpos($field, '.') === false) {
 					$field_name = "`{$this->options['table']}`.`{$field}`";
@@ -363,7 +369,7 @@ class AdminModule {
 		$search = $this->search;
 		$sql = array();
 		if(trim($search) != '') {
-			$search = '%'.$this->db->escape($search, false).'%';
+			$search = '%'.mysql_real_escape_string($search).'%';
 			if(is_array($additionalFields)) {
 				foreach($additionalFields as $key)
 					$sql[] = "{$key} LIKE '{$search}'";
