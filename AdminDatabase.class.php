@@ -119,13 +119,13 @@ class AdminDatabase {
 
         if($this->linkId === false) return false;
 
-        if(func_num_args() > 1)
-            $args = array_slice(func_get_args(), 1);
-        else
+        if(func_num_args() > 1) {
+            $args = array();
+            array_walk_recursive(array_slice(func_get_args(), 1), function($a) use (&$args) { $args[] = $a; });
+        } else
             $args = null;
 
-        if(count($args) == 1 && is_array($args[0]))
-            $args = $args[0];
+
 
         if(is_array($args)) {
             preg_match_all("/\?/", $sql, $matches, PREG_OFFSET_CAPTURE);
