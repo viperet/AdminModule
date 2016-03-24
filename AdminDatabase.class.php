@@ -211,18 +211,16 @@ class AdminDatabase {
 
     }
 
-    function getOne($sql, $args = NULL) {
-        if($args!==NULL && !is_array($args))
-            $args = array_slice(func_get_args(), 1);
+    function getOne($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         if($res->count == 0) return NULL;
         $row = $res->current();
         return current($row);
     }
 
-    function getRow($sql, $args = NULL) {
-        if($args!==NULL && !is_array($args))
-            $args = array_slice(func_get_args(), 1);
+    function getRow($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $row = $res->current();
         return $row;
@@ -243,9 +241,8 @@ class AdminDatabase {
 
 
     // Executes SQL and returns list of values of first SQL result field
-    function getList($sql, $args = NULL) {
-        if($args!==NULL &&!is_array($args))
-            $args = array_slice(func_get_args(), 1);
+    function getList($sql, $args) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
         foreach($res as $row) {
