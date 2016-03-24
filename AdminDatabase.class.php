@@ -115,12 +115,17 @@ class AdminDatabase {
         return $arr;
     }
 
-    function query($sql, $args = NULL) {
+    function query($sql) {
 
         if($this->linkId === false) return false;
 
-        if(func_num_args() >= 2 && !is_array($args))
+        if(func_num_args() > 1)
             $args = array_slice(func_get_args(), 1);
+        else
+            $args = null;
+
+        if(count($args) == 1 && is_array($args[0]))
+            $args = $args[0];
 
         if(is_array($args)) {
             preg_match_all("/\?/", $sql, $matches, PREG_OFFSET_CAPTURE);
@@ -131,7 +136,7 @@ class AdminDatabase {
                 echo "</pre>";
                 echo _("Query:")." {$sql}<br>";
                 var_dump($args);
-                die(_("Replacement count doesn't match"));
+                die(_("Replacement count doesn't match ".count($matches[0])." != ".count($args)));
             }
 
         }
@@ -150,7 +155,7 @@ class AdminDatabase {
 
         // executes the query
         $callerFileRel = str_replace(ROOT_PATH, '', $callerFile);
-        if(is_array($args)) {
+        if(is_array($args) && count($args)>0) {
             if($stmt = mysqli_prepare($this->linkId, "/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql)) {
                 $types = "";
                 foreach($args as &$arg) {
@@ -223,9 +228,8 @@ class AdminDatabase {
         return $row;
     }
 
-    function getAll($sql, $args = NULL) {
-        if($args!==NULL &&!is_array($args))
-            $args = array_slice(func_get_args(), 1);
+    function getAll($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
         foreach($res as $row) {
