@@ -119,7 +119,7 @@ class AdminDatabase {
 
         if($this->linkId === false) return false;
 
-        if($args!==NULL && !is_array($args))
+        if(func_num_args() >= 2 && !is_array($args))
             $args = array_slice(func_get_args(), 1);
 
         if(is_array($args)) {
@@ -150,11 +150,10 @@ class AdminDatabase {
 
         // executes the query
         $callerFileRel = str_replace(ROOT_PATH, '', $callerFile);
-
         if(is_array($args)) {
             if($stmt = mysqli_prepare($this->linkId, "/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql)) {
                 $types = "";
-                foreach($args as $arg) {
+                foreach($args as &$arg) {
                     if(is_float($arg))
                         $types .= 'd';
                     elseif(is_integer($arg))
