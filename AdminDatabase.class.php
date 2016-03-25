@@ -241,7 +241,7 @@ class AdminDatabase {
 
 
     // Executes SQL and returns list of values of first SQL result field
-    function getList($sql, $args) {
+    function getList($sql) {
         $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
