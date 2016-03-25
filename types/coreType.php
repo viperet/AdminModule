@@ -25,16 +25,16 @@ abstract class coreType {
 	public $primary = false; // true у главного поля, характеризующего запись (для логирования)
 	public $permissions;
 	public $inline = false; // разрешить редактировать прямо в таблице
-	public $order = 0; // порядок столбцов
+	public $order = 99999; // порядок столбцов
 	public $print = true; // выводить поле на печатной версии
 	public $series = false; // выводить в график
-	
+
 	public $onLoad = null; // callback for transforming data after loading from db
 	public $onSave = null; // callback for transforming data before saving to db
 
 	public $options;
 	public $db;
-	
+
 	function __construct($db, $name, $array) {
 		$this->name = $name;
 		$this->cell_class = str_replace('_', '-', $this->name).'-cell';
@@ -48,7 +48,7 @@ abstract class coreType {
 			$this->readonly = true;
 		}
 	}
-	
+
 	public function toStringTruncated() {
 		$value = $this->toString();
 		$value_truncated = mb_substr($value, 0, $this->truncate, $this->encoding);
@@ -56,16 +56,16 @@ abstract class coreType {
 		return $value_truncated;
 	}
 	public function toString() {
-		return $this->escape($this->value);		
+		return $this->escape($this->value);
 	}
-	
+
 	public function fromForm($value) {
 /* 		echo $this->name." - ".$value[$this->name]."<br>"; */
 		if(isset($value[$this->name])) {
 			$this->value = $value[$this->name];
 		}
 	}
-	
+
 	public function fromRow($row) {
 		if (AdminDatabase::isError($row)) {
 			echo "<pre>";
@@ -79,18 +79,18 @@ abstract class coreType {
 		} else {
 			$this->value = $row[substr($this->name, $pos+1)];
 		}
-		
+
 		if(is_callable($this->onLoad)) {
 			$this->value = call_user_func($this->onLoad, $this->value);
 		}
 		$this->id = $row['id'];
 	}
-	
+
 	public function validate(&$errors) {
 		$this->valid = true;
 
 		if($this->required && (
-			(is_string($this->value) && (trim($this->value) == '' ) 
+			(is_string($this->value) && (trim($this->value) == '' )
 			|| is_null($this->value))
 		)) {
 			$errors[] = sprintf(_("Please fill required field '%s'"), $this->label);
@@ -98,7 +98,7 @@ abstract class coreType {
 			$this->valid = false;
 			return false;
 		}
-	
+
 		if($this->type == 'time' && ($this->value!='' && !preg_match('/^\d?\d:\d?\d$/', $this->value))) {
 			$this->valid = false;
 			$this->errors[] = _('Time format - HH:MM');
@@ -143,14 +143,14 @@ abstract class coreType {
 			$this->valid = false;
 			if($message === false)
 				$this->errors[] = $this->validation_message;
-			else 
+			else
 				$this->errors[] = $message;
-			
+
 		}
-		
+
 		return $this->valid;
 	}
-	
+
 	public function toHtmlLabel() {
 		return "<label class='col-sm-3 control-label ".(!$this->valid?'error':'')."' for='{$this->name}'>
 			{$this->label}".($this->required?'*':'').
@@ -161,20 +161,20 @@ abstract class coreType {
 
 	public function toListElement() {
 		return $this->toStringTruncated();
-	}	
+	}
 	public function toListItem() {
 		ob_start();
 		if($this->inline)
 			echo "<a href='{$this->baseUrl}&edit={$this->id}' class='editable' data-type='text' data-pk='{$this->id}' >".$this->toListElement()."</a>";
 		elseif($this->options['datatables'])
 			echo $this->toListElement();
-		elseif($this->filterByClick)		
+		elseif($this->filterByClick)
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($this->name.':'.$this->value)."'>".$this->toListElement()."</a>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$this->id}'>".$this->toListElement()."</a>";
 		return ob_get_clean();
 	}
-	
+
 	/* Get values list for filtering */
 	public function getValues() {
 		$sql = "SELECT *, `{$this->name}` value FROM `{$this->options['table']}` GROUP By `{$this->name}`";
@@ -185,26 +185,26 @@ abstract class coreType {
 			$items[$row['value']] = $this->toString();
 		}
 		asort($items);
-		return $items;		
+		return $items;
 	}
 
 	public function delete() { return; }
-	
+
 	public function postSave($id, $params, $item) { return ''; }
-	
+
 	public function escape($string) {
-		if($this->escape) 
-			return htmlspecialchars($string, ENT_QUOTES, $this->encoding);	
+		if($this->escape)
+			return htmlspecialchars($string, ENT_QUOTES, $this->encoding);
 		else
 			return $string;
 	}
-	
+
 	public static function pageHeader() { return ''; }
-	
+
 	abstract public function toHtml();
 	abstract public function toSql();
-	
-	
+
+
 	public function json($obj) {
 //		return json_encode($obj);
 		return preg_replace_callback(
@@ -213,5 +213,5 @@ abstract class coreType {
 			json_encode($obj)
 		);
 	}
-	
+
 }
