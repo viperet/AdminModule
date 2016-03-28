@@ -173,19 +173,29 @@ class AdminDatabase {
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
             } else {
+    			$error_no = mysqli_errno($this->linkId);
+    			$error_msg = mysqli_error($this->linkId);
+    			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+/*
                 echo "<pre>";
                 debug_print_backtrace();
                 echo "</pre>";
                 echo _("Query:")." {$sql}<br>";
                 die(_('Error preparing query:').' ' . mysqli_stmt_error($this->linkId));
+*/
             }
         } else {
             if(!$res = mysqli_query($this->linkId, "/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql)) {
+    			$error_no = mysqli_errno($this->linkId);
+    			$error_msg = mysqli_error($this->linkId);
+    			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+/*
                 echo "<pre>";
                 debug_print_backtrace();
                 echo "</pre>";
                 echo _("Query:")." {$sql}<br>";
                 die(_('Error executing query:').' ' . mysqli_error($this->linkId));
+*/
             }
         }
 
