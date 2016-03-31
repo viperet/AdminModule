@@ -1,4 +1,4 @@
-<?
+<?php
 
 class coordsType extends coreType {
 	public $lat; // широта
@@ -25,7 +25,7 @@ class coordsType extends coreType {
 	public static function pageHeader() {
 	?>
 <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-	<?
+	<?php
 	}
 	
 	public function toString() {

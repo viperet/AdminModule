@@ -1,4 +1,4 @@
-<?
+<?php
 
 class checkboxType extends textType {
 	

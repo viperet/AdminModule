@@ -1,4 +1,4 @@
-<? if(!isset($_SESSION['import_filename'])) { ?>
+<?php if(!isset($_SESSION['import_filename'])) { ?>
 <div class="jumbotron">
 	<h1>Импорт данных из CSV</h1>
 	<p>Вы можете загрузить данные из CSV файла созданного в Excel или другой программе.</p>
@@ -19,7 +19,7 @@
 		}
 	});	
 </script>
-<? } elseif(is_array($csv)) { ?>
+<?php } elseif(is_array($csv)) { ?>
 <style>
 	.import-table .bootstrap-select { width: 160px !important; }	
 	.import-table tr.skip { color: #DDDDDD; }
@@ -38,9 +38,9 @@
 	<div class="form-group">
 		<label for="skip" data-toggle="tooltip" data-placement="right" title="Позволяет пропустить пустые или заголовочные строчки в начале файла">Пропуск строк <i class="glyphicon glyphicon-question-sign"></i></label>
 		<select name="skip" class="selectpicker form-control" id="skip">
-		<? for($i=0;$i<=10;++$i) { ?>
+		<?php for($i=0;$i<=10;++$i) { ?>
 			<option <?= $_REQUEST['skip']==$i?'selected':''?> value="<?=$i?>"><?=$i?></option>
-		<? } ?>
+		<?php } ?>
 		</select>
 	</div>
 	<div class="form-group">
@@ -60,39 +60,37 @@
 	<table class="import-table table table-bordered table-striped">
 		<thead>
 			<tr>
-	<?
-		foreach(reset($csv) as $num => $col) {
+	<?php 		foreach(reset($csv) as $num => $col) {
 	?>
 				<td>
 					<select class="selectpicker" name="col_<?= $num ?>">
 						<option value="">Тип поля</option>
 						<option value="-">Пропустить</option>
 						<option disabled="disabled" data-content="<hr>">-</option>
-<? foreach($this->options['form'] as $id=>$item) { 
+<?php foreach($this->options['form'] as $id=>$item) { 
 		if($item->type != 'text') continue;
 ?>
 						<option value="<?= $id ?>" <?= $_POST["col_{$num}"]==$id?'selected':'' ?>><?= $item->label . ($item->required?'*':'') ?></option>
-<? } ?>
+<?php } ?>
 					</select>
 				</td>
-	<?
-		}
+	<?php 		}
 	?>			
 			</tr>
 		</thead>
 		<tbody>
-	<? foreach($csv as $row_num => $row) { 
+	<?php foreach($csv as $row_num => $row) { 
 			if(empty($row)) continue;
 	?>
 			<tr class="row_<?= $row_num ?>">
 					
-	<?	foreach($row as $col) { ?>
+	<?php foreach($row as $col) { ?>
 				<td>
 					<?=  htmlspecialchars($col) ?>
 				</td>
-	<?	} ?>
+	<?php } ?>
 			</tr>
-	<? } ?>			
+	<?php } ?>			
 			
 		</tbody>
 	</table>
@@ -127,10 +125,10 @@ $(function () {
 	
 })	
 </script>
-<? } elseif(is_array($stats)) { ?>
+<?php } elseif(is_array($stats)) { ?>
 <div class="jumbotron">
   <h1>Импорт завершен</h1>
   <p>Всего записей обработано: <b><?=$stats['total']?></b>, вставлено: <b><?=$stats['inserted']?></b></p>
   <p><a class="btn btn-primary btn-lg" href="<?= $this->baseUrl ?>" role="button">Ок</a></p>
 </div>
-<? } ?>
+<?php } ?>

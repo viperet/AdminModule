@@ -1,4 +1,4 @@
-<?
+<?php
 
 class groupType extends coreType {
 	public $raw = true;

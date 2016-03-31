@@ -1,4 +1,4 @@
-<?
+<?php
 
 class labelType extends coreType {
 

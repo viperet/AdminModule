@@ -1,4 +1,4 @@
-<?
+<?php
 
 class textType extends coreType {
 	public $placeholder;

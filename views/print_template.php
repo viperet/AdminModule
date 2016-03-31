@@ -26,7 +26,7 @@ table.table th {
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
 	<thead>
 		<tr>
-	<?		
+	<?php 	
 			foreach($headers as $header) {
 				if(!$this->options['form'][$header]->print) continue;
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
@@ -37,37 +37,33 @@ table.table th {
 		</tr>			
 	</thead>
 	<tbody>
-	<?
-			$count = 0;
+	<?php 			$count = 0;
 			foreach($items as $item) {
 	?>
 		<tr class="<?= $this->getListClass($item); ?>">
-	<?
-				foreach($headers as $header) {
+	<?php 				foreach($headers as $header) {
 					$formItem = $this->options['form'][$header];
 					if(!$formItem->print) continue;
 					$formItem->fromRow($item);
 					
 	?>
-			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
+			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
 				<div class="no-break"><?= $formItem->toListElement() ?></div>
 			</td>
-	<?
-					
+	<?php 					
 				}
 	?>
 		</tr>
-	<?
-				$count++;
+	<?php 				$count++;
 			}
 	?>
 	</tbody>
 	</table>
-<? if(count($items) == 0 && isset($_GET['filter'])) { ?>	
+<?php if(count($items) == 0 && isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<? } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
+<?php } elseif(count($items) == 0 && !isset($_GET['filter'])) { ?>	
 	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
-<? } ?>	
+<?php } ?>	
 
 
 

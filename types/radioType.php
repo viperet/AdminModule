@@ -1,4 +1,4 @@
-<?
+<?php
 
 class radioType extends textType {
 	public $values = array();

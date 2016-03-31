@@ -1,4 +1,4 @@
-<?
+<?php
 
 class htmlType extends textareaType {
 	public $height = 300;
@@ -9,7 +9,7 @@ class htmlType extends textareaType {
 
 	public static function pageHeader() {
 	?>
-	<?
+	<?php
 	}
 	
 	public function upload() {

@@ -113,11 +113,11 @@
 		</div>
 <?php } ?>
 
-<?	foreach($this->filter_fields as $field) { ?>
+<?php	foreach($this->filter_fields as $field) { ?>
 	<div class="col-lg-2 pull-left">
 		<label for="filter_<?=$name?>"><?= htmlspecialchars($field->label) ?></label>
 		<div>
-<?
+<?php
 		$fieldValues = $this->getFieldValues($field);
 		$name = $field->name;
 		
@@ -129,19 +129,19 @@
 			<span class="text">-</span> <span class="badge"></span> <span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-<? 						foreach($fieldValues as $key => $value) { ?>
+<?php						foreach($fieldValues as $key => $value) { ?>
 			<li>
 				<label for="prio_{$priority}">
 					<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>> 
 					<?=$value?>
 				</label></li>
-<? } /* foreach */ ?>
+<?php } /* foreach */ ?>
 
 			<li role="separator" class="divider"></li>
 			<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> фильтровать</button></li>
 		</ul>
 	</div>	
-<?
+<?php
 
 			
 		} else {
@@ -160,7 +160,7 @@
 ?>		
 		</div>
 	</div>
-<?	} ?>
+<?php	} ?>
 		</div>
 		</form>
 	</div>

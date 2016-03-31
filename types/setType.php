@@ -1,4 +1,4 @@
-<?
+<?php
 
 class setType extends textType {
 	public $values = array();

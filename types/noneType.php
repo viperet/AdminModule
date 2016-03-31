@@ -1,4 +1,4 @@
-<?
+<?php
 
 class noneType extends coreType {
 	

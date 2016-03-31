@@ -1,4 +1,4 @@
-<?
+<?php
 
 class switchType extends textType {
 	

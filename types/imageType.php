@@ -1,4 +1,4 @@
-<?
+<?php
 require_once(dirname(__FILE__)."/../helpers/phpThumb/phpthumb.class.php");
 require_once(dirname(__FILE__)."/../imageResizer.class.php");
 
@@ -480,7 +480,7 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 	return false;
 }
 </script>
-<?	
+<?php 
 
 	}
 

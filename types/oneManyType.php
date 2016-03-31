@@ -1,4 +1,4 @@
-<?
+<?php
 
 class oneManyType extends coreType {
 	public $details_table = '';

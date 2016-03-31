@@ -1,4 +1,4 @@
-<?
+<?php
 
 class hiddenType extends coreType {
 	public $placeholder;

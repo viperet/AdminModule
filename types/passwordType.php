@@ -1,4 +1,4 @@
-<?
+<?php
 
 class passwordType extends textType {
 	public $placeholder;
@@ -67,7 +67,7 @@ class passwordType extends textType {
 <style>
 	.row .form-password { margin-bottom: 10px; }
 </style>
-	<?
+	<?php
 	}
 	
 }

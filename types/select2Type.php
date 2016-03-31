@@ -1,4 +1,4 @@
-<?
+<?php
 
 class select2Type extends textType {
 	public $values = array();
@@ -30,7 +30,7 @@ class select2Type extends textType {
 <script src="/js/select2.js"></script>
 <link href="/js/select2.css" media="screen" type="text/css" rel="stylesheet">
 -->
-	<?
+	<?php
 	}
 
 	

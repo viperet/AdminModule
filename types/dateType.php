@@ -1,4 +1,4 @@
-<?
+<?php
 
 class dateType extends textType {
 
@@ -63,7 +63,7 @@ class dateType extends textType {
 			$('.input-group.date').datetimepicker({language: 'ru', format: 'DD.MM.YYYY'});
 	});
 </script>
-<?
+<?php
 	}
 	
 }

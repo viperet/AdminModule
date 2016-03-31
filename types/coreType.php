@@ -1,4 +1,4 @@
-<?
+<?php
 
 abstract class coreType {
 	public $id;

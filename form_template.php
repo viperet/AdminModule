@@ -13,14 +13,14 @@
 	.label-hint { text-align: right; font-size: 75%; }	
 </style>
 
-<? if( count($this->errorMessage)>0 ) { ?>
+<?php if( count($this->errorMessage)>0 ) { ?>
 <div class="alert alert-danger" role="alert"><?= implode('<br>', $this->errorMessage) ?></div>
-<? } ?>
+<?php } ?>
 
 <form method="POST" id="editForm" class="form-horizontal" enctype="multipart/form-data" role="form">
 	<input type="hidden" name="id" value="<?= $this->id ?>">
 	<input type="hidden" name="_session_id" value="<?= $this->session_id ?>">
-<?	$count = 0;
+<?php $count = 0;
 	foreach($this->form as $id=>$item) { 
 		if($item->raw)
 			echo $item->toHtml();
@@ -31,13 +31,13 @@
 		<div class="col-sm-8">
 			<?= $item->toHtml() ?>
 		</div>
-<?		if(!$item->valid) { ?>
+<?php 	if(!$item->valid) { ?>
 		<span id="helpBlock" class="col-sm-8  col-sm-offset-3 help-block">
 			<?= implode('<br>', $item->errors) ?>
 		</span>
-<?		} ?>
+<?php 	} ?>
 	</div> <!-- form-group -->
-<?		}
+<?php 	}
 		$count++;
 	} ?>
 	<hr>

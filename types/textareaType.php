@@ -1,4 +1,4 @@
-<?
+<?php
 
 class textareaType extends textType {
 	public $rows = 3;

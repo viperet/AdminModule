@@ -1,4 +1,4 @@
-<?
+<?php
 
 class selectType extends textType {
 	public $values = array();

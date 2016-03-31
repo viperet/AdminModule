@@ -1,4 +1,4 @@
-<?
+<?php
 
 class datetimeType extends textType {
 	public $format = 'datetime'; // хранится в timestamp или datetime 
@@ -82,7 +82,7 @@ class datetimeType extends textType {
 			$('.input-group.datetime').datetimepicker({language: 'ru'});
 	});
 </script>
-<?
+<?php
 	}
 	
 }

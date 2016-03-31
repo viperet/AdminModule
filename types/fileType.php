@@ -342,7 +342,7 @@ $(function() {
 });
 
 </script>
-<?	
+<?php 
 
 	}
 

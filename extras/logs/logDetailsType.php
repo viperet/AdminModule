@@ -1,4 +1,4 @@
-<?
+<?php
 include 'finediff.php';
 
 class logDetailsType extends coreType {
@@ -45,7 +45,7 @@ class logDetailsType extends coreType {
 	.log-details ins { background: yellow; padding: 0 3px; }
 	.log-details del { background: red; color: white; padding: 0 3px; }
 </style>
-<?
+<?php
 	}
 	
 }

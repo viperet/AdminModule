@@ -1,4 +1,4 @@
-<?
+<?php
 
 class numericType extends textType {
 	public $validation = 'float';
