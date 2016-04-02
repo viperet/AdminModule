@@ -6,7 +6,7 @@
 div.filter-panel { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
 div.filter-panel form { margin: 0;	}
 .filter {  width: 100%; max-width: 150px; }
-.clear { clear: both; }	
+.clear { clear: both; }
 table th { border-bottom: 0 none !important; border-top: 0 none !important;	}
 #filter_form .form-group { position: relative; }
 #date-from, #date-to { width: 100px; }
@@ -42,11 +42,11 @@ table.dataTable tr.totals-row th {
 .mass-action .dropdown-menu > li > button:hover { background-color: #f5f5f5; }
 
 
-.filter .dropdown-toggle {   
+.filter .dropdown-toggle {
     overflow: hidden;
     padding-right: 24px /* Optional for caret */;
     text-align: left;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
     width: 100%;
 }
 
@@ -119,17 +119,17 @@ table.dataTable tr.totals-row th {
 		}
 		return filters;
 	}
-	
+
 	function setFilters(filters) {
 		var tmpFilter = [];
 		$.each(filters, function (key, value) {
-			if(value != '') 
+			if(value != '')
 				tmpFilter.push(key+':'+value);
 		});
 		$('#filter_input').val(tmpFilter.join(';'));
 		return true;
 	}
-	
+
 	$(function () {
 		$('#filter_form').submit(function () {
 			$('.overlay').show();
@@ -141,19 +141,19 @@ table.dataTable tr.totals-row th {
 			document.location = new_location;
 			return false;
 		})
-		
+
 		$('body').on('change', '#header_checkbox', function (event, value) {
 			$('.row_checkbox').prop('checked', this.checked).trigger('change');
 		});
-		
+
 		$('.filter.multiple').on('hidden.bs.dropdown show.bs.dropdown triggerEvent', function (e) {
-			
+
 			console.log(e);
-			
-			var filters = getFilters();			
+
+			var filters = getFilters();
 			var el = $(this);
 			values = [];
-			
+
 			el.find('input:checked').each(function () {
 				values.push(this.value);
 			})
@@ -168,7 +168,7 @@ table.dataTable tr.totals-row th {
 			if(e.type == 'triggerEvent') {
 				return;
 			} else if(e.type == 'show') {
-				el.data('old_values', values_list);	
+				el.data('old_values', values_list);
 			} else {
 				console.log(values);
 				var old_values = el.data('old_values');
@@ -180,7 +180,7 @@ table.dataTable tr.totals-row th {
 			}
 		}).trigger('triggerEvent');
 		$('select.filter').not('[multiple]').change( function () {
-			var filters = getFilters();			
+			var filters = getFilters();
 			var el = $(this);
 			filters[el.data('field')] = this.value;
 			setFilters(filters);
@@ -194,7 +194,7 @@ table.dataTable tr.totals-row th {
 
 
 		<form method="GET" action="" id="filter_form" class="form-inline">
-<?php if($this->options['date']) { ?>			
+<?php if($this->options['date']) { ?>
 			<div class="form-group">
 				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="Дата от"/>
 			</div>
@@ -215,12 +215,12 @@ table.dataTable tr.totals-row th {
 				<li class="divider"></li>
 			    <li><a href="#" onClick="return setTime('reset');">Очистить</a></li>
 			  </ul>
-			</div>			
+			</div>
 <?php } ?>
-			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>"> 
+			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>">
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>"> 
+					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>">
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
 					</span>
@@ -254,15 +254,15 @@ table.dataTable tr.totals-row th {
 		    <li role="separator" class="divider"></li>
 		    <li><a class="export-link" href="<?= $this->baseUrl ?>&print">Print</a></li>
 		  </ul>
-		</div>				
-		<? } ?>	
+		</div>
+		<? } ?>
 		<? if($this->options['import']) { ?>
 		<div class="btn-group ">
 			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>				
-		<? } ?>	
+		</div>
+		<? } ?>
 	</div>
-	
+
 	<div class="clear"></div>
 
 <? if(!$this->options['datatables']) { ?>
@@ -274,11 +274,11 @@ table.dataTable tr.totals-row th {
 	</div>
 	<div id="selected-items-container"></div>
 
-	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">	
+	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">
 	<thead>
 		<tr>
 			<th class="checkbox-cell" data-orderable="0"></th>
-	<?		
+	<?
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
 					htmlspecialchars($this->options['form'][$header]->label);
@@ -286,16 +286,16 @@ table.dataTable tr.totals-row th {
 			}
 	?>
 			<th class="table-actions" data-orderable="0"><?= _('Actions') ?></th>
-		</tr>			
+		</tr>
 		<tr>
 			<th class="checkbox-cell"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
-	<?		
+	<?
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
 				if($this->options['form'][$header]->filterByClick) {
 					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-					
-					// фильтрация 
+
+					// фильтрация
 					if($this->options['form'][$header]->filterByClick === 'multiple') {
 						$name = $this->options['form'][$header]->name;
 ?>
@@ -307,7 +307,7 @@ table.dataTable tr.totals-row th {
 <? 						foreach($fieldValues as $key => $value) { ?>
 						<li>
 							<label for="prio_{$priority}">
-								<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>> 
+								<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>>
 								<?=$value?>
 							</label></li>
 <? } /* foreach */ ?>
@@ -315,20 +315,20 @@ table.dataTable tr.totals-row th {
 						<li role="separator" class="divider"></li>
 						<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> фильтровать</button></li>
 					</ul>
-				</div>	
+				</div>
 <?
 
-						
+
 					} else {
 						if($this->options['form'][$header]->filterByClick === 'search')
 							$filterClass = 'select2';
-						else 
+						else
 							$filterClass = 'selectpicker';
 						echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'  data-title='-'>".
 								"<option value=''>-</option>";
 						foreach($fieldValues as $key => $value) {
 							$name = $this->options['form'][$header]->name;
-							echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
+							echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>";
 						}
 						echo "</select>";
 					}
@@ -340,7 +340,7 @@ table.dataTable tr.totals-row th {
 		</tr>
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
-	<?		
+	<?
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
 				echo "</th>\n";
@@ -363,10 +363,10 @@ table.dataTable tr.totals-row th {
 				foreach($headers as $header) {
 					$formItem = $this->options['form'][$header];
 					$formItem->fromRow($item);
-					
+
 	?>
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?	if($formItem->filterByClick)		
+	<?	if($formItem->filterByClick)
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
@@ -375,7 +375,7 @@ table.dataTable tr.totals-row th {
 				</a>
 			</td>
 	<?
-					
+
 				}
 	?>
 			<td class="table-actions btn-toolbar">
@@ -390,18 +390,18 @@ table.dataTable tr.totals-row th {
 		<tr>
 			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
 		</tr>
-<?				
+<?
 			}
 	?>
 	</tbody>
 	<tfoot>
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
-	<?		
+	<?
 			$totals = $this->getTotals();
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
-				if(isset($totals[$this->options['form'][$header]->name])) 
+				if(isset($totals[$this->options['form'][$header]->name]))
 					echo  $totals[$this->options['form'][$header]->name];
 				echo "</th>\n";
 			}
@@ -410,11 +410,11 @@ table.dataTable tr.totals-row th {
 		</tr>
 	</tfoot>
 	</table>
-<? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
+<? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<? } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>	
+<? } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>
 	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
-<? } ?>	
+<? } ?>
 
 <? if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
@@ -438,13 +438,13 @@ table.dataTable tr.totals-row th {
 		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
 		    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
 		  </ul>
-		</div>				
+		</div>
 		<? } ?>
 		<? if($this->options['import']) { ?>
 		<div class="btn-group ">
 			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>				
-		<? } ?>	
+		</div>
+		<? } ?>
 	</div>
 </form>
 
@@ -453,7 +453,7 @@ table.dataTable tr.totals-row th {
 
 <script>
 	var checkboxed_storage = [];
-	
+
 	function updateSelectedItems() {
 		var container = $('#selected-items-container').empty();
 		for(var i=0;i<checkboxed_storage.length;++i) {
@@ -464,7 +464,7 @@ table.dataTable tr.totals-row th {
 			$(".selected-items").css('visibility', 'visible');
 		} else {
 			$(".selected-items").css('visibility', 'hidden');
-		}	
+		}
 
 		// добавляем к ссылкам параметр по списком ID выбранных записей
 		$('.export-link').each(function () {
@@ -517,7 +517,7 @@ table.dataTable tr.totals-row th {
 	<?		foreach($headers as $header) { ?>
 		        { data: '<?= $this->options['form'][$header]->cell_class ?>', },
 	<?		}	?>
-		        { data: 'actions-cell' }
+		        { data: 'actions-cell', className: 'table-actions' }
 	    ],
 		stateSave: true,
 		stateDuration: 0, // хранить настройки без ограничения по времени
@@ -537,8 +537,8 @@ table.dataTable tr.totals-row th {
 		lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "Все"] ],
 		language: {
 			paginate: {
-				first: "&laquo;",	
-				last: "&raquo;",	
+				first: "&laquo;",
+				last: "&raquo;",
 				previous: "<?=_('Previous')?>",
 				next: "<?=_('Next')?>",
 			},
@@ -575,7 +575,7 @@ table.dataTable tr.totals-row th {
 				cells.filter('.'+key).html(value);
 			});
 			$('.dataTable thead .totals-row').show();
-		}		
+		}
 	}).on('draw.dt', function () {
 		$('.row_checkbox').each(function () {
 			if(checkboxed_storage.indexOf(this.value) != -1) {
@@ -590,21 +590,21 @@ new $.fn.dataTable.FixedHeader( datatable, {
     // options
 } );
 
-	
+
 	try {
 		datatable.buttons().container().appendTo('.top-toolbar');
 	} catch(e) {
     	console.log('datatables buttons error');
 	}
-	
-	
+
+
 <? } ?>
-	
-	
-	
-	
+
+
+
+
 	moment.locale('ru');
-	
+
 	function setTime(mode) {
 		var from, to;
 		switch(mode) {
@@ -641,8 +641,8 @@ new $.fn.dataTable.FixedHeader( datatable, {
 		$('#date-to').val( to.format('DD.MM.YYYY') );
 		$('#filter_form').submit();
 	}
-	
-	$('select.filter.selectpicker').selectpicker({ 
+
+	$('select.filter.selectpicker').selectpicker({
 		 width: '100%',
 		 style: 'btn-default btn-xs',
 	});
@@ -652,7 +652,7 @@ new $.fn.dataTable.FixedHeader( datatable, {
 		dropdownAutoWidth: true,
 	});
 
-	
+
 	if($.fn.datetimepicker.defaults.locale !== undefined)
 		options = {locale: 'ru'};
 	else
@@ -660,15 +660,15 @@ new $.fn.dataTable.FixedHeader( datatable, {
 
 	options.format = 'DD.MM.YYYY';
 	$('#date-from, #date-to').datetimepicker(options);
-	
+
 	$("#date-from").on("dp.change",function (e) {
 	$('#date-to').data("DateTimePicker").minDate(e.date);
 	});
 	$("#date-to").on("dp.change",function (e) {
 	$('#date-from').data("DateTimePicker").maxDate(e.date);
-	});	
-	
-	
+	});
+
+
 	$('body').on('click', '.checkbox-td, #admin-table td', function (e) {
 		if($(e.target).hasClass('checkbox-td') )
 			$(this).find('input.row_checkbox').click();
