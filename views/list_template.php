@@ -513,7 +513,7 @@ table.dataTable tr.totals-row th {
 			orderSequence: [ "desc", "asc"]
 		} ],
 		columns: [
-		        { data: 'checkbox-cell' },
+		        { data: 'checkbox-cell', className: 'checkbox-cell' },
 	<?		foreach($headers as $header) { ?>
 		        { data: '<?= $this->options['form'][$header]->cell_class ?>', },
 	<?		}	?>
@@ -557,6 +557,15 @@ table.dataTable tr.totals-row th {
 				"sortDescending": ": активировать для сортировки столбца по убыванию"
 			}
 		},
+        fnDrawCallback: function(oSettings) { // hides paging when only one page to display
+            if (oSettings._iDisplayLength == -1
+                || oSettings._iDisplayLength > oSettings.fnRecordsDisplay())
+            {
+                jQuery(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+            } else {
+                jQuery(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+            }
+        }
 //		ordering: false,
 // 		scrollY: 300
 	}).on('preXhr.dt', function (e) {
