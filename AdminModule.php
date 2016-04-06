@@ -8,16 +8,16 @@ function AdminModuleAutoloader($class) {
 		echo "$file not found";
 		return false;
 	}
-		
+
 }
 
 spl_autoload_register('AdminModuleAutoloader');
-require_once("Translate.class.php");			
-require_once("Form.class.php");			
-require_once("AdminDatabase.class.php");			
-require_once("AdminChart.class.php");			
-require_once("Navigation.class.php");			
-require_once("Pagination.class.php");			
+require_once("Translate.class.php");
+require_once("Form.class.php");
+require_once("AdminDatabase.class.php");
+require_once("AdminChart.class.php");
+require_once("Navigation.class.php");
+require_once("Pagination.class.php");
 //require_once(PATH_ROOT ."classes/pageSplit.class.php");
 
 class AdminModule {
@@ -43,14 +43,14 @@ class AdminModule {
 	public $search = "", $filter = "", $dateFrom = "", $dateTo = "";
 	public $filters = array();
 	public $logger;
-	
+
 	private $gettextDomain;
-	
+
 	function __construct($options) {
 //		global $this->db;
 //! BANKER
-		
-		$this->options = array_merge($this->options, $options);	
+
+		$this->options = array_merge($this->options, $options);
 
 		if(empty($this->options['db'])) throw new Exception("Empty required parameter 'db'");
 		$this->db = new AdminDatabase($this->options['db']);
@@ -77,21 +77,21 @@ class AdminModule {
 		} else { // null logger
 			$this->logger = new CoreLogger($this->db, $this);
 		}
-		
+
 		if(isset($_GET['block']))
 			$this->baseUrl .= "&block=".$_GET['block'];
-		if(isset($_GET['filter'])) { 
+		if(isset($_GET['filter'])) {
 			$this->filter = $_GET['filter'];
 			$this->baseUrl .= "&filter=".urlencode($_GET['filter']);
 			$this->baseUrlNoPaging .= "&filter=".urlencode($_GET['filter']);
-			
+
 			foreach(explode(';', $this->filter) as $filter) {
 				list($param, $value) = explode(':', $filter);
 				if(empty($param)) continue;
 				$this->filters[$param] = explode('|', $value);
 			}
 		}
-		if(isset($_GET['query'])) { 
+		if(isset($_GET['query'])) {
 			$this->search = $_GET['query'];
 			$this->baseUrl .= "&query=".urlencode($_GET['query']);
 			$this->baseUrlNoPaging .= "&query=".urlencode($_GET['query']);
@@ -99,14 +99,14 @@ class AdminModule {
 		if(isset($_GET['s'])) {
 			$this->baseUrl .= "&s=".(int)$_GET['s'];
 		}
-		if(!empty($_GET['df']) && !empty($_GET['dt'])) { 
+		if(!empty($_GET['df']) && !empty($_GET['dt'])) {
 			$this->dateFrom = date('Y-m-d', strtotime($_GET['df']));
 			$this->dateTo = date('Y-m-d', strtotime($_GET['dt']));
 			$this->baseUrl .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 			$this->baseUrlNoPaging .= "&df=".urlencode($_GET['df'])."&dt=".urlencode($_GET['dt']);
 		}
-		
-		
+
+
 		// преобразование формы в линейный список
 		$tmp = $this->options['form'];
 		$this->options['form'] = array();
@@ -117,19 +117,19 @@ class AdminModule {
 				$arrayEnd['begin'] = false;
 				unset($arrayBegin['form'], $arrayEnd['form']);
 				$this->options['form'] = array_merge(
-					$this->options['form'], 
+					$this->options['form'],
 					array($name => $arrayBegin),
 					$array['form'],
 					array($name.'-end' => $arrayEnd)
 				);
-			} else 
+			} else
 				$this->options['form'][$name] = $array;
 		}
 		unset($tmp);
-		
+
 
 // 		echo "<pre>";print_r($this->options['form']);exit;
-		
+
 		// преобразование в объекты
 		foreach($this->options['form'] as $name=>&$array) {
 			if(isset($this->options['role']) && isset($array['permissions'])) {
@@ -140,7 +140,7 @@ class AdminModule {
 					$array['readonly'] = true;
 				}
 			}
-			
+
 			$className = $array['type']."Type";
 			$array = new $className($this->db, $name, $array);
 			$array->options = $this->options;
@@ -157,30 +157,30 @@ class AdminModule {
 		    if ($a->order == $b->order) {
 		        return 0;
 		    }
-		    return ($a->order < $b->order) ? -1 : 1;			
+		    return ($a->order < $b->order) ? -1 : 1;
 		});
 	}
 
 /* ================================= */
 /* Просмотр списка записей в таблице */
 /* ================================= */
-	
+
 	function listItems() {
 		$this->sortFields();
 
 		$per_page  = $this->options['perpage'];
 		$limit = (empty($_GET['s'])?0:(int)$_GET['s']);
-		
+
 		if(!$this->options['datatables']) {
 			$items = $this->getItems($limit, $per_page);
 		}
 //		echo "<hr>{$this->itemsCount}<hr>";
-//		$pager = new pageSplit($page, $this->itemsCount, '', $per_page);		
+//		$pager = new pageSplit($page, $this->itemsCount, '', $per_page);
 //		$htmlPager = $pager->showNav();
-		
+
 		$pager = new Pagination($this->itemsCount, $per_page);
-		$htmlPager  = $pager->display($this->baseUrlNoPaging);		
-		
+		$htmlPager  = $pager->display($this->baseUrlNoPaging);
+
 //		$headers = array('id'); // hide ID column for now
 		$headers = array();
 		$this->options['form'] = array_merge(array('id' => new textType($this->db, 'id', array('type'=>'text', 'label'=>'ID'))), $this->options['form']);
@@ -190,23 +190,23 @@ class AdminModule {
 				$headers[] = $key;
 			}
 		}
-		
+
 		include('views/list_template.php');
 
 	}
 /* ================================= */
 /* Печать списка записей в таблице */
 /* ================================= */
-	
+
 	function printItems() {
 		$this->sortFields();
 
 		$per_page  = 1000000;
 		$limit = 0;
-		
+
 		$items = $this->getItems($limit, $per_page);
-		
-		
+
+
 		$headers = array();
 		$this->options['form'] = array_merge(array('id' => new textType($this->db, 'id', array('type'=>'text', 'label'=>'ID'))), $this->options['form']);
 
@@ -215,7 +215,7 @@ class AdminModule {
 				$headers[] = $key;
 			}
 		}
-		
+
 		include('views/print_template.php');
 
 	}
@@ -224,10 +224,10 @@ class AdminModule {
 /* Редактирование/добавление записи	 */
 /* ================================	 */
 	function editItem($id, $clone = false) {
-		
+
 		$myObjectForm = $this->options['form'];
 		if($id>0) {
-			// редактирование 
+			// редактирование
 			$object = $this->getItem($id);
 		} else {
 			// добавление
@@ -240,19 +240,19 @@ class AdminModule {
 			}
 		}
 		$this->form = new Form($myObjectForm, $this);
-		if($this->form->filled($_POST)) {	
+		if($this->form->filled($_POST)) {
 //			$merged_object = array_merge($object, $_POST);
 			$merged_object = $_POST;
 			$this->form->load($merged_object, 'form');
 			$error = true;
 			if(!$this->form->validate($_POST) ||
 			  ($error = $this->validate($_POST))!== true
-			) {	
+			) {
 				if($error !== true) {
 					array_unshift($this->form->errorMessage, $error);
 				}
 			} else {// все ок
-				
+
 				try {
 					if($id>0 && !$clone) { // сохранение
 						$this->logger->beforeAction($id, 'update');
@@ -268,7 +268,7 @@ class AdminModule {
 
 					$this->updateCache($id, $item);
 					$this->updateFullCache();
-					
+
 					$postSql = $this->form->postSave($id, $_POST, $item);
 					if($postSql) {
 						$res = $this->db->query("UPDATE ".$this->options['table']." SET ".$postSql);
@@ -284,10 +284,10 @@ class AdminModule {
 					switch($e->getCode()) {
 						case AdminDatabaseException::DUPLICATE_KEY:
 							$error = _("Can't insert duplicate data").' ('.$e->getMessage().')'; break;
-						default: 
+						default:
 							$error = $e->getMessage();
 					}
-					array_unshift($this->form->errorMessage, $error);						
+					array_unshift($this->form->errorMessage, $error);
 				}
 			}
 			$htmlForm = $this->form->build();
@@ -296,7 +296,7 @@ class AdminModule {
 			$htmlForm = $this->form->build();
 		}
 		echo $htmlForm;
-	}	
+	}
 
 /* ====================== */
 /* Обновление записи      */
@@ -311,7 +311,7 @@ class AdminModule {
 //			echo "UPDATE error<br>";
 //			echo nl2br($res->result->userinfo);
 //			exit;
-//		}		
+//		}
 		return $res;
 	}
 
@@ -319,30 +319,31 @@ class AdminModule {
 /* Вставка записи         */
 /* ====================== */
 	function insertItem($data) {
-		
+
 		$sql = "INSERT ".$this->options['table']." SET ".$this->form->save($data);
-		return $this->db->query($sql); // return insert id
+		$this->db->query($sql); // return insert id
+		return $this->db->insertId;
 	}
 
 /* ====================== */
 /* Получение SQL для фильтра */
 /* ====================== */
 	function getFilterSQL($additionalFields = NULL) {
-		
+
 		if($this->dateFrom != '' && $this->dateTo != '') {
 			$dateSql = " `{$this->options['table']}`.`{$this->options['date']}` >=  '{$this->dateFrom} 00:00:00' AND `{$this->options['table']}`.`{$this->options['date']}` <=  '{$this->dateTo} 23:59:59' ";
 		} else {
 			$dateSql = "1";
 		}
-		
-		
+
+
 // 		if(trim($this->filter) == '') return $dateSql;
 
 
 		if(count($this->filters)>0) {
 			$filterSql = "1";
 			foreach($this->filters as $field => $filter) {
-				
+
 				foreach($filter as &$filter_value) {
 					$filter_value = $this->db->escape($filter_value);
 				}
@@ -351,7 +352,7 @@ class AdminModule {
 				} else {
 					$field_name = $field;
 				}
-				
+
 				$filterSql .= " AND {$field_name} IN (".implode(',', $filter).")";
 			}
 // 			return $dateSql.$filterSql;
@@ -371,13 +372,13 @@ class AdminModule {
 			foreach($this->options['form'] as $key=>$value)
 				if($value->filter)
 					$sql[] = "`{$this->options['table']}`.`{$key}` LIKE '{$search}'";
-					
+
 			if(preg_match('/^%(\d+)%$/', $this->search, $m)) {
 				$sql[] = "`{$this->options['table']}`.`id` = '{$m[1]}'";
 			}
 		}
-		
-		if(count($sql) > 0) 
+
+		if(count($sql) > 0)
 			$searchSql = '( '.implode(' OR ', $sql).' )';
 		else
 			$searchSql = "1";
@@ -397,22 +398,22 @@ class AdminModule {
 /* Получение всех записей */
 /* ====================== */
 	function getItems($from=0, $count=100) {
-		
+
 		$sql = "SELECT * FROM {$this->options['table']} WHERE ".$this->getFilterSQL().
 			($this->options['sort']?" ORDER By {$this->options['sort']}":"").
 			(isset($from) && isset($count) ? " LIMIT $from,$count" : "");
 		$items = $this->db->getAll($sql);
 		$sql = "SELECT  COUNT(*) FROM {$this->options['table']} WHERE ".$this->getFilterSQL();
-		
+
 		$this->itemsCount = $this->db->getOne($sql);
-		return $items;	
+		return $items;
 	}
 
 /* ====================== */
 /* Получение записи по ID */
 /* ====================== */
 	function getItem($id) {
-		
+
 		$row = $this->db->getRow("SELECT * FROM `".$this->options['table']."` WHERE id=?", array($id));
 		return $row;
 	}
@@ -421,7 +422,7 @@ class AdminModule {
 /* Получение итоговых данных */
 /* ====================== */
 	function getTotals() {
-		return false;		
+		return false;
 	}
 
 /* =============== */
@@ -432,17 +433,17 @@ class AdminModule {
 
 		$myObjectForm = $this->options['form'];
 		$this->form = new Form($myObjectForm, $this->options);
-		
+
 		foreach($ids as $id) {
 			$item = $this->getItem($id);
-			
+
 // сообщаем полям записи об удалении, чтоб они могли подчистить за собой данные
 // например связанные записи в таблицах, картинки, теги
 			$this->form->load($item, 'db');
 			$this->form->delete();
-			
+
 			$this->logger->beforeAction(intval($id), 'delete', $item);
- 
+
  			$sql = "DELETE FROM `".$this->options['table']."` WHERE id = ".intval($id);
 			$res = $this->db->query($sql);
 
@@ -453,8 +454,8 @@ class AdminModule {
 		$this->updateFullCache();
 		$this->returnUser();
 	}
-	
-	
+
+
 	function returnUser() {
 		if(!empty($_SERVER['HTTP_REFERER']))
 			header("Location: ".$_SERVER['HTTP_REFERER']);
@@ -462,7 +463,7 @@ class AdminModule {
 			header("Location: ".$this->baseUrl);
 		exit;
 	}
-	
+
 /* =============== */
 /* Обновление кеша	*/
 /* =============== */
@@ -476,28 +477,28 @@ class AdminModule {
 	function updateFullCache() {
 		return true;
 	}
-	
-	
+
+
 /* =============== */
 /* Дополнительные действия над записями	*/
 /* =============== */
 	function actions($item) {
 		return '
 				<div class="btn-group" role="group">
-					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'"><span class="glyphicon glyphicon-edit" title="'._('Edit').'"></span></a> 
-					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'&clone"><span class="glyphicon glyphicon-sound-stereo" title="'._('Clone').'"></span></a> 
-					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&delete&item='.$item['id'].'" onclick="return confirm(\''._('Delete?').'\');"><span class="glyphicon glyphicon-remove" title="'._('Delete').'"></span></a> 
-				</div>		
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'"><span class="glyphicon glyphicon-edit" title="'._('Edit').'"></span></a>
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'&clone"><span class="glyphicon glyphicon-sound-stereo" title="'._('Clone').'"></span></a>
+					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&delete&item='.$item['id'].'" onclick="return confirm(\''._('Delete?').'\');"><span class="glyphicon glyphicon-remove" title="'._('Delete').'"></span></a>
+				</div>
 ';
 	}
-	
+
 /* =============== */
 /* Возвращает класс для TR в списке	*/
 /* =============== */
 	function getListClass($item) {
 		return "";
 	}
-	
+
 /* =============== */
 /* Возвращает кнопки в начале и конце списка	*/
 /* =============== */
@@ -516,10 +517,10 @@ class AdminModule {
   </ul>
 </div>
 ";
-				
-				
+
+
 /*
-				
+
 				$html .= "<button class='btn btn-default' type='submit' name='mass_{$value->name}_on' onclick=\"return confirm('{$value->label} "._('On')."?');\">{$value->label} "._('On')."</button>&nbsp;";
 				$html .= "<button class='btn btn-default' type='submit' name='mass_{$value->name}_off' onclick=\"return confirm('{$value->label} "._('Off')."?');\">{$value->label} "._('Off')."</button>&nbsp;";
 */
@@ -530,26 +531,26 @@ class AdminModule {
 	}
 /* =============== */
 /* Возвращает кнопки для формы редактирования	*/
-/* =============== */	
+/* =============== */
 	function formButtons() {
 		return '<button type="submit" class="btn btn-primary" id="editForm_save" name="editForm_save">'._('Save').'</button> '.
 		       '<button type="submit" class="btn btn-default" id="editForm_save_stay" name="editForm_save_stay">'._('Save and stay').'</button>';
 	}
-	
+
 	function bottomButtons() {
 		return self::topButtons();
 	}
 
 /* =============== */
 /* Возвращает заголовок над списком	*/
-/* =============== */	
+/* =============== */
 	function listHeader() {
 		return '';
 	}
 
 /* =============== */
 /* Возвращает заголовок над формой	*/
-/* =============== */	
+/* =============== */
 	function formHeader() {
 		return '';
 	}
@@ -569,7 +570,7 @@ class AdminModule {
 /* =============== */
 	function export($format, $encoding) {
 		//$this->itemsCount
-		
+
 //		var_dump($_REQUEST);exit;
 		$csv = array();
 
@@ -594,7 +595,7 @@ class AdminModule {
 			else {
 				$items = $this->getItems($limit, $per_page); // все записи попадающие под фильтр
 			}
-			$limit += $per_page;	
+			$limit += $per_page;
 			//  данные
 			foreach($items as $item) {
 				$row = array();
@@ -606,18 +607,18 @@ class AdminModule {
 				$csv[] = $row;
 			}
 		} while(count($items)>0);
-		
+
 		if($format == 'csv') {
 			ob_start();
-			// вывод		
+			// вывод
 			$df = fopen("php://output", 'w');
 			foreach ($csv as $row) {
 				fputcsv($df, $row);
 			}
-			fclose($df);		
+			fclose($df);
 			$csv = ob_get_clean();
-			header("Content-Disposition: attachment;filename={$this->options['table']}.csv"); 
-			header("Content-Transfer-Encoding: binary");			
+			header("Content-Disposition: attachment;filename={$this->options['table']}.csv");
+			header("Content-Transfer-Encoding: binary");
 			if($encoding == 'windows1251') {
 				header('Content-type: text/plain; charset=windows-1251');
 				echo iconv('UTF-8', 'windows-1251', $csv);
@@ -629,8 +630,8 @@ class AdminModule {
 			header("Content-Type: application/force-download");
 			header("Content-Type: application/octet-stream");
 			header("Content-Type: application/download");
-			header("Content-Disposition: attachment;filename={$this->options['table']}.xls"); 
-			header("Content-Transfer-Encoding: binary");			
+			header("Content-Disposition: attachment;filename={$this->options['table']}.xls");
+			header("Content-Transfer-Encoding: binary");
 			SimpleXLS::begin();
 			foreach($csv as $line => $row) {
 				$col = 0;
@@ -644,22 +645,22 @@ class AdminModule {
 			}
 			SimpleXLS::end();
 		}
-		
-		
-		exit;		
+
+
+		exit;
 	}
 
 /* =============== */
 /* Массовые действия	*/
 /* =============== */
 	function massAction($ids, $field, $value) {
-		
+
 		if($ids == NULL) $this->returnUser();
 		if(!is_array($ids)) $ids = array($ids);
 
 		$sql = "UPDATE `".$this->options['table']."` SET `{$field}`='{$value}' WHERE id IN (".implode(',', $ids).")";
 		$res = $this->db->query($sql);
-		
+
 		foreach($ids as $id) {
 			$item = $this->getItem($id);
 			$this->updateCache($id, $item);
@@ -680,11 +681,11 @@ class AdminModule {
 				unlink($name);
 				unset($_SESSION['import_filename']);
 			}
-		} 
-		
+		}
+
 		if(isset($_POST['import'])) {
 			$this->form = new Form($this->options['form'], $this);
-			
+
 			$f = fopen($_SESSION['import_filename'], 'r');
 			$inserted = 0;
 			for($i=0;!feof($f);$i++) {
@@ -701,7 +702,7 @@ class AdminModule {
 					$line = @array_map( function ( $str ) { return iconv( "windows-1251", "UTF-8", $str ); }, $line );
 				elseif($_REQUEST['encoding'] == 'macOS')
 					$line = @array_map( function ( $str ) { return iconv( "MacUkraine", "UTF-8", $str ); }, $line );
-				
+
 				$data = array();
 				foreach($line as $index => $row) {
 					if(empty($_POST["col_{$index}"]) || $_POST["col_{$index}"] == '-') continue;
@@ -727,7 +728,7 @@ class AdminModule {
 			$this->returnUser();
 		} elseif(isset($_SESSION['import_filename'])) {
 			$csv = array();
-			
+
 			$f = fopen($_SESSION['import_filename'], 'r');
 			for($i=0;$i<12;$i++) {
 				$line = fgetcsv($f, 1000, (isset($_REQUEST['delimiter'])?$_REQUEST['delimiter']:';'));
@@ -738,22 +739,22 @@ class AdminModule {
 				$csv[] = $line;
 			}
 		}
-		
+
 		include "views/import_template.php";
-	}	
+	}
 
 /* =============== */
 /* Выдача данных в формате JSON для dataTables	*/
 /* =============== */
 	function dataSource() {
 		$this->sortFields();
-		$headers = array();		
+		$headers = array();
 		foreach($this->options['form'] as $key=>$value) {
 			if(!empty($value->header)) {
 				$headers[] = $key;
 			}
 		}
-		
+
 		if(count($_GET['order'])>0) {
 			$this->options['sort'] = '';
 			foreach($_GET['order'] as $order) {
@@ -761,7 +762,7 @@ class AdminModule {
 				$this->options['sort'] .= $headers[$order['column']-1].' '.$order['dir'];
 			}
 		}
-		
+
 		$items = $this->getItems($_GET['start'], $_GET['length']);
 
 		$data = array();
@@ -771,9 +772,9 @@ class AdminModule {
 			$row = array('checkbox-cell' => '<input type="checkbox" class="row_checkbox" name="" value="'.$item['id'].'" autocomplete="off">');
 			foreach($this->options['form'] as $key=>$value) {
 				if(!empty($value->header)) {
-					
+
 					$value->fromRow($item);
-										
+
 					$row[$value->cell_class] = $value->toListItem();
 				}
 			}
@@ -781,7 +782,7 @@ class AdminModule {
 			$row['DT_RowClass'] = $this->getListClass($item);
 			$data[] = $row;
 		}
-		
+
 
 
 		$result = array(
@@ -793,32 +794,32 @@ class AdminModule {
 
 		return $result;
 	}
-	
+
 
 /* =============== */
 /* Обработка действий по умолчанию	*/
 /* =============== */
 	function processCommands() {
 		$this->gettextDomain = 'AdminModule';
-		bindtextdomain($this->gettextDomain, dirname(__FILE__)."/locale"); 
-		$oldDomain = textdomain($this->gettextDomain);	
-		
+		bindtextdomain($this->gettextDomain, dirname(__FILE__)."/locale");
+		$oldDomain = textdomain($this->gettextDomain);
+
 
 		if(isset($_REQUEST['data-source']) ) { // выдача данных для dataTables
-		
+
 			echo json_encode($this->dataSource(), JSON_UNESCAPED_UNICODE);
 			exit;
-			
+
 		} elseif(isset($_REQUEST['ajaxField']) && isset($_REQUEST['ajaxMethod'])) { // обработка AJAX
-		
+
 			call_user_func( array( $this->options['form'][$_REQUEST['ajaxField']], $_REQUEST['ajaxMethod'] ) );
 			exit;
-			
+
 		} else { // обработка обычных запросов
 
 			if($this->options['title']!='')
 				$this->navigation->add($this->options['title'], $this->baseUrl);
-	
+
 			foreach($this->options['form'] as $key=>$value) {
 				if($value->massAction && $value->type == 'checkbox') {
 					if(isset($_REQUEST["mass_{$value->name}_on"])) {
@@ -828,7 +829,7 @@ class AdminModule {
 					}
 				}
 			}
-	
+
 			if(isset($_REQUEST['export'])) {
 				$this->export($_REQUEST['format'], $_REQUEST['encoding']);
 			} elseif(isset($_REQUEST['print'])) {
@@ -839,7 +840,7 @@ class AdminModule {
 				exit;
 			} elseif(isset($_REQUEST['import'])) {
 				$this->navigation->add(_("Import"),"addarticle.php");
-				echo $this->navigation->get();				
+				echo $this->navigation->get();
 				$this->import();
 			} elseif(isset($_REQUEST['delete'])) {
 				$this->deleteItem($_REQUEST['item']);
@@ -859,14 +860,14 @@ class AdminModule {
 				$this->listItems();
 			}
 		}
-		
+
 		textdomain($oldDomain);
-		
+
 		return true;
 	}
-	
+
 	function move($url = NULL) {
-		header("Location: ".($url?$url:$this->baseUrl));	
+		header("Location: ".($url?$url:$this->baseUrl));
 		exit;
 	}
 
