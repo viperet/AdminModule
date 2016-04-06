@@ -13,7 +13,7 @@ class hiddenType extends coreType {
 	
 	public function toSql() {
 		if($this->readonly) return "";
-		return "`{$this->name}`=".$this->db->escape($this->value);
+		return "`{$this->name}`='". mysql_real_escape_string($this->value)."'";
 		
 	}
 	

@@ -1,4 +1,4 @@
-<?php
+<?
 class fileType extends coreType {
 	public $format = '{id}_{filename}';
 	public $subfolders = true;
@@ -196,7 +196,7 @@ class fileType extends coreType {
 			else
 				$url = $path.$fname; //."?v=".time(); // ссылка на файл
 
-			return "`{$this->name}` = ".$this->db->escape($url);
+			return "`{$this->name}` = '".mysql_real_escape_string($url)."'";
 		} else {
 			$this->cleanup();
 			die("Error rename('$fileName', '$name')");

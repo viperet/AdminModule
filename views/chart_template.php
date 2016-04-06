@@ -11,11 +11,11 @@
 	color: #939393;
 }
 
-.filter .dropdown-toggle {   
+.filter .dropdown-toggle {
     overflow: hidden;
     padding-right: 24px /* Optional for caret */;
     text-align: left;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
     width: 100%;
 }
 
@@ -68,7 +68,7 @@
 	height: 100%;
 	background-color: rgba(0,0,0,0.5);
 	z-index: 1100;
-}	
+}
 </style>
 <div class="overlay" style="display: none;"></div> <!-- шторка для закрывания на время загрузки -->
 
@@ -76,12 +76,12 @@
 <div class="panel panel-default">
 	<div class="panel-heading"><?= _('Filters')?></div>
 	<div class="panel-body">
-	  
+
 	<form method="GET" action="" id="filter_form">
-	<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>"> 
+	<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>">
 	<div class="row">
 
-<?php if($this->options['date']) { ?>			
+<?php if($this->options['date']) { ?>
 		<div class="col-lg-4 pull-right">
 			<label><?= _('Date')?></label>
 			<div class="form-inline">
@@ -120,8 +120,8 @@
 <?php
 		$fieldValues = $this->getFieldValues($field);
 		$name = $field->name;
-		
-		// фильтрация 
+
+		// фильтрация
 		if($field->filterByClick === 'multiple') {
 ?>
 	<div id="filter_<?=$name?>" class="filter multiple btn-group" data-field="<?=$name?>">
@@ -132,7 +132,7 @@
 <?php						foreach($fieldValues as $key => $value) { ?>
 			<li>
 				<label for="prio_{$priority}">
-					<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>> 
+					<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>>
 					<?=$value?>
 				</label></li>
 <?php } /* foreach */ ?>
@@ -140,24 +140,29 @@
 			<li role="separator" class="divider"></li>
 			<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> фильтровать</button></li>
 		</ul>
+<<<<<<< HEAD
 	</div>	
 <?php
+=======
+	</div>
+<?
+>>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
 
-			
+
 		} else {
 			if($field->filterByClick === 'search')
 				$filterClass = 'select2';
-			else 
+			else
 				$filterClass = 'selectpicker';
 			echo "<select id='filter_{$name}' class='filter form-control {$filterClass}' data-field='{$name}'  data-title='-'>".
 					"<option value=''>-</option>";
 			foreach($fieldValues as $key => $value) {
-				echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>"; 
+				echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>";
 			}
 			echo "</select>";
 		}
-			
-?>		
+
+?>
 		</div>
 	</div>
 <?php	} ?>
@@ -171,7 +176,7 @@
 
 <script>
 
-	$('select.filter.selectpicker').selectpicker({ 
+	$('select.filter.selectpicker').selectpicker({
 		 width: '100%',
 		 style: 'btn-default btn-xs',
 	});
@@ -180,12 +185,13 @@
 //		containerCssClass: 'input-xs',
 		dropdownAutoWidth: true,
 	});
-	
-	
+
+
     var chart_options = {
         chart: {
-            type: '<?=$this->options['type']?>'
-        },	    
+            type: '<?=$this->options['type']?>',
+            height: <?=intval($this->options['height'])?>
+        },
         title: {
             text: '<?=$this->options['title']?>',
         },
@@ -222,7 +228,7 @@
             borderWidth: 0
         },
         series:<?= $this->json($this->series, JSON_UNESCAPED_UNICODE)?>
-        
+
 /*
         [{
             name: 'Tokyo',
@@ -240,15 +246,14 @@
 */
     };
     var custom_chart_options = {<?=$this->options['options']?>};
-    $.extend(chart_options, custom_chart_options);  
-    
-    $('#chart-container').highcharts(chart_options);
-    
+
+    $('#chart-container').highcharts($.extend(true, chart_options, custom_chart_options));
+
 
 // Фильтрование
 
 	moment.locale('ru');
-	
+
 	function setTime(mode) {
 		var from, to;
 		switch(mode) {
@@ -296,17 +301,17 @@
 		}
 		return filters;
 	}
-	
+
 	function setFilters(filters) {
 		var tmpFilter = [];
 		$.each(filters, function (key, value) {
-			if(value != '') 
+			if(value != '')
 				tmpFilter.push(key+':'+value);
 		});
 		$('#filter_input').val(tmpFilter.join(';'));
 		return true;
 	}
-	
+
 	$('#filter_form').submit(function () {
 		$('.overlay').show();
 		var new_location = "<?=$this->baseUrlNoFilter?>&filter="+$('#filter_input').val();
@@ -317,19 +322,19 @@
 		document.location = new_location;
 		return false;
 	})
-	
+
 	$('body').on('change', '#header_checkbox', function (event, value) {
 		$('.row_checkbox').prop('checked', this.checked).trigger('change');
 	});
-	
+
 	$('.filter.multiple').on('hidden.bs.dropdown show.bs.dropdown triggerEvent', function (e) {
-		
+
 		console.log(e);
-		
-		var filters = getFilters();			
+
+		var filters = getFilters();
 		var el = $(this);
 		values = [];
-		
+
 		el.find('input:checked').each(function () {
 			values.push(this.value);
 		})
@@ -344,7 +349,7 @@
 		if(e.type == 'triggerEvent') {
 			return;
 		} else if(e.type == 'show') {
-			el.data('old_values', values_list);	
+			el.data('old_values', values_list);
 		} else {
 			console.log(values);
 			var old_values = el.data('old_values');
@@ -356,7 +361,7 @@
 		}
 	}).trigger('triggerEvent');
 	$('select.filter').not('[multiple]').change( function () {
-		var filters = getFilters();			
+		var filters = getFilters();
 		var el = $(this);
 		filters[el.data('field')] = this.value;
 		setFilters(filters);
@@ -372,14 +377,14 @@
 
 	options.format = 'DD.MM.YYYY';
 	$('#date-from, #date-to').datetimepicker(options);
-	
+
 	$("#date-from").on("dp.change",function (e) {
 	$('#date-to').data("DateTimePicker").minDate(e.date);
 	});
 	$("#date-to").on("dp.change",function (e) {
 	$('#date-from').data("DateTimePicker").maxDate(e.date);
-	});	
-    
-    
-    
+	});
+
+
+
 </script>

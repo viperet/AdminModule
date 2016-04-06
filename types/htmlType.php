@@ -48,7 +48,7 @@ class htmlType extends textareaType {
 			$this->value = preg_replace_callback("#(?<! !!! -->)(<img .*src=['\"])(http://.*)(['\"])#Us", array($this, 'downloadImage'), $this->value);
 			
 //			echo htmlspecialchars($this->value); exit;
-			return "`{$this->name}` = ".$this->db->escape($this->value);
+			return "`{$this->name}` = '".mysql_real_escape_string($this->value)."'";
 		} else {
 			return ''; 
 		}

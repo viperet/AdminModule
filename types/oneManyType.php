@@ -19,7 +19,7 @@ class oneManyType extends coreType {
 	
 	
 	public function ajaxLookup() {
-		$tagsJSON = $this->db->getAll("SELECT id, {$this->details_display} text FROM {$this->details_table} WHERE {$this->details_display} LIKE '".$this->db->escape($_GET['q'], false)."%' ORDER BY {$this->details_sort}");
+		$tagsJSON = $this->db->getAll("SELECT id, {$this->details_display} text FROM {$this->details_table} WHERE {$this->details_display} LIKE '".mysql_real_escape_string($_GET['q'])."%' ORDER BY {$this->details_sort}");
 	
 		echo $this->json($tagsJSON);
 	}	

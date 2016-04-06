@@ -30,7 +30,7 @@ class tagsType extends coreType {
 	
 	
 	public function ajaxLookup() {
-		$tags = $this->db->getAll("SELECT * FROM tags WHERE tag LIKE '".$this->db->escape($_GET['q'], false)."%' ORDER By tag ASC LIMIT 10");
+		$tags = $this->db->getAll("SELECT * FROM tags WHERE tag LIKE '".mysql_real_escape_string($_GET['q'])."%' ORDER By tag ASC LIMIT 10");
 	
 		$tagsJSON = array();
 		foreach($tags as $tag){
@@ -54,12 +54,13 @@ class tagsType extends coreType {
 		return $result;
 	}
 	
-	public function postSave($id, $params, $item) { 
+	public function postSave($id, $params) { 
 		$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
 		
 		foreach($this->value as $tag) {
 			if($tag['id'] ===  NULL) {
-				$tag_id = $this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
+				$this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
+				$tag_id = mysql_insert_id();
 				if($tag_id == 0) { // такой тег уже есть в базе
 					$tag_id =$this->db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
 				}
@@ -72,9 +73,9 @@ class tagsType extends coreType {
 		}
 		return ''; 
 	}
-	public function delete() {
-		if(!empty($this->value) && !empty($this->id)) {
-			$this->db->query("DELETE FROM tags_content WHERE content_id={$this->id} AND content_table='{$this->options['table']}'");
+	public function delete($id) {
+		if(!empty($this->value) && !empty($id)) {
+			$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
 		}
 	}
 	

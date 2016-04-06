@@ -58,7 +58,7 @@ class passwordType extends textType {
 	public function toSql() {
 		if($this->value == '') return "";
 		$password = $this->hashPassword();
-		return "`{$this->name}`= ".$this->db->escape($password);
+		return "`{$this->name}`= '". mysql_real_escape_string($password)."'";
 		
 	}
 
