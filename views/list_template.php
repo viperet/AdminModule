@@ -254,23 +254,13 @@ table.dataTable tr.totals-row th {
 		    <li role="separator" class="divider"></li>
 		    <li><a class="export-link" href="<?= $this->baseUrl ?>&print">Print</a></li>
 		  </ul>
-<<<<<<< HEAD
-		</div>				
-		<?php } ?>	
+		</div>
+		<?php } ?>
 		<?php if($this->options['import']) { ?>
 		<div class="btn-group ">
 			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>				
-		<?php } ?>	
-=======
 		</div>
-		<? } ?>
-		<? if($this->options['import']) { ?>
-		<div class="btn-group ">
-			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>
-		<? } ?>
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+		<?php } ?>
 	</div>
 
 	<div class="clear"></div>
@@ -288,11 +278,7 @@ table.dataTable tr.totals-row th {
 	<thead>
 		<tr>
 			<th class="checkbox-cell" data-orderable="0"></th>
-<<<<<<< HEAD
-	<?php 	
-=======
-	<?
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
 					htmlspecialchars($this->options['form'][$header]->label);
@@ -303,11 +289,7 @@ table.dataTable tr.totals-row th {
 		</tr>
 		<tr>
 			<th class="checkbox-cell"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
-<<<<<<< HEAD
-	<?php 	
-=======
-	<?
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
 				if($this->options['form'][$header]->filterByClick) {
@@ -333,16 +315,9 @@ table.dataTable tr.totals-row th {
 						<li role="separator" class="divider"></li>
 						<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> фильтровать</button></li>
 					</ul>
-<<<<<<< HEAD
-				</div>	
-<?php 
-						
-=======
 				</div>
-<?
+<?php
 
-
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
 					} else {
 						if($this->options['form'][$header]->filterByClick === 'search')
 							$filterClass = 'select2';
@@ -364,11 +339,7 @@ table.dataTable tr.totals-row th {
 		</tr>
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
-<<<<<<< HEAD
-	<?php 	
-=======
-	<?
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
 				echo "</th>\n";
@@ -391,13 +362,8 @@ table.dataTable tr.totals-row th {
 					$formItem->fromRow($item);
 
 	?>
-<<<<<<< HEAD
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?php if($formItem->filterByClick)		
-=======
-			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <? $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?	if($formItem->filterByClick)
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php if($formItem->filterByClick)
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
@@ -405,12 +371,7 @@ table.dataTable tr.totals-row th {
 				<?= $formItem->toListElement() ?>
 				</a>
 			</td>
-<<<<<<< HEAD
-	<?php 					
-=======
-	<?
-
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php
 				}
 	?>
 			<td class="table-actions btn-toolbar">
@@ -424,22 +385,14 @@ table.dataTable tr.totals-row th {
 		<tr>
 			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
 		</tr>
-<<<<<<< HEAD
-<?php 			
-=======
-<?
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+<?php
 			}
 	?>
 	</tbody>
 	<tfoot>
 		<tr class="totals-row">
 			<th class="checkbox-cell"></th>
-<<<<<<< HEAD
-	<?php 	
-=======
-	<?
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+	<?php
 			$totals = $this->getTotals();
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
@@ -452,19 +405,11 @@ table.dataTable tr.totals-row th {
 		</tr>
 	</tfoot>
 	</table>
-<<<<<<< HEAD
-<?php if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>	
+<?php if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>
 	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<?php } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>	
+<?php } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>
 	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
-<?php } ?>	
-=======
-<? if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>
-	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<? } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>
-	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
-<? } ?>
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+<?php } ?>
 
 <?php if(!$this->options['datatables']) { ?>
 	<div class="admin-pager"><?= $htmlPager ?></div>
@@ -488,23 +433,13 @@ table.dataTable tr.totals-row th {
 		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
 		    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
 		  </ul>
-<<<<<<< HEAD
-		</div>				
+		</div>
 		<?php } ?>
 		<?php if($this->options['import']) { ?>
 		<div class="btn-group ">
 			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>				
-		<?php } ?>	
-=======
 		</div>
-		<? } ?>
-		<? if($this->options['import']) { ?>
-		<div class="btn-group ">
-			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>
-		<? } ?>
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
+		<?php } ?>
 	</div>
 </form>
 
@@ -573,19 +508,11 @@ table.dataTable tr.totals-row th {
 			orderSequence: [ "desc", "asc"]
 		} ],
 		columns: [
-<<<<<<< HEAD
-		        { data: 'checkbox-cell' },
+		        { data: 'checkbox-cell', className: 'checkbox-cell' },
 	<?php 	foreach($headers as $header) { ?>
 		        { data: '<?= $this->options['form'][$header]->cell_class ?>', },
 	<?php 	}	?>
-		        { data: 'actions-cell' }
-=======
-		        { data: 'checkbox-cell', className: 'checkbox-cell' },
-	<?		foreach($headers as $header) { ?>
-		        { data: '<?= $this->options['form'][$header]->cell_class ?>', },
-	<?		}	?>
 		        { data: 'actions-cell', className: 'table-actions' }
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
 	    ],
 		stateSave: true,
 		stateDuration: 0, // хранить настройки без ограничения по времени
@@ -673,23 +600,13 @@ new $.fn.dataTable.FixedHeader( datatable, {
 	} catch(e) {
     	console.log('datatables buttons error');
 	}
-<<<<<<< HEAD
-	
-	
+
+
 <?php } ?>
-	
-	
-	
-	
-=======
-
-
-<? } ?>
 
 
 
 
->>>>>>> 48545dbe539d0537cb03869892d3dab85956a6b7
 	moment.locale('ru');
 
 	function setTime(mode) {

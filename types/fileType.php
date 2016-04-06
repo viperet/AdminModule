@@ -3,32 +3,32 @@ class fileType extends coreType {
 	public $format = '{id}_{filename}';
 	public $subfolders = true;
 	public $relative = false; //сохранять путь относительно папки path
-	public $path = ''; 
+	public $path = '';
 	public $maxsize = 5242880; // 5 MB
-	public $blacklist = array('php', 'cgi', 'phtml'); 
-	
+	public $blacklist = array('php', 'cgi', 'phtml');
+
 	protected $session_id;
 	protected $original_name;
-	
+
 	static function formatSize($size, $precision = 1) {
 	    $base = log($size) / log(1024);
-	    $suffixes = array('', 'k', 'M', 'G', 'T');   
-	
+	    $suffixes = array('', 'k', 'M', 'G', 'T');
+
 	    return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)].'B';
     }
-	
+
 	private function getFilename() {
 		if($this->relative)
-			$fname = $this->options['root_path'].$this->path.$this->value; 
+			$fname = $this->options['root_path'].$this->path.$this->value;
 		else
-			$fname = $this->options['root_path'].$this->value; 
+			$fname = $this->options['root_path'].$this->value;
 		return $fname;
 	}
-	
+
 	public function toString() {
 		$fname = $this->getFilename();
 		$name = basename($fname);
-		
+
 		if(!file_exists($fname)) return _("File not uploaded");
 
 		$size = filesize($fname);
@@ -41,7 +41,7 @@ class fileType extends coreType {
 		parent::fromForm($value);
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
-		
+
 		if(!empty($value[$this->name.'_remove'])) {
 			if(isset($_SESSION['uploads'][$this->session_id][$this->name])) {
 				$this->value = $_SESSION['uploads'][$this->session_id][$this->name]['value'];
@@ -49,17 +49,17 @@ class fileType extends coreType {
 			}
 			$this->value = '';
 		} elseif(!empty($_FILES[$this->name.'_file']['tmp_name']) &&
-		   !empty($_FILES[$this->name.'_file']['name'])) { 
+		   !empty($_FILES[$this->name.'_file']['name'])) {
 			$fileName = $_FILES[$this->name.'_file']['tmp_name'];
 			$translit_filename = $this->translitFileName($_FILES[$this->name.'_file']['name']);
 
-		
+
 		    $path = $this->path.'/tmp/'.$this->session_id.'/';
 		    @mkdir($this->options['root_path'].$path, 0777, true);
-		    
+
 		    $name = $this->options['root_path'].$path.$translit_filename; // имя файла
 		    if (move_uploaded_file($fileName, $name)) {
-			    
+
 			    $this->value = $path.$translit_filename;
 				$this->original_name = $_FILES[$this->name.'_file']['name']; // оригинальное имя файла
 				$_SESSION['uploads'][$this->session_id][$this->name] = array(
@@ -74,16 +74,16 @@ class fileType extends coreType {
 			$this->value = $_SESSION['uploads'][$this->session_id][$this->name]['value'];
 			$this->original_name = $_SESSION['uploads'][$this->session_id][$this->name]['original_name'];
 		}
-		
 
 
-	}	
-	
+
+	}
+
 	public function fromRow($row) {
 		parent::fromRow($row);
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
-	}	
+	}
 
 	public function toHtml() {
 		return "<div class='row file_upload_field' data-maxsize='{$this->maxsize}'>
@@ -101,8 +101,8 @@ class fileType extends coreType {
 </div>
 ";
 	}
-	public function toSql() { return ""; }	
-	
+	public function toSql() { return ""; }
+
 	public function validate(&$errors) {
 		$valid = true;
 		if(!empty($this->value)) {
@@ -141,7 +141,7 @@ class fileType extends coreType {
 			}
 		}
 
-	    // если обязательное поле и нет старого значения и нет нового файла - ошибка    
+	    // если обязательное поле и нет старого значения и нет нового файла - ошибка
 		if($this->required && empty($this->value)) {
 			$errors[] = sprintf(_("Upload file in field '%s'"), htmlspecialchars($this->label));
 			$this->errors[] = _('Required field');
@@ -150,24 +150,24 @@ class fileType extends coreType {
 		}
 	    return $valid;
 	}
-	
-	
-	public function postSave($id, $params, $item) { 
+
+
+	public function postSave($id, $params, $item) {
 		if($this->subfolders)
 			$relative_path = chunk_split(substr(str_pad($id, 4, '0', STR_PAD_LEFT), 0, 4), 2,'/');
 		else
 			$relative_path = '';
-		
-	    $path = $this->path.$relative_path;		
+
+	    $path = $this->path.$relative_path;
 	    @mkdir($this->options['root_path'].$path, 0777, true);
-	    
-	    
+
+
 		if(!empty($this->value) &&
-		   !empty($this->original_name)) { 
+		   !empty($this->original_name)) {
 			$fileName = $this->options['root_path'].$this->value;
 
-		    $translit_filename = $this->translitFileName($this->original_name);	    
-						    			
+		    $translit_filename = $this->translitFileName($this->original_name);
+
 		    $fname = str_replace(array(
 		    			'{id}',
 		    			'{filename}',
@@ -176,19 +176,19 @@ class fileType extends coreType {
 		    			$translit_filename,
 		    		), $this->format);
 
-		} elseif(empty($this->value)) { // удаление файла 
+		} elseif(empty($this->value)) { // удаление файла
 			$this->cleanup();
 			return "`{$this->name}` = ''";
 		} else {
 			$this->cleanup();
 			return "";
 		}
-			
+
 		$name= $this->options['root_path'].$path.$fname; // имя файла
-			
+
 		if (rename($fileName, $name)) {
 		    // Файл корректен и был успешно загружен
-		    
+
 			$this->cleanup();
 
 			if($this->relative)
@@ -200,23 +200,23 @@ class fileType extends coreType {
 		} else {
 			$this->cleanup();
 			die("Error rename('$fileName', '$name')");
-			return ''; 
-		}	    
+			return '';
+		}
 
-		return ''; 
+		return '';
 	}
 
 	// удаление файла
-	public function delete() { 
+	public function delete($id) {
 		if(!empty($this->value)) {
 			$fname = $this->getFilename();
 			@unlink($fname);
 			$this->removeEmptySubFolders($this->options['root_path'].$this->path);
 		}
 	}
-	
+
 	// очистка временных файлов
-	public function cleanup() { 
+	public function cleanup() {
 		if(!empty($this->session_id)) {
 			$path = $this->options['root_path'].$this->path.'/tmp/'.$this->session_id.'/';
 			if(file_exists($path)) $this->recRmDir($path);
@@ -227,12 +227,12 @@ class fileType extends coreType {
 
 	private function recRmDir($path) {
 		if(!file_exists($path)) return;
-		if(is_file($path)) { 
+		if(is_file($path)) {
 			unlink($path);
 			return;
 		}
 		$dir = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::CHILD_FIRST);
-		
+
 		for ($dir->rewind(); $dir->valid(); $dir->next()) {
 		    if ($dir->isDir()) {
 		        @rmdir($dir->getPathname());
@@ -240,8 +240,8 @@ class fileType extends coreType {
 		        @unlink($dir->getPathname());
 		    }
 		}
-		rmdir($path);	
-	}	
+		rmdir($path);
+	}
 
 	private function removeEmptySubFolders($path) {
 		$empty=true;
@@ -249,49 +249,49 @@ class fileType extends coreType {
 			$empty &= is_dir($file) && $this->removeEmptySubFolders($file);
 		}
 		return $empty && rmdir($path);
-	}	
-	
+	}
+
 	private function translitFileName($translit_filename) {
 	    return $this->translit(pathinfo($translit_filename, PATHINFO_FILENAME)).'.'.mb_convert_case(pathinfo($translit_filename, PATHINFO_EXTENSION), MB_CASE_LOWER);
 	}
 
-	private static function translit($text) { 
+	private static function translit($text) {
 		$text = mb_convert_case($text, MB_CASE_LOWER);
-		preg_match_all('/./u', $text, $text); 
-		$text = $text[0]; 
-		$simplePairs = array('і'=>'i', 'ї'=>'i', 'є'=>'e', 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' ); 
-		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'h' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja', 'ъ' => "" , 'ь' => "" ); 
-		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '-', ',' => '-', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' ); 
-		$translitLatSymbols = array( 'a','l','u','b','m','t','v','n','y','g','o', 'f','d','p','i','r','z','c','k','e','s', 'A','L','U','B','M','T','V','N','Y','G','O', 'F','D','P','I','R','Z','C','K','E','S', ); 
-		$simplePairsFlip = array_flip($simplePairs); 
-		$complexPairsFlip = array_flip($complexPairs); 
-		$specialSymbolsFlip = array_flip($specialSymbols); 
-		$charsToTranslit = array_merge(array_keys($simplePairs),array_keys($complexPairs)); 
-		$translitTable = array(); 
-		foreach($simplePairs as $key => $val) $translitTable[$key] = $simplePairs[$key]; 
-		foreach($complexPairs as $key => $val) $translitTable[$key] = $complexPairs[$key]; 
-		foreach($specialSymbols as $key => $val) $translitTable[$key] = $specialSymbols[$key]; 
-		$result = ""; 
-		$nonTranslitArea = false; 
-		foreach($text as $char) { 
-			if(in_array($char,array_keys($specialSymbols))) { 
-				$result.= $translitTable[$char]; 
-			} elseif(in_array($char,$charsToTranslit)) { 
-				if($nonTranslitArea) { 
-					$result.= ""; 
-					$nonTranslitArea = false; 
-				} 
-				$result.= $translitTable[$char]; 
-			} else { 
-				if(!$nonTranslitArea && in_array($char,$translitLatSymbols)) { 
-					$result.= ""; 
-					$nonTranslitArea = true; 
-				} $result.= $char; 
-			} 
-		} 
+		preg_match_all('/./u', $text, $text);
+		$text = $text[0];
+		$simplePairs = array('і'=>'i', 'ї'=>'i', 'є'=>'e', 'а' => 'a' , 'л' => 'l' , 'у' => 'u' , 'б' => 'b' , 'м' => 'm' , 'т' => 't' , 'в' => 'v' , 'н' => 'n' , 'ы' => 'y' , 'г' => 'g' , 'о' => 'o' , 'ф' => 'f' , 'д' => 'd' , 'п' => 'p' , 'и' => 'i' , 'р' => 'r' );
+		$complexPairs = array( 'з' => 'z' , 'ц' => 'c' , 'к' => 'k' , 'ж' => 'zh' , 'ч' => 'ch' , 'х' => 'h' , 'е' => 'e' , 'с' => 's' , 'ё' => 'jo' , 'э' => 'e' , 'ш' => 'sh' , 'й' => 'j' , 'щ' => 'shh' , 'ю' => 'ju' , 'я' => 'ja', 'ъ' => "" , 'ь' => "" );
+		$specialSymbols = array( "_" => "-", "'" => "", "`" => "", "^" => "", " " => "-", '.' => '-', ',' => '-', ':' => '', '"' => '', "'" => '', '<' => '', '>' => '', '«' => '', '»' => '', ' ' => '-', '/' => '-', '\\' => '-' );
+		$translitLatSymbols = array( 'a','l','u','b','m','t','v','n','y','g','o', 'f','d','p','i','r','z','c','k','e','s', 'A','L','U','B','M','T','V','N','Y','G','O', 'F','D','P','I','R','Z','C','K','E','S', );
+		$simplePairsFlip = array_flip($simplePairs);
+		$complexPairsFlip = array_flip($complexPairs);
+		$specialSymbolsFlip = array_flip($specialSymbols);
+		$charsToTranslit = array_merge(array_keys($simplePairs),array_keys($complexPairs));
+		$translitTable = array();
+		foreach($simplePairs as $key => $val) $translitTable[$key] = $simplePairs[$key];
+		foreach($complexPairs as $key => $val) $translitTable[$key] = $complexPairs[$key];
+		foreach($specialSymbols as $key => $val) $translitTable[$key] = $specialSymbols[$key];
+		$result = "";
+		$nonTranslitArea = false;
+		foreach($text as $char) {
+			if(in_array($char,array_keys($specialSymbols))) {
+				$result.= $translitTable[$char];
+			} elseif(in_array($char,$charsToTranslit)) {
+				if($nonTranslitArea) {
+					$result.= "";
+					$nonTranslitArea = false;
+				}
+				$result.= $translitTable[$char];
+			} else {
+				if(!$nonTranslitArea && in_array($char,$translitLatSymbols)) {
+					$result.= "";
+					$nonTranslitArea = true;
+				} $result.= $char;
+			}
+		}
 		$result = preg_replace('/[^0-9a-z\-]/', '', $result);
-		return strtolower(preg_replace("/[-]{2,}/", '-', $result)); 
-	} 
+		return strtolower(preg_replace("/[-]{2,}/", '-', $result));
+	}
 
 	public static function pageHeader() {
 ?>
@@ -303,11 +303,11 @@ class fileType extends coreType {
 </style>
 <script>
 $(function() {
-	
+
 	$(document).on('drop', function (e)	{
 	    e.stopPropagation().preventDefault();
 	});
-	
+
 	function escapeHtml(text) {
 	  var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
 	  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
@@ -322,29 +322,29 @@ $(function() {
 			if(this.files.length == 1) {
 				var file = this.files[0];
 				p.html("<span class='glyphicon glyphicon-file'></span> "+escapeHtml(file.name)+", "+formatSize(file.size));
-				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления 
+				$('#'+p.attr('id')+'_remove').val('0'); // устанавливаем флаг удаления
 			} else {
 				p.text('<?=_("File not uploaded")?>');
-				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
+				$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления
 			}
 	});
 	$('.file_upload_remove').click(function () { // удаление файла
 		var el = $(this);
 		var p = el.parents('.file_upload_field').find('.file_status');
-		
+
 		p.text('<?=_("File not uploaded")?>');
 
 		var file_id = $('#'+p.attr('id')+'_file');
 		file_id.val('').replaceWith( file_id = file_id.clone( true ) );
-		$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления 
+		$('#'+p.attr('id')+'_remove').val('1'); // устанавливаем флаг удаления
 		return false;
 	});
 });
 
 </script>
-<?php 
+<?php
 
 	}
 
-	
+
 }

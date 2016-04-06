@@ -27,24 +27,24 @@ class tagsType extends coreType {
 	public function toSql() {
 		return "";
 	}
-	
-	
+
+
 	public function ajaxLookup() {
 		$tags = $this->db->getAll("SELECT * FROM tags WHERE tag LIKE '".mysql_real_escape_string($_GET['q'])."%' ORDER By tag ASC LIMIT 10");
-	
+
 		$tagsJSON = array();
 		foreach($tags as $tag){
 			$tagsJSON[] = array('id'=>$tag['id'], 'text'=>$tag['tag']);
 		}
 		echo $this->json($tagsJSON);
 	}
-	
+
 	private function parseTags($value) {
 		$result = array();
 		if(trim($value)=='') return $result;
 		$tags = explode(',', $value);
 		foreach($tags as $tag) {
-			if(is_numeric($tag)) 
+			if(is_numeric($tag))
 				$result[] = array('id'=>(int)$tag, 'text'=>$this->db->getOne('SELECT tag FROM tags WHERE id=?', (int)$tag));
 			else if(preg_match('/^"(.*)"$/', $tag, $matches))
 				$result[] = array('id'=>NULL, 'text'=>$matches[1]);
@@ -53,10 +53,10 @@ class tagsType extends coreType {
 		}
 		return $result;
 	}
-	
-	public function postSave($id, $params) { 
+
+	public function postSave($id, $params, $item) {
 		$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
-		
+
 		foreach($this->value as $tag) {
 			if($tag['id'] ===  NULL) {
 				$this->db->query("INSERT IGNORE tags SET tag=?", array($tag['text']));
@@ -64,25 +64,25 @@ class tagsType extends coreType {
 				if($tag_id == 0) { // такой тег уже есть в базе
 					$tag_id =$this->db->getOne("SELECT id FROM tags WHERE tag=?", array($tag['text']));
 				}
-				$this->db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");	
+				$this->db->query("INSERT tags_content SET tag_id={$tag_id}, content_id={$id}, content_table='{$this->options['table']}'");
 			} else if(is_numeric($tag['id'])) {
-				$this->db->query("INSERT tags_content SET tag_id={$tag['id']}, content_id={$id}, content_table='{$this->options['table']}'");	
+				$this->db->query("INSERT tags_content SET tag_id={$tag['id']}, content_id={$id}, content_table='{$this->options['table']}'");
 			} else {
 				throw new Exception("Tag error: ".print_r($tag, true));
 			}
 		}
-		return ''; 
+		return '';
 	}
 	public function delete($id) {
 		if(!empty($this->value) && !empty($id)) {
 			$this->db->query("DELETE FROM tags_content WHERE content_id={$id} AND content_table='{$this->options['table']}'");
 		}
 	}
-	
+
 	public function fromRow($row) {
 		if(empty($row['id'])) return $this->value = array();
 		$this->value = array();
-		$tags = $this->db->getAll("SELECT tags_content.tag_id, tags.tag FROM tags_content 
+		$tags = $this->db->getAll("SELECT tags_content.tag_id, tags.tag FROM tags_content
 			INNER JOIN tags ON (tags.id = tags_content.tag_id)
 			 WHERE content_id={$row['id']} AND content_table='{$this->options['table']}'");
 		foreach($tags as $tag) {
@@ -91,17 +91,17 @@ class tagsType extends coreType {
 	}
 	public function fromForm($values) {
 		$this->value = $this->parseTags($values[$this->name]);
-	}	
-	
+	}
+
 	public function toString() {
 		$result = '';
 		foreach($this->value as $tag) {
-			if($result != '') $result .= ', '; 
+			if($result != '') $result .= ', ';
 			$result .= $tag['text'];
 		}
 		return $result;
 	}
-	
+
 	public function validate(&$errors) {
 		if($this->required && count($this->value) == 0 ) {
 			$errors[] = sprintf(_("Fill required field '%s'"),htmlspecialchars($this->label));
@@ -111,7 +111,7 @@ class tagsType extends coreType {
 		}
 		return true;
 	}
-	
+
 	public function toHtml() {
 		$values = array();
 		foreach($this->value as $value)
@@ -119,16 +119,16 @@ class tagsType extends coreType {
 				$values[] = $value;
 			else if(is_null($value['id']))
 				$values[] = array('id'=>'"'.$value['text'].'"', 'text'=>$value['text']);
-		
+
 		$value_json = $this->json($values);
 		$value_ids = '';
 		foreach($values as $tag) {
-			if($value_ids != '') $value_ids .= ','; 
+			if($value_ids != '') $value_ids .= ',';
 			$value_ids .= $tag['id'];
 		}
 		$value_ids = htmlspecialchars($value_ids);
 		$html = <<< EOT
-<input type="hidden" id="{$this->name}" name="{$this->name}" class="form-control" value="{$value_ids}"/>		
+<input type="hidden" id="{$this->name}" name="{$this->name}" class="form-control" value="{$value_ids}"/>
 <script>
 	$('#{$this->name}').select2({
 //	  tags: true,
@@ -137,12 +137,12 @@ class tagsType extends coreType {
 			// no comma no need to tokenize
 			if (input.indexOf(',') < 0)
 				return;
-	
+
 			var parts = input.split(/,/);
 			for (var i = 0; i < parts.length; i++) {
 				var part = parts[i];
 				part = part.trim();
-	
+
 				callback({id:part,text:part});
 			}
 		},
@@ -158,7 +158,7 @@ class tagsType extends coreType {
 		},
 		multiple: true,
 		initSelection: function(element, callback) {
-			callback({$value_json});	  
+			callback({$value_json});
 		},
 		ajax: {
 		url: document.location+'&ajaxField='+encodeURIComponent('{$this->name}')+'&ajaxMethod=ajaxLookup',
@@ -180,5 +180,5 @@ class tagsType extends coreType {
 EOT;
 		return $html;
 	}
-	
+
 }
