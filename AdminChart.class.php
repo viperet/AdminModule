@@ -51,6 +51,10 @@ class AdminChart extends AdminModule {
 
 	}
 
+	function renderFilters() {
+    	return "";
+    }
+
 	function draw() {
 		if($this->options['title']!='')
 			$this->navigation->add($this->options['title'], $this->baseUrl);
