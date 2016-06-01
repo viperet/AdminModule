@@ -5,8 +5,8 @@ class detailsType extends coreType {
 	public $details_field = '';
 	public $details_sort = 'id';
 	public $master_id = 0;
-	public $form = array();	
-	
+	public $form = array();
+
 	private $data = array();
 
 	function __construct($db, $name, $array) {
@@ -16,17 +16,17 @@ class detailsType extends coreType {
 			$className = $array['type']."Type";
 			$array = new $className($db, $name, $array);
 		}
-		unset($array);	
+		unset($array);
 	}
-	
+
 	public function toStringTruncated() {
-		return "";		
+		return "";
 	}
 	public function toString() {
-		return "";		
+		return "";
 	}
-	
-	
+
+
 	// загружает структуру из POST
 	public function fromForm($value) {
 		unset($value[$this->name]['%%ID%%']);
@@ -38,9 +38,9 @@ class detailsType extends coreType {
 				$item = clone $field;
 				$item->fromForm($row);
 				$item->name = "{$this->name}[{$index}][{$name}]";
-				$this->data[$index][$name] = $item; 
-			}			
-			$this->data[$index]['id'] = $row['id']; 
+				$this->data[$index][$name] = $item;
+			}
+			$this->data[$index]['id'] = $row['id'];
 			$index++;
 		}
 /*
@@ -50,8 +50,8 @@ class detailsType extends coreType {
 		exit;
 */
 	}
-	
-	
+
+
 	// загружает структуру из ДБ
 	public function fromRow($row) {
 		if(empty($row['id'])) {
@@ -59,7 +59,7 @@ class detailsType extends coreType {
 			return;
 		}
 		$this->master_id = $row['id'];
-		$rows = $this->db->getAll("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort} ASC");
+		$rows = $this->db->getAll("SELECT * FROM {$this->details_table} WHERE {$this->details_field} = {$this->master_id} ORDER BY {$this->details_sort}");
 		$index = 0;
 		$this->data = array();
 		foreach($rows as $row) {
@@ -68,20 +68,20 @@ class detailsType extends coreType {
 				$item->fromRow($row);
 				$item->name = "{$this->name}[{$index}][{$name}]";
 
-				$this->data[$index][$name] = $item; 
+				$this->data[$index][$name] = $item;
 			}
 			$this->data[$index]['id'] = $row['id'];
 			$index++;
 		}
-		
+
 /*
 		echo "<pre>";
 		print_r($this->data);
 		exit;
 */
 	}
-	
-	
+
+
 	public function validate(&$errors) {
 		$valid = true;
 		foreach($this->data as $row) {
@@ -101,10 +101,10 @@ class detailsType extends coreType {
 		$this->valid = $valid;
 		return $valid;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function toHtml() {
 		$html = "<table class='table details_table'><thead><tr><th class='hidden'>ID</th>";
 		foreach($this->form as $name=>$field) {
@@ -112,15 +112,15 @@ class detailsType extends coreType {
 		}
 		$html .= "<th></th></tr></thead>";
 		$html .= "<tbody>";
-		
+
 		$actions_td = "<td class='actions_td'><a href='#' onClick='return removeRow(this);'>["._('Delete')."]</a>"
 					. "&nbsp; <a href='#' onClick=\"return addRow($(this).parents('tr:first'));\">["._('Copy')."]</a></td>";
-					
+
 		$actions_td = "<td class='actions_td'><div role='group' class='btn-group'>
-					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='"._('Copy')."' class='glyphicon glyphicon-sound-stereo'></span></div> 
-					<div onclick='return confirm(\""._('Delete?')."\")?removeRow(this):false;' class='btn btn-default'><span title='"._('Delete')."' class='glyphicon glyphicon-remove'></span></div> 
+					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='"._('Copy')."' class='glyphicon glyphicon-sound-stereo'></span></div>
+					<div onclick='return confirm(\""._('Delete?')."\")?removeRow(this):false;' class='btn btn-default'><span title='"._('Delete')."' class='glyphicon glyphicon-remove'></span></div>
 					</div></td>";
-					
+
 		$index = 0;
 		foreach($this->data as $row) {
 			$html .= "<tr data-index='{$index}'>";
@@ -144,11 +144,11 @@ class detailsType extends coreType {
 		}
 		$html .= $actions_td."</tr></tbody></table>";
 		$html .= "<button type='button' class='pull-right btn btn-default' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> "._('Add')."</button>";
-		return $html;		
-		
+		return $html;
+
 	}
 
-	public function postSave($id, $params, $item) { 
+	public function postSave($id, $params, $item) {
 		$res = $this->db->query($s="DELETE FROM {$this->details_table} WHERE `{$this->details_field}` = '{$id}'");
 		foreach($this->data as $row) {
 			$sql = "INSERT {$this->details_table} SET `{$this->details_field}` = '{$id}', ";
@@ -169,19 +169,19 @@ class detailsType extends coreType {
 					echo "SQL error while saving details<br>";
 					echo nl2br($res->result->userinfo);
 					exit;
-				}	
+				}
 */
-				
+
 			}
-				
+
 		}
-		return false; 
+		return false;
 	}
-	
+
 	public function toSql() {
 		return "";
 	}
-	
+
 	public static function pageHeader() {
 		return <<< EOT
 <script>
@@ -194,12 +194,12 @@ class detailsType extends coreType {
 	    var table = $(el).parents('.form-group:first').find('.details_table');
 	    var last_row = table.find('tr.new_row');
 		var index = table.find('tr:not(.new_row):last').data('index');
-		if(index === undefined) 
-			index = 0; 
-		else 
+		if(index === undefined)
+			index = 0;
+		else
 			index++;
 		var clone_row = new_row.html().replace(/\[(%%ID%%|\d+)\]\[/g, '['+index+'][' );
-		clone_row = $('<tr>'+clone_row+'</tr>').attr('class','').data('index', index); 
+		clone_row = $('<tr>'+clone_row+'</tr>').attr('class','').data('index', index);
 //		console.log(clone_row);
 		clone_row.find('td.id_td').contents().last()[0].textContent='';
 		clone_row.find('td.id_td input').val('');
@@ -217,5 +217,5 @@ class detailsType extends coreType {
 
 EOT;
 	}
-	
+
 }
