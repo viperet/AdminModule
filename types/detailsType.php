@@ -117,8 +117,8 @@ class detailsType extends coreType {
 					. "&nbsp; <a href='#' onClick=\"return addRow($(this).parents('tr:first'));\">["._('Copy')."]</a></td>";
 
 		$actions_td = "<td class='actions_td'><div role='group' class='btn-group'>
-					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default'><span title='"._('Copy')."' class='glyphicon glyphicon-sound-stereo'></span></div>
-					<div onclick='return confirm(\""._('Delete?')."\")?removeRow(this):false;' class='btn btn-default'><span title='"._('Delete')."' class='glyphicon glyphicon-remove'></span></div>
+					<div onClick=\"return addRow($(this).parents('tr:first'));\" class='btn btn-default detailed-clone'><span title='"._('Copy')."' class='glyphicon glyphicon-sound-stereo'></span></div>
+					<div onclick='return confirm(\""._('Delete?')."\")?removeRow(this):false;' class='btn btn-default detailed-remove'><span title='"._('Delete')."' class='glyphicon glyphicon-remove'></span></div>
 					</div></td>";
 
 		$index = 0;
@@ -127,7 +127,7 @@ class detailsType extends coreType {
 			$html .= "<td class='id_td hidden'><input type='hidden' name='{$this->name}[{$index}][id]' value='{$row['id']}'>{$row['id']}</td>";
 			foreach($row as $name=>$field) {
 				if(is_object($field)) {
-					$html .= "<td>".$field->toHtml()."</td>";
+					$html .= "<td class='details_{$name}'>".$field->toHtml()."</td>";
 				}
 			}
 			$html .= $actions_td."</tr>";
@@ -139,11 +139,11 @@ class detailsType extends coreType {
 			$field->fromForm(array($name=>''));
 			$oldName = $field->name;
 			$field->name = "{$this->name}[%%ID%%][{$oldName}]";
-			$html .= "<td>".$field->toHtml()."</td>";
+			$html .= "<td class='details_{$oldName}'>".$field->toHtml()."</td>";
 			$field->name = $oldName;
 		}
 		$html .= $actions_td."</tr></tbody></table>";
-		$html .= "<button type='button' class='pull-right btn btn-default' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> "._('Add')."</button>";
+		$html .= "<button type='button' class='pull-right btn btn-default detailed-add' onClick=\"return addRow($(this).parents('.form-group:first').find('.details_table tr.new_row'));\"><i class='glyphicon glyphicon-plus'></i> "._('Add')."</button>";
 		return $html;
 
 	}
