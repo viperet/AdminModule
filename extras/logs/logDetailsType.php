@@ -4,13 +4,13 @@ include 'finediff.php';
 class logDetailsType extends coreType {
 
 	public function toHtml() {
-		
+
 		$html = "<div class='well well-sm'>
 		<table class='table log-details'>
 		<thead>
 			<tr>
-				<th>Поле</th>
-				<th>Изменения</th>
+				<th>"._('Field')."</th>
+				<th>"._('Change')."</th>
 			</tr>
 		</thead>
 		";
@@ -25,20 +25,20 @@ class logDetailsType extends coreType {
 				</tr>
 				";
 			}
-			if(count($details)==0) 
-				$html .= "<tr><td colspan='2'>Нет изменений</td></tr>";
+			if(count($details)==0)
+				$html .= "<tr><td colspan='2'>"._('No changes')."</td></tr>";
 		} else {
-			$html .= "<tr><td colspan='2'>Нет данных</td></tr>";
+			$html .= "<tr><td colspan='2'>"._('No data')."</td></tr>";
 		}
 		$html .= "</table></div>";
-		
+
 		return $html;
 	}
-	
+
 	public function toSql() {
 		return "";
 	}
-	
+
 	public static function pageHeader() {
 ?>
 <style>
@@ -47,5 +47,5 @@ class logDetailsType extends coreType {
 </style>
 <?php
 	}
-	
+
 }
