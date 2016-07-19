@@ -196,10 +196,10 @@ table.dataTable tr.totals-row th {
 		<form method="GET" action="" id="filter_form" class="form-inline">
 <?php if($this->options['date']) { ?>
 			<div class="form-group">
-				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="Дата от"/>
+				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="<?= _('Date from')?>"/>
 			</div>
 			<div class="form-group">
-				<input type='text' class="form-control" name="dt" id='date-to' value="<?= $this->dateTo!=''?date('d.m.Y', strtotime($this->dateTo)):'' ?>" placeholder="до"/>
+				<input type='text' class="form-control" name="dt" id='date-to' value="<?= $this->dateTo!=''?date('d.m.Y', strtotime($this->dateTo)):'' ?>" placeholder="<?= _('to')?>"/>
 			</div>
 			<div class="btn-group" style="margin-right: 20px;">
 			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
