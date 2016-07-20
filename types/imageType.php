@@ -8,28 +8,28 @@ class imageType extends fileType {
 	public $format = '{id}_{width}x{height}';
 	public $subfolders = true;
 	public $relative = false; //сохранять путь относительно папки path
-	public $path = ''; 
+	public $path = '';
 	public $quality = 95;
 	public $zc = 1;
 	public $size = 'medium'; // картинки какого размера показывать в рез-тах поиска (icon|medium|xxlarge|huge)
 	public $validation = array('jpg', 'jpeg', 'png', 'gif');
-	
+
 	public $x,$y,$h,$w;
-	
+
 	protected $timestamp = '';
 	protected $download_url = '';
-	
+
 	public function __construct($db, $name, $array) {
 		parent::__construct($db, $name, $array);
 		$this->timestamp = 'v='.time();
 	}
-	
+
 	public function toHtml() {
 		if($this->readonly) {
 			return "<div class='col-sm-3 col-xs-3 img_mask' style='position:relative;'>
 			<img id='{$this->name}' class='form_thumbnail {$this->class}' style='".($this->value==''?"display:none;'":"' src='{$this->value}?{$this->timestamp}'")." id='{$this->name}_uploadPreview' data-width='{$this->width}' data-height='{$this->height}'>
 			</div>";
-		} else 
+		} else
 			return "<div class='row upload_field'>
 		<div class='col-sm-12'><p class='form-control-static'>".
 			($this->width>0&&$this->height>0?_('Minimum size')." {$this->width}x{$this->height}":_("Any size"))
@@ -45,7 +45,7 @@ class imageType extends fileType {
 	    "._('Upload from computer')." <input type='file' class='form_input upload_image' name='{$this->name}_file' id='{$this->name}_file'>
 	</span>
 	<div>
-		<span class='link' onClick='return searchPopup(\"{$this->name}_url\", \"{$this->size}\");'>"._('find image')."</span> "._('or upload image from URL')."<br>
+		"._('or upload image from URL')."<br>
 		<input type='hidden' name='{$this->name}' value='{$this->value}'>
 		<input type='text' class='form-control upload_url' name='{$this->name}_url' id='{$this->name}_url' placeholder='http://' value=''>
 	</div>
@@ -62,43 +62,43 @@ class imageType extends fileType {
 
 	public function fromForm($value) {
 		parent::fromForm($value);
-		
+
 		if(!empty($value[$this->name.'_url'])) { // загрузка по ссылке
 			if(!preg_match('#^https?://#', $value[$this->name.'_url']))
 				$value[$this->name.'_url'] = 'http://'.$value[$this->name.'_url'];
-			
+
 			$fileName = $this->download_url = $value[$this->name.'_url'];
 
 			$translit_filename = 'tmp_image.jpg';
-		
+
 		    $path = $this->path.'/tmp/'.$this->session_id.'/';
 		    @mkdir($this->options['root_path'].$path, 0777, true);
-		    
+
 		    $name = $this->options['root_path'].$path.$translit_filename; // имя файла
 			$tmpData = file_get_contents($fileName);
 			file_put_contents($name, $tmpData);
 			unset($tmpData);
-			    
+
 		    $this->value = $path.$translit_filename;
 			$_SESSION['uploads'][$this->session_id][$this->name] = array(
 				'value' => $this->value,
 			);
 
-		} 
+		}
 	}
 
 	public function fromRow($row) {
 		parent::fromRow($row);
 		list($this->value, $this->timestamp) = explode('?', $this->value, 2);
-		
+
 		if($this->relative && $this->value!='')
 			$this->value = $this->path.$this->value;
 	}
-	
-	public function postSave($id, $params, $item) { 
-		
+
+	public function postSave($id, $params, $item) {
+
 		if($this->readonly) return "";
-	
+
 		$this->x = $params[$this->name.'_x'];
 		$this->y = $params[$this->name.'_y'];
 		$this->w = $params[$this->name.'_w'];
@@ -108,8 +108,8 @@ class imageType extends fileType {
 			$relative_path = chunk_split(substr(str_pad($id, 4, '0', STR_PAD_LEFT), 0, 4), 2,'/');
 		else
 			$relative_path = '';
-		
-	    $path = $this->path.$relative_path;		
+
+	    $path = $this->path.$relative_path;
 	    @mkdir($this->options['root_path'].$path, 0777, true);
 	    $fname = str_replace(array(
 	    			'{id}',
@@ -126,16 +126,16 @@ class imageType extends fileType {
 			$fileName = $this->options['root_path'].$this->value;
 		} elseif(empty($this->value)) { // удаление картинки
 			return "`{$this->name}` = ''";
-		} else 
+		} else
 			return "";
-			
-			
-		$image = @file_get_contents($fileName);	
+
+
+		$image = @file_get_contents($fileName);
 		if($image == "") return '';
 
 
 
-		// определяем тип файла 	    		
+		// определяем тип файла
 		$signature = bin2hex(substr($image,0,3));
 	    if($signature == 'ffd8ff')
 	    	$ext = 'jpg';
@@ -146,7 +146,7 @@ class imageType extends fileType {
 	    else {
 	    	die(strarg(_("Unknown file format in %1, signature %2"), $this->label, $signature));
 	    }
-	    
+
 		$name= $this->options['root_path'].$path.$fname.".".$ext; // имя файла
 		if($this->relative)
 			$url = $fname.".".$ext."?v=".time(); // ссылка на файл
@@ -168,7 +168,7 @@ class imageType extends fileType {
 				imagepng($dst_r, $name);
 			$this->cleanup();
 			return "`{$this->name}` = ".$this->db->escape($url);
-				
+
 		} else {
 			$params = array('w'=>$this->width,'h'=>$this->height,'zc'=>$this->zc,'q'=>$this->quality);
 			if(ImageResizer::resizeImgAdvanced($image, $name, $ext, $params)) {
@@ -177,7 +177,7 @@ class imageType extends fileType {
 			}
 		}
 		$this->cleanup();
-		return ''; 
+		return '';
 	}
 
 	public static function pageHeader() {
@@ -255,7 +255,7 @@ class imageType extends fileType {
         <h4 class="modal-title" id="exampleModalLabel"><?= _('Image search'); ?></h4>
         <form id="searchForm" role="form">
 	        <div class="input-group">
-				<input type="text" id="q" class="form-control"> 
+				<input type="text" id="q" class="form-control">
 				<span class="input-group-btn">
 					<button class="btn btn-primary" type="submit" id="search"><?= _('Search'); ?></button>
 				</span>
@@ -284,7 +284,7 @@ class imageType extends fileType {
       </div>
       <div class="modal-footer">
 		<button type="btn btn-primary" id="apply" data-dismiss="modal"><?= _('Apply'); ?></button>
-      </div>      
+      </div>
     </div>
   </div>
 </div>
@@ -293,12 +293,12 @@ class imageType extends fileType {
 function cropImage(id) {
 	var img = $('#'+id);
 	if(img.attr('src') == '') return;
-	
+
 	var imgSize = {w: img[0].naturalWidth, h: img[0].naturalHeight};
 	imgSize.aspect = imgSize.w/imgSize.h;
 	var targetSize = {w: img.data('width'), h: img.data('height')};
 	targetSize.aspect = targetSize.w/targetSize.h;
-	
+
 	if(imgSize.w<targetSize.w || imgSize.h<targetSize.h) {
 		alert('Изображение слишком маленькое');
 		img.attr('src', '').hide();
@@ -317,7 +317,7 @@ function cropImage(id) {
 		selectSize.y = Math.floor((imgSize.h-selectSize.h)/2);
 	}
 
-	
+
 
 //		img.width(selectSize.w).height(selectSize.h).css('top', selectSize.y).css('left', selectSize.x);
 	$('#'+id+'_x').val(selectSize.x);
@@ -332,7 +332,7 @@ $(function() {
 	$('.upload_remove').click(function () { // удаление картинки
 		var el = $(this);
 		var p = el.parents('.upload_field').find('.form_thumbnail');
-		
+
 		p.attr('src', '').hide();
 
 		var file_id = $('#'+p.attr('id')+'_file');
@@ -346,7 +346,7 @@ $(function() {
 		var img = $(this);
 		cropPopup(this.id, this.src, img.data('width'), img.data('height'));
 	});
-	
+
 	$(".upload_url").bind('change preview', function(){ // загрузка по ссылке
 		var el = $(this);
 		var p = el.parents('.upload_field').find('.form_thumbnail');
@@ -363,11 +363,11 @@ $(function() {
 		var p = el.parents('.upload_field').find('.form_thumbnail');
 		// fadeOut or hide preview
 		p.hide();
-		
+
 		// prepare HTML5 FileReader
 		var oFReader = new FileReader();
 		oFReader.readAsDataURL(this.files[0]);
-		
+
 		oFReader.onload = function (oFREvent) {
 			console.log(oFREvent);
 			if(oFREvent.total>1048576) {
@@ -389,7 +389,7 @@ $(function() {
 	function search(id, start) {
 		var query = encodeURIComponent($('#imageSearch #q').val());
 		var size = encodeURIComponent($('#'+id+'_size').val());
-		
+
 		$.getJSON('https://www.googleapis.com/customsearch/v1?q='+query+'&start='+start+'&filetype=png&cx=002678885553542504836:qge42psoiiq&searchType=image&num=10&key=AIzaSyCiGJKDOHAU5W5Tno2ku-dfiDCH4X3SPkA&callback=?', function (data) {
 			console.log(data);
 			var sr = $('#searchResults');
@@ -431,7 +431,7 @@ $('#imageSearch #searchResults').on("click", ".searchResult a", function () {
 function searchPopup(result_id, size) {
 	title = $('#name').val() || $('#title').val() || $('#family').val() || '';
 	$('#imageSearch #q').val(title);
-	$('#imageSearch #searchForm').submit();		
+	$('#imageSearch #searchForm').submit();
 	$('#imageSearch').data('id', result_id).modal();
 	return false;
 }
@@ -444,7 +444,7 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 	    image_y = $('#'+id+'_y').val(),
 	    image_w = $('#'+id+'_w').val(),
 	    image_h = $('#'+id+'_h').val();
-	
+
 	var img = $('#imageCrop #previewCrop');
 
 	var targetSize = {w: image_width, h: image_height, aspect: image_width/image_height};
@@ -460,7 +460,7 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 			setSelect: [image_x, image_y, image_x+image_w, image_y+image_h]
 		},function(){
 			Jcrop = this;
-		});		
+		});
 	}).one('hidden.bs.modal', function () {
 		Jcrop.destroy();
 	});
@@ -472,17 +472,17 @@ function cropPopup(id, image, image_width, image_height, x,y,w,h) {
 		$('#'+id+'_w').val(Math.round(crop.w));
 		$('#'+id+'_h').val(Math.round(crop.h));
     	$('#imageCrop').modal('close');
-    	return false;			
-	});		
+    	return false;
+	});
 
-	
+
 
 	return false;
 }
 </script>
-<?php 
+<?php
 
 	}
 
-	
+
 }
