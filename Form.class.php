@@ -3,11 +3,11 @@
 class Form {
 	public $form;
 	public $formId = "editForm";
-	public $errorMessage;	
+	public $errorMessage;
 	public $id;
 	public $options;
 	public $adminModule;
-	
+
 	private $session_id = "";
 
 	function __construct($form, $adminModule) {
@@ -29,11 +29,11 @@ class Form {
 		}
 		return $valid;
 	}
-	
+
 	function load($values, $source) {
 		$this->id = @$values['id'];
 		if(isset($values['_session_id'])) $this->session_id = $values['_session_id'];
-		
+
 		foreach($this->form as $id => &$item) {
 			if($source == 'db') {
 				$item->fromRow($values);
@@ -47,10 +47,10 @@ class Form {
 			$item->delete($this->id);
 		}
 	}
-	
+
 	function build() {
 		if(empty($this->session_id)) $this->session_id = uniqid('', true);
-		
+
 		$types = array();
 		$data = "";
 		foreach($this->form as $id => &$item) {
@@ -69,11 +69,11 @@ class Form {
 		}
 		unset($item);
 		ob_start();
-		include('form_template.php');
+		include('views/form_template.php');
 		$data .= ob_get_clean();
 		return $data;
 	}
-	
+
 	function filled($params) {
 		return isset($params[$this->formId.'_save']) || isset($params[$this->formId.'_save_stay']);
 	}
@@ -82,7 +82,7 @@ class Form {
 		foreach($this->form as $id => &$item) {
 //			$item->fromForm($params);
 			$old_value = $item->value;
-			if(is_callable($item->onSave)) 
+			if(is_callable($item->onSave))
 				$item->value = call_user_func($item->onSave, $item->value);
 			$itemSql = $item->toSql();
 			$item->value = $old_value;
@@ -107,7 +107,7 @@ class Form {
 		else
 			return false;
 	}
-	
-	
-	
+
+
+
 }

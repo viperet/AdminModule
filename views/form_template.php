@@ -1,3 +1,4 @@
+<div class="portlet light bordered">
 <?= $this->adminModule->formHeader(); ?>
 <!--
 <script src="/js/jquery.autocomplete.js"></script>
@@ -10,7 +11,7 @@
 
 <style>
 	span.link { border-bottom: 1px dotted blue; cursor: pointer; color: blue; }
-	.label-hint { text-align: right; font-size: 75%; }	
+	.label-hint { text-align: right; font-size: 75%; }
 </style>
 
 <?php if( count($this->errorMessage)>0 ) { ?>
@@ -21,7 +22,7 @@
 	<input type="hidden" name="id" value="<?= $this->id ?>">
 	<input type="hidden" name="_session_id" value="<?= $this->session_id ?>">
 <?php $count = 0;
-	foreach($this->form as $id=>$item) { 
+	foreach($this->form as $id=>$item) {
 		if($item->raw)
 			echo $item->toHtml();
 		else {
@@ -48,3 +49,4 @@
 	</div>
 </form>
 
+</div>

@@ -3,7 +3,7 @@
 <style>
 .link { border-bottom: 1px white dotted; display: inline; cursor: pointer; }
 .admin-pager  { text-align: center;}
-div.filter-panel { margin: 0 0 10px 0; float: right;	/* max-width: 200px;  */}
+div.filter-panel { margin: 0; float: right;	/* max-width: 200px;  */}
 div.filter-panel form { margin: 0;	}
 .filter {  width: 100%; max-width: 150px; }
 .clear { clear: both; }
@@ -92,7 +92,7 @@ table.dataTable tr.totals-row th {
   background-position: 0 -2px;
 }
 .top-toolbar .btn-group,
-.bottom-toolbar .btn-group { margin: 0 0 5px 0; }
+.bottom-toolbar .btn-group { margin: 0; }
 
 .overlay {
 	position: fixed;
@@ -189,261 +189,273 @@ table.dataTable tr.totals-row th {
 	});
 </script>
 
+<div class="portlet light bordered">
+    <div class="filter-panel">
+    		<form method="GET" action="" id="filter_form" class="form-inline">
+    <?php if($this->options['date']) { ?>
+    			<div class="form-group">
+    				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="<?= _('Date from')?>"/>
+    			</div>
+    			<div class="form-group">
+    				<input type='text' class="form-control" name="dt" id='date-to' value="<?= $this->dateTo!=''?date('d.m.Y', strtotime($this->dateTo)):'' ?>" placeholder="<?= _('to')?>"/>
+    			</div>
+    			<div class="btn-group" style="margin-right: 20px;">
+    			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    			    <i class="glyphicon glyphicon-calendar"></i> <span class="caret"></span>
+    			  </button>
+    			  <ul class="dropdown-menu" role="menu">
+    			    <li><a href="#" onClick="return setTime('today');"><?= _('Today')?></a></li>
+    			    <li><a href="#" onClick="return setTime('yesterday');"><?= _('Yesterday')?></a></li>
+    			    <li><a href="#" onClick="return setTime('week');"><?= _('Last week')?></a></li>
+    			    <li><a href="#" onClick="return setTime('month');"><?= _('Last month')?></a></li>
+    			    <li><a href="#" onClick="return setTime('7days');"><?= _('Last 7 days')?></a></li>
+    			    <li><a href="#" onClick="return setTime('30days');"><?= _('Last 30 days')?></a></li>
+    				<li class="divider"></li>
+    			    <li><a href="#" onClick="return setTime('reset');"><?= _('Clear')?></a></li>
+    			  </ul>
+    			</div>
+    <?php } ?>
+    			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>">
+    			<div class="form-group">
+    				<div class="input-group">
+    					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>">
+    					<span class="input-group-btn">
+    						<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
+    					</span>
+    				</div>
+    			</div>
+    		</span>
+    	</form>
+    <?php if(isset($_GET['filter'])) {
+    	echo "<a href='{$this->baseUrlNoFilter}'>"._('remove filter')."</a>";
+    }
+    ?>
+    </div> <!-- filter-panel -->
+    <form method="POST" action="<?= $this->baseUrl ?>">
+    	<div class="top-toolbar">
+    		<div class=" additional-buttons-top" role="group">
+    		<?= $this->topButtons(); ?>
+    		</div>
+    		<div class="btn-group main-buttons-top" role="group">
+    			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
+    			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
+    		</div>
+    		<?php if($this->options['export']) { ?>
+    		<div class="btn-group">
+    		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
+    		  </button>
+    		  <ul class="dropdown-menu" role="menu">
+    		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+    		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+    		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+    		    <li role="separator" class="divider"></li>
+    		    <li><a class="export-link" href="<?= $this->baseUrl ?>&print">Print</a></li>
+    		  </ul>
+    		</div>
+    		<?php } ?>
+    		<?php if($this->options['import']) { ?>
+    		<div class="btn-group ">
+    			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+    		</div>
+    		<?php } ?>
+    	</div>
 
-<div class="filter-panel">
+    	<div class="clear"></div>
+    </form>
+</div> <!-- portlet -->
+<div class="portlet light bordered">
+    <form method="POST" action="<?= $this->baseUrl ?>">
+    <?php if(!$this->options['datatables']) { ?>
+    	<div class="admin-pager"><?= $htmlPager ?></div>
+    <?php } else { ?>
+    <?php } ?>
+    	<div class="selected-items">
+        	<?= _('<b id="selected-items-count">0</b> record(s) selected')?>
+    		 <i class="fa fa-times-circle" title="<?= _('Deselect')?>"></i>
+    	</div>
+    	<div id="selected-items-container"></div>
 
+    	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">
+    	<thead>
+    		<tr>
+    			<th class="checkbox-cell" data-orderable="0"></th>
+    	<?php
+    			foreach($headers as $header) {
+    				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
+    					htmlspecialchars($this->options['form'][$header]->label);
+    				echo "</th>\n";
+    			}
+    	?>
+    			<th class="table-actions" data-orderable="0"><?= _('Actions') ?></th>
+    		</tr>
+    		<tr>
+    			<th class="checkbox-cell">
+                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                        <input id="header_checkbox" name="" type="checkbox" value="" autocomplete="off">
+                        <span></span>
+                    </label>
+                </th>
+    	<?php
+    			foreach($headers as $header) {
+    				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
+    				if($this->options['form'][$header]->filterByClick) {
+    					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
 
-		<form method="GET" action="" id="filter_form" class="form-inline">
-<?php if($this->options['date']) { ?>
-			<div class="form-group">
-				<input type='text' class="form-control" name="df" id='date-from' value="<?= $this->dateFrom!=''?date('d.m.Y', strtotime($this->dateFrom)):'' ?>" placeholder="<?= _('Date from')?>"/>
-			</div>
-			<div class="form-group">
-				<input type='text' class="form-control" name="dt" id='date-to' value="<?= $this->dateTo!=''?date('d.m.Y', strtotime($this->dateTo)):'' ?>" placeholder="<?= _('to')?>"/>
-			</div>
-			<div class="btn-group" style="margin-right: 20px;">
-			  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-			    <i class="glyphicon glyphicon-calendar"></i> <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" role="menu">
-			    <li><a href="#" onClick="return setTime('today');"><?= _('Today')?></a></li>
-			    <li><a href="#" onClick="return setTime('yesterday');"><?= _('Yesterday')?></a></li>
-			    <li><a href="#" onClick="return setTime('week');"><?= _('Last week')?></a></li>
-			    <li><a href="#" onClick="return setTime('month');"><?= _('Last month')?></a></li>
-			    <li><a href="#" onClick="return setTime('7days');"><?= _('Last 7 days')?></a></li>
-			    <li><a href="#" onClick="return setTime('30days');"><?= _('Last 30 days')?></a></li>
-				<li class="divider"></li>
-			    <li><a href="#" onClick="return setTime('reset');"><?= _('Clear')?></a></li>
-			  </ul>
-			</div>
-<?php } ?>
-			<input type="hidden" name="filter" id="filter_input" class="form-control" value="<?= htmlspecialchars(@$_GET['filter']) ?>">
-			<div class="form-group">
-				<div class="input-group">
-					<input type="text" name="query" id="search_input" class="form-control" value="<?= htmlspecialchars(@$_GET['query']) ?>" placeholder="<?= _('filter') ?>">
-					<span class="input-group-btn">
-						<button type="submit" class="btn btn-default" name=""><span class="glyphicon glyphicon-search"></span></button>
-					</span>
-				</div>
-			</div>
-		</span>
-	</form>
-<?php if(isset($_GET['filter'])) {
-	echo "<a href='{$this->baseUrlNoFilter}'>"._('remove filter')."</a>";
-}
-?>
+    					// фильтрация
+    					if($this->options['form'][$header]->filterByClick === 'multiple') {
+    						$name = $this->options['form'][$header]->name;
+    ?>
+    				<div class="filter multiple btn-group btn-group-xs" data-field="<?=$name?>">
+    					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    						<span class="text">-</span> <span class="badge"></span> <span class="caret"></span>
+    					</button>
+    					<ul class="dropdown-menu">
+    <?php 						foreach($fieldValues as $key => $value) { ?>
+    						<li>
+    							<label for="prio_{$priority}">
+    								<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>>
+    								<?=$value?>
+    							</label></li>
+    <?php } /* foreach */ ?>
+
+    						<li role="separator" class="divider"></li>
+    						<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> <?= _('filter') ?></button></li>
+    					</ul>
+    				</div>
+    <?php
+
+    					} else {
+    						if($this->options['form'][$header]->filterByClick === 'search')
+    							$filterClass = 'select2';
+    						else
+    							$filterClass = 'selectpicker';
+    						echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'  data-title='-'>".
+    								"<option value=''>-</option>";
+    						foreach($fieldValues as $key => $value) {
+    							$name = $this->options['form'][$header]->name;
+    							echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>";
+    						}
+    						echo "</select>";
+    					}
+    				}
+    				echo "</th>\n";
+    			}
+    	?>
+    			<th class="table-actions"></th>
+    		</tr>
+    		<tr class="totals-row">
+    			<th class="checkbox-cell"></th>
+    	<?php
+    			foreach($headers as $header) {
+    				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+    				echo "</th>\n";
+    			}
+    	?>
+    			<th class="table-actions"></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<?php 			$count = 0;
+    			if(!$this->options['datatables']) {
+    				foreach($items as $item) {
+    	?>
+    		<tr class="<?= $this->getListClass($item); ?>">
+    			<td class="checkbox-td">
+                        <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                            <input class="row_checkbox" name="item[]" type="checkbox" value="<?= $item['id'] ?>" autocomplete="off">
+                            <span></span>
+                        </label>
+    			</td>
+    	<?php 				foreach($headers as $header) {
+    					$formItem = $this->options['form'][$header];
+    					$formItem->fromRow($item);
+
+    	?>
+    			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
+    	<?php if($formItem->filterByClick)
+    			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
+    		else
+    			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
+    	?>
+    				<?= $formItem->toListElement() ?>
+    				</a>
+    			</td>
+    	<?php
+    				}
+    	?>
+    			<td class="table-actions btn-toolbar">
+    				<?= $this->actions($item) ?>
+    			</td>
+    		</tr>
+    	<?php 				$count++;
+    				}
+    			} else {
+    ?>
+    		<tr>
+    			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
+    		</tr>
+    <?php
+    			}
+    	?>
+    	</tbody>
+    	<tfoot>
+    		<tr class="totals-row">
+    			<th class="checkbox-cell"></th>
+    	<?php
+    			$totals = $this->getTotals();
+    			foreach($headers as $header) {
+    				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
+    				if(isset($totals[$this->options['form'][$header]->name]))
+    					echo  $totals[$this->options['form'][$header]->name];
+    				echo "</th>\n";
+    			}
+    	?>
+    			<th class="table-actions"></th>
+    		</tr>
+    	</tfoot>
+    	</table>
+    <?php if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>
+    	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
+    <?php } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>
+    	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
+    <?php } ?>
+
+    <?php if(!$this->options['datatables']) { ?>
+    	<div class="admin-pager"><?= $htmlPager ?></div>
+    <?php } ?>
+    </form>
+</div> <!-- portlet -->
+<div class="portlet light bordered">
+    <form method="POST" action="<?= $this->baseUrl ?>">
+    	<div class="bottom-toolbar">
+    		<div class="additional-buttons-bottom" role="group">
+    		<?= $this->bottomButtons(); ?>
+    		</div>
+    		<div class="btn-group main-buttons-bottom" role="group">
+    			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
+    			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
+    		</div>
+    		<?php if($this->options['export']) { ?>
+    		<div class="btn-group dropup">
+    		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
+    		  </button>
+    		  <ul class="dropdown-menu" role="menu">
+    		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
+    		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
+    		    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
+    		  </ul>
+    		</div>
+    		<?php } ?>
+    		<?php if($this->options['import']) { ?>
+    		<div class="btn-group ">
+    			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
+    		</div>
+    		<?php } ?>
+    	</div>
+    </form>
 </div>
-<form method="POST" action="<?= $this->baseUrl ?>">
-	<div class="top-toolbar">
-		<div class=" additional-buttons-top" role="group">
-		<?= $this->topButtons(); ?>
-		</div>
-		<div class="btn-group main-buttons-top" role="group">
-			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
-			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
-		</div>
-		<?php if($this->options['export']) { ?>
-		<div class="btn-group">
-		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu">
-		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
-		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
-		    <li><a class="export-link" href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
-		    <li role="separator" class="divider"></li>
-		    <li><a class="export-link" href="<?= $this->baseUrl ?>&print">Print</a></li>
-		  </ul>
-		</div>
-		<?php } ?>
-		<?php if($this->options['import']) { ?>
-		<div class="btn-group ">
-			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>
-		<?php } ?>
-	</div>
-
-	<div class="clear"></div>
-
-<?php if(!$this->options['datatables']) { ?>
-	<div class="admin-pager"><?= $htmlPager ?></div>
-<?php } else { ?>
-<?php } ?>
-	<div class="selected-items">
-    	<?= _('<b id="selected-items-count">0</b> record(s) selected')?>
-		 <i class="fa fa-times-circle" title="<?= _('Deselect')?>"></i>
-	</div>
-	<div id="selected-items-container"></div>
-
-	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">
-	<thead>
-		<tr>
-			<th class="checkbox-cell" data-orderable="0"></th>
-	<?php
-			foreach($headers as $header) {
-				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
-					htmlspecialchars($this->options['form'][$header]->label);
-				echo "</th>\n";
-			}
-	?>
-			<th class="table-actions" data-orderable="0"><?= _('Actions') ?></th>
-		</tr>
-		<tr>
-			<th class="checkbox-cell"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
-	<?php
-			foreach($headers as $header) {
-				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
-				if($this->options['form'][$header]->filterByClick) {
-					$fieldValues = $this->getFieldValues($this->options['form'][$header]);
-
-					// фильтрация
-					if($this->options['form'][$header]->filterByClick === 'multiple') {
-						$name = $this->options['form'][$header]->name;
-?>
-				<div class="filter multiple btn-group btn-group-xs" data-field="<?=$name?>">
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<span class="text">-</span> <span class="badge"></span> <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-<?php 						foreach($fieldValues as $key => $value) { ?>
-						<li>
-							<label for="prio_{$priority}">
-								<input type="checkbox" name="filter_<?=$name?>" id="filter_<?=$name?>" value="<?=$key?>" <?=isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"checked":""?>>
-								<?=$value?>
-							</label></li>
-<?php } /* foreach */ ?>
-
-						<li role="separator" class="divider"></li>
-						<li class="text-center"><button class="btn btn-info" type="button"><i class="glyphicon glyphicon-filter"></i> <?= _('filter') ?></button></li>
-					</ul>
-				</div>
-<?php
-
-					} else {
-						if($this->options['form'][$header]->filterByClick === 'search')
-							$filterClass = 'select2';
-						else
-							$filterClass = 'selectpicker';
-						echo "<select class='filter {$filterClass}' data-field='{$this->options['form'][$header]->name}'  data-title='-'>".
-								"<option value=''>-</option>";
-						foreach($fieldValues as $key => $value) {
-							$name = $this->options['form'][$header]->name;
-							echo "<option value='{$key}'".(isset($this->filters[$name])&&in_array($key, $this->filters[$name])?"selected":"").">{$value}</option>";
-						}
-						echo "</select>";
-					}
-				}
-				echo "</th>\n";
-			}
-	?>
-			<th class="table-actions"></th>
-		</tr>
-		<tr class="totals-row">
-			<th class="checkbox-cell"></th>
-	<?php
-			foreach($headers as $header) {
-				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
-				echo "</th>\n";
-			}
-	?>
-			<th class="table-actions"></th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php 			$count = 0;
-			if(!$this->options['datatables']) {
-				foreach($items as $item) {
-	?>
-		<tr class="<?= $this->getListClass($item); ?>">
-			<td class="checkbox-td">
-				<input type="checkbox" class="row_checkbox" name="item[]" value="<?= $item['id'] ?>" autocomplete="off">
-			</td>
-	<?php 				foreach($headers as $header) {
-					$formItem = $this->options['form'][$header];
-					$formItem->fromRow($item);
-
-	?>
-			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?php if($formItem->filterByClick)
-			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
-		else
-			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
-	?>
-				<?= $formItem->toListElement() ?>
-				</a>
-			</td>
-	<?php
-				}
-	?>
-			<td class="table-actions btn-toolbar">
-				<?= $this->actions($item) ?>
-			</td>
-		</tr>
-	<?php 				$count++;
-				}
-			} else {
-?>
-		<tr>
-			<td colspan="<?= count($headers)+2; ?>"><center>Loading...</center></td>
-		</tr>
-<?php
-			}
-	?>
-	</tbody>
-	<tfoot>
-		<tr class="totals-row">
-			<th class="checkbox-cell"></th>
-	<?php
-			$totals = $this->getTotals();
-			foreach($headers as $header) {
-				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
-				if(isset($totals[$this->options['form'][$header]->name]))
-					echo  $totals[$this->options['form'][$header]->name];
-				echo "</th>\n";
-			}
-	?>
-			<th class="table-actions"></th>
-		</tr>
-	</tfoot>
-	</table>
-<?php if(!$this->options['datatables'] && count($items) == 0 && isset($_GET['filter'])) { ?>
-	<div class="alert alert-info" role="alert"><?=_('Records not found')?>, <a href='<?=$this->baseUrlNoFilter?>'><?=_('remove filter')?></a>?</div>
-<?php } elseif(!$this->options['datatables'] && count($items) == 0 && !isset($_GET['filter'])) { ?>
-	<div class="alert alert-info" role="alert"><?=_('No records yet,')?> <a href='<?= $this->baseUrl ?>&edit=0'><?=_('add records')?></a>?</div>
-<?php } ?>
-
-<?php if(!$this->options['datatables']) { ?>
-	<div class="admin-pager"><?= $htmlPager ?></div>
-<?php } ?>
-
-	<div class="bottom-toolbar">
-		<div class="additional-buttons-bottom" role="group">
-		<?= $this->bottomButtons(); ?>
-		</div>
-		<div class="btn-group main-buttons-bottom" role="group">
-			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
-			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
-		</div>
-		<?php if($this->options['export']) { ?>
-		<div class="btn-group dropup">
-		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		    <i class="fa fa-cloud-download"></i> <?= _('Export') ?> <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu">
-		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=utf8">CSV (UTF-8)</a></li>
-		    <li><a href="<?= $this->baseUrl ?>&export&format=csv&encoding=windows1251">CSV (windows-1251)</a></li>
-		    <li><a href="<?= $this->baseUrl ?>&export&format=xls">XLS</a></li>
-		  </ul>
-		</div>
-		<?php } ?>
-		<?php if($this->options['import']) { ?>
-		<div class="btn-group ">
-			<a href="<?= $this->baseUrl ?>&import" class="btn btn-default"><?= _('Import') ?></a>
-		</div>
-		<?php } ?>
-	</div>
-</form>
-
 
 <div class="overlay" style="display: none;"></div> <!-- шторка для закрывания на время загрузки -->
 
@@ -638,10 +650,12 @@ new $.fn.dataTable.FixedHeader( datatable, {
 		$('#filter_form').submit();
 	}
 
+/*
 	$('select.filter.selectpicker').selectpicker({
 		 width: '100%',
 		 style: 'btn-default btn-xs',
 	});
+*/
 
 	$('select.filter.select2').select2({
 		containerCssClass: 'input-xs',
