@@ -240,6 +240,11 @@ class AdminDatabase {
         $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
+        if(!$res) {
+			$error_no = mysqli_errno($this->linkId);
+			$error_msg = mysqli_error($this->linkId);
+			throw new AdminDatabaseException('No data returned', $error_no, $sql);
+        }
         foreach($res as $row) {
             if(isset($row['id']))
                 $data[$row['id']] = $row;
