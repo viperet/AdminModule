@@ -188,7 +188,7 @@ abstract class coreType {
 		return $items;
 	}
 
-	public function delete() { return; }
+	public function delete($id) { return; }
 
 	public function postSave($id, $params, $item) { return ''; }
 
