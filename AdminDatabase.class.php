@@ -121,7 +121,8 @@ class AdminDatabase {
 
         if(func_num_args() > 1) {
             $args = array();
-            array_walk_recursive(array_slice(func_get_args(), 1), function($a) use (&$args) { $args[] = $a; });
+            $argv = array_slice(func_get_args(), 1);
+            array_walk_recursive($argv, function($a) use (&$args) { $args[] = $a; });
         } else
             $args = null;
 
