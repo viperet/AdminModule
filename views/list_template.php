@@ -260,6 +260,7 @@ table.dataTable tr.totals-row th {
     		</div>
     		<?php } ?>
     	</div>
+    	<div id="selected-items-container"></div>
 
     	<div class="clear"></div>
     </form>
@@ -274,7 +275,6 @@ table.dataTable tr.totals-row th {
         	<?= _('<b id="selected-items-count">0</b> record(s) selected')?>
     		 <i class="fa fa-times-circle" title="<?= _('Deselect')?>"></i>
     	</div>
-    	<div id="selected-items-container"></div>
 
     	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">
     	<thead>
@@ -426,6 +426,7 @@ table.dataTable tr.totals-row th {
     <?php } ?>
     </form>
 </div> <!-- portlet -->
+<!--
 <div class="portlet light bordered">
     <form method="POST" action="<?= $this->baseUrl ?>">
     	<div class="bottom-toolbar">
@@ -456,6 +457,7 @@ table.dataTable tr.totals-row th {
     	</div>
     </form>
 </div>
+-->
 
 <div class="overlay" style="display: none;"></div> <!-- шторка для закрывания на время загрузки -->
 
