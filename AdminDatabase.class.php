@@ -65,6 +65,9 @@ class AdminDatabase {
     public $linkId;
     public $insertId;
     public $foundRows;
+    private $profiling;
+    public $profiling_log = "";
+    public $profiling_threshold = 10;
 
     function __construct($linkId) {
         $args = func_get_args();
@@ -79,10 +82,16 @@ class AdminDatabase {
             echo "</pre>";
             die('You should pass either "mysqli" object or connection parameters host,user,password,dbname');
         }
+        $this->profiling = false;
     }
 
     function selectDb($name) {
         mysqli_select_db($this->linkId, $name);
+    }
+
+    function profiling() {
+        $this->query("set profiling=1");
+        $this->profiling = true;
     }
 
     static function isError($row) {
@@ -203,6 +212,8 @@ class AdminDatabase {
         $this->insertId = mysqli_insert_id($this->linkId);
         $this->affectedRows = mysqli_affected_rows($this->linkId);
         if(is_object($res)) { // SELECT, SHOW, DESCRIBE, EXPLAIN
+
+            $this->getProfilingInfo("/* {$callerFileRel}:{$callerLine} {$callerMethod}() */ ".$sql);
             if(strpos($sql, 'SQL_CALC_FOUND_ROWS') > 0) {
                 $this->foundRows = $this->getOne("SELECT FOUND_ROWS()");
             } else {
@@ -218,8 +229,20 @@ class AdminDatabase {
             $this->affectedRows = mysqli_affected_rows($this->linkId);
             return $this->insertId;
         }
+    }
 
 
+    function getProfilingInfo($sql) {
+        if(!$this->profiling || $this->profiling_log == '') return;
+        $res = mysqli_query($this->linkId, "SHOW PROFILE");
+        $rowset = new Rowset($res);
+        foreach($rowset as $row) {
+            if($row['Status'] == 'executing') {
+                if($row['Duration'] > $this->profiling_threshold) {
+                    error_log("{$row['Duration']} sec: {$sql}\n", 3, $this->profiling_log);
+                }
+            }
+        }
     }
 
     function getOne($sql) {
