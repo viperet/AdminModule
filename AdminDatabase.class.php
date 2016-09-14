@@ -237,9 +237,9 @@ class AdminDatabase {
         $res = mysqli_query($this->linkId, "SHOW PROFILE");
         $rowset = new Rowset($res);
         foreach($rowset as $row) {
-            if($row['Status'] == 'executing') {
+            if($row['Status'] == 'Sending data') {
                 if($row['Duration'] > $this->profiling_threshold) {
-                    error_log("{$row['Duration']} sec: {$sql}\n", 3, $this->profiling_log);
+                    error_log(date('r')." {$row['Duration']} sec: {$sql}\n", 3, $this->profiling_log);
                 }
             }
         }
