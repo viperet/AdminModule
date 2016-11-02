@@ -182,6 +182,11 @@ class AdminDatabase {
 //                mysqli_stmt_bind_param($stmt, "d", $arg);
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
+                if(!$res) {
+        			$error_no = mysqli_errno($this->linkId);
+        			$error_msg = mysqli_error($this->linkId);
+        			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+                }
             } else {
     			$error_no = mysqli_errno($this->linkId);
     			$error_msg = mysqli_error($this->linkId);
