@@ -32,6 +32,7 @@ class AdminModule {
 			'user' => 'unknown',
 			'datatables' => false,
 			'logger' => false,
+			'readonly' => false
 		);
 	public $db, $navigation;
 	public $form;
@@ -483,6 +484,7 @@ class AdminModule {
 /* Дополнительные действия над записями	*/
 /* =============== */
 	function actions($item) {
+    	if($this->options['readonly']) return "";
 		return '
 				<div class="btn-group" role="group">
 					<a class="btn btn-default btn-xs" href="'.$this->baseUrl.'&edit='.$item['id'].'"><span class="glyphicon glyphicon-edit" title="'._('Edit').'"></span></a>
@@ -842,7 +844,7 @@ class AdminModule {
 				$this->navigation->add(_("Import"),"addarticle.php");
 				echo $this->navigation->get();
 				$this->import();
-			} elseif(isset($_REQUEST['delete'])) {
+			} elseif(isset($_REQUEST['delete']) && !$this->options['readonly']) {
 				$this->deleteItem($_REQUEST['item']);
 			} elseif(isset($_GET['edit'])) {
 				if($_GET['edit'] == 0)

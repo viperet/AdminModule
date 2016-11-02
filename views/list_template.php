@@ -238,10 +238,12 @@ table.dataTable tr.totals-row th {
 		<div class=" additional-buttons-top" role="group">
 		<?= $this->topButtons(); ?>
 		</div>
+        <?php if(!$this->options['readonly']) { ?>
 		<div class="btn-group main-buttons-top" role="group">
 			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
 			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
 		</div>
+		<?php } ?>
 		<?php if($this->options['export']) { ?>
 		<div class="btn-group">
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -420,10 +422,12 @@ table.dataTable tr.totals-row th {
 		<div class="additional-buttons-bottom" role="group">
 		<?= $this->bottomButtons(); ?>
 		</div>
+        <?php if(!$this->options['readonly']) { ?>
 		<div class="btn-group main-buttons-bottom" role="group">
 			<a class="btn btn-default" href="<?= $this->baseUrl ?>&edit=0"><i class="fa fa-plus"></i> <?= _('Add') ?></a>
 			<button class="btn btn-default" type="submit" name="delete" onclick="return confirm('<?= _('Delete selected records?') ?>');"><i class="fa fa-trash-o"></i> <?= _('Delete selected') ?></button>
 		</div>
+        <?php } ?>
 		<?php if($this->options['export']) { ?>
 		<div class="btn-group dropup">
 		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
