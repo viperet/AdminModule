@@ -279,7 +279,9 @@ table.dataTable tr.totals-row th {
 	<table id="admin-table" class="table table-hover table-bordered table-striped table-condensed" width="100%">
 	<thead>
 		<tr>
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="checkbox-cell" data-orderable="0"></th>
+    <?php } ?>
 	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell' title='".@$this->options['form'][$header]->label_hint."'>".
@@ -287,10 +289,15 @@ table.dataTable tr.totals-row th {
 				echo "</th>\n";
 			}
 	?>
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="table-actions" data-orderable="0"><?= _('Actions') ?></th>
+    <?php } ?>
+
 		</tr>
 		<tr>
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="checkbox-cell"><input id="header_checkbox" type="checkbox" name="" value="" autocomplete="off"></th>
+    <?php } ?>
 	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell cell-filter'>";
@@ -337,17 +344,23 @@ table.dataTable tr.totals-row th {
 				echo "</th>\n";
 			}
 	?>
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="table-actions"></th>
+    <?php } ?>
 		</tr>
 		<tr class="totals-row">
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="checkbox-cell"></th>
+    <?php } ?>
 	<?php
 			foreach($headers as $header) {
 				echo "<th class='".str_replace('_', '-', $this->options['form'][$header]->name)."-cell'>";
 				echo "</th>\n";
 			}
 	?>
+    <?php if(!$this->options['readonly']) { ?>
 			<th class="table-actions"></th>
+    <?php } ?>
 		</tr>
 	</thead>
 	<tbody>
@@ -356,16 +369,20 @@ table.dataTable tr.totals-row th {
 				foreach($items as $item) {
 	?>
 		<tr class="<?= $this->getListClass($item); ?>">
+    <?php if(!$this->options['readonly']) { ?>
 			<td class="checkbox-td">
 				<input type="checkbox" class="row_checkbox" name="item[]" value="<?= $item['id'] ?>" autocomplete="off">
 			</td>
+    <?php } ?>
 	<?php 				foreach($headers as $header) {
 					$formItem = $this->options['form'][$header];
 					$formItem->fromRow($item);
 
 	?>
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
-	<?php if($formItem->filterByClick)
+    <?php if($this->options['readonly']) { ?>
+				<?= $formItem->toListElement() ?>
+	<?php } elseif($formItem->filterByClick)
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
@@ -376,9 +393,13 @@ table.dataTable tr.totals-row th {
 	<?php
 				}
 	?>
+
+    <?php if(!$this->options['readonly']) { ?>
 			<td class="table-actions btn-toolbar">
 				<?= $this->actions($item) ?>
 			</td>
+    <?php } ?>
+
 		</tr>
 	<?php 				$count++;
 				}
