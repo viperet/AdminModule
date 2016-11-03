@@ -382,17 +382,17 @@ table.dataTable tr.totals-row th {
 			<td class="table-data <?=str_replace('_', '-', $formItem->name)?>-cell" <?php $s=$formItem->toString(); if(mb_strlen($s)>$formItem->truncate) echo ' title="'.htmlspecialchars(str_replace("\n", " ", $s), ENT_QUOTES, $formItem->encoding, false).'" '; ?> >
     <?php if($this->options['readonly']) { ?>
 				<?= $formItem->toListElement() ?>
-	<?php } elseif($formItem->filterByClick)
+	<?php } else {
+        if($formItem->filterByClick)
 			echo "<a href='{$this->baseUrlNoFilter}&filter=".urlencode($formItem->name.':'.$formItem->value)."'>";
 		else
 			echo "<a href='{$this->baseUrl}&edit={$item['id']}'>";
 	?>
 				<?= $formItem->toListElement() ?>
 				</a>
+	<?php } ?>
 			</td>
-	<?php
-				}
-	?>
+	<?php } ?>
 
     <?php if(!$this->options['readonly']) { ?>
 			<td class="table-actions btn-toolbar">
