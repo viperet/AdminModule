@@ -8,6 +8,9 @@ class AdminDatabaseException extends RuntimeException {
         $this->sql = $sql;
         return parent::__construct($message, $code);
     }
+    public function getSql() {
+        return $this->sql;
+    }
 }
 
 class Rowset implements Iterator, Countable {
@@ -184,8 +187,10 @@ class AdminDatabase {
                 $res = mysqli_stmt_get_result($stmt);
                 if(!$res) {
         			$error_no = mysqli_errno($this->linkId);
-        			$error_msg = mysqli_error($this->linkId);
-        			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+        			if($error_no) {
+            			$error_msg = mysqli_error($this->linkId);
+            			throw new AdminDatabaseException($error_msg, $error_no, $sql);
+                    }
                 }
             } else {
     			$error_no = mysqli_errno($this->linkId);
