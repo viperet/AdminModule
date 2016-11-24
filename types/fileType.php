@@ -45,7 +45,7 @@ class fileType extends coreType {
 		if(!empty($value[$this->name.'_remove'])) {
 			if(isset($_SESSION['uploads'][$this->session_id][$this->name])) {
 				$this->value = $_SESSION['uploads'][$this->session_id][$this->name]['value'];
-				$this->delete();
+				$this->delete(null);
 			}
 			$this->value = '';
 		} elseif(!empty($_FILES[$this->name.'_file']['tmp_name']) &&
@@ -112,7 +112,7 @@ class fileType extends coreType {
 						$this->valid = false;
 						$this->errors[] = sprintf(_("Upload of files with extension '%s' is forbidden"), htmlspecialchars($ext));
 						$errors[] = _('Invalid file format');
-						$this->delete();
+						$this->delete(null);
 						return false;
 			}
 			if(isset($this->validation)) {
@@ -122,7 +122,7 @@ class fileType extends coreType {
 						$this->errors[] = _('Allowed file formats: ').htmlspecialchars(implode(', ', $this->validation));
 						$errors[] = sprintf(_("Invalid file format '%s'"), htmlspecialchars($ext));
 						$valid = false;
-						$this->delete();
+						$this->delete(null);
 					}
 				} else {
 					throw new Exception("Validation field in '{$this->name}' should be array of allowed file formats");
@@ -136,7 +136,7 @@ class fileType extends coreType {
 					$this->errors[] = sprintf(_('Maximum file size %s'), fileType::formatSize($this->maxsize));
 					$errors[] = _('File too large');
 					$valid = false;
-					$this->delete();
+					$this->delete(null);
 			    }
 			}
 		}
@@ -207,7 +207,7 @@ class fileType extends coreType {
 	}
 
 	// удаление файла
-	public function delete($id) {
+	public function delete($id = null) {
 		if(!empty($this->value)) {
 			$fname = $this->getFilename();
 			@unlink($fname);
