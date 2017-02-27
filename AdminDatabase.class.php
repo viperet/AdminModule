@@ -176,7 +176,7 @@ class AdminDatabase {
                     else
                         $types .= 's';
                 }
-                call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $types), $this->refValues($args)));
+                mysqli_stmt_bind_param($stmt, $types, ...$args);
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
                 if(!$res) {
