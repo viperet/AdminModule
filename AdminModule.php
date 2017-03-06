@@ -415,7 +415,7 @@ class AdminModule {
 /* ====================== */
 	function getItem($id) {
 
-		$row = $this->db->getRow("SELECT * FROM `".$this->options['table']."` WHERE id=?", array($id));
+		$row = $this->db->getRow("SELECT * FROM `".$this->options['table']."` WHERE id=?", $id);
 		return $row;
 	}
 
