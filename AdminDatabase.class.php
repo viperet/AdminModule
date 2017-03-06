@@ -135,7 +135,7 @@ class AdminDatabase {
             $args = &$args[0];
         }
 
-        if(is_array($args) && count($args) > 0) {
+        if(is_array($args)) {
             preg_match_all("/\?/", $sql, $matches, PREG_OFFSET_CAPTURE);
             // if the number of items to replace is different than the number of items specified in $replacements
             if (count($matches[0]) != count($args)) {
