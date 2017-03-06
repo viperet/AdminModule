@@ -127,13 +127,9 @@ class AdminDatabase {
         return $arr;
     }
 
-   function query($sql, &...$args) {
+   function query($sql, ...$args) {
 
         if($this->linkId === false) return false;
-
-        if(is_array($args) && count($args) == 1 && is_array($args[0])) { // unwraping array
-            $args = &$args[0];
-        }
 
         if(is_array($args)) {
             preg_match_all("/\?/", $sql, $matches, PREG_OFFSET_CAPTURE);
@@ -177,6 +173,7 @@ class AdminDatabase {
                         $types .= 's';
                 }
                 call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $types), $this->refValues($args)));
+
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
                 if(!$res) {
@@ -249,20 +246,23 @@ class AdminDatabase {
         }
     }
 
-    function getOne($sql, &...$args) {
+    function getOne($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         if($res->count == 0) return NULL;
         $row = $res->current();
         return current($row);
     }
 
-    function getRow($sql, &...$args) {
+    function getRow($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $row = $res->current();
         return $row;
     }
 
-    function getAll($sql, &...$args) {
+    function getAll($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
         foreach($res as $row) {
@@ -276,7 +276,8 @@ class AdminDatabase {
 
 
     // Executes SQL and returns list of values of first SQL result field
-    function getList($sql, &...$args) {
+    function getList($sql) {
+        $args = array_slice(func_get_args(), 1);
         $res = $this->query($sql, $args);
         $data = array();
         foreach($res as $row) {
