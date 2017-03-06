@@ -127,9 +127,18 @@ class AdminDatabase {
         return $arr;
     }
 
-   function query($sql, ...$args) {
+    function query($sql) {
 
         if($this->linkId === false) return false;
+
+        if(func_num_args() > 1) {
+            $args = array();
+            $argv = array_slice(func_get_args(), 1);
+            array_walk_recursive($argv, function($a) use (&$args) { $args[] = $a; });
+        } else
+            $args = null;
+
+
 
         if(is_array($args)) {
             preg_match_all("/\?/", $sql, $matches, PREG_OFFSET_CAPTURE);
@@ -173,7 +182,7 @@ class AdminDatabase {
                         $types .= 's';
                 }
                 call_user_func_array('mysqli_stmt_bind_param', array_merge(array($stmt, $types), $this->refValues($args)));
-
+//                mysqli_stmt_bind_param($stmt, "d", $arg);
                 mysqli_stmt_execute($stmt);
                 $res = mysqli_stmt_get_result($stmt);
                 if(!$res) {
