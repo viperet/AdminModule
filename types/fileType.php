@@ -248,7 +248,7 @@ class fileType extends coreType {
 		foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file) {
 			$empty &= is_dir($file) && $this->removeEmptySubFolders($file);
 		}
-		return $empty && rmdir($path);
+		return $empty && @rmdir($path);
 	}
 
 	private function translitFileName($translit_filename) {
