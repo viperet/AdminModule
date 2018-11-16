@@ -1,0 +1,11 @@
+{
+    "name": "viperet/admin-module",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Vitaly Peretiatko",
+            "email": "viperet@gmail.com"
+        }
+    ],
+    "require": {}
+}
